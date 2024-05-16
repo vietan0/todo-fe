@@ -4,20 +4,24 @@ import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Input } from '@nextui-org/input';
 import { Controller, useForm } from 'react-hook-form';
 
-import { devServer } from './utils/serverUrl';
+import useUserStore from '../store/useUserStore';
+import { devServer } from '../utils/serverUrl';
 
 interface Inputs {
   email: string;
   password: string;
 }
 
-;
-
 export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
+  const markSignIn = useUserStore(state => state.markSignIn);
+
   const {
     handleSubmit,
     control,
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({ defaultValues: {
+    email: 'vite@gmail.com',
+    password: 'vite',
+  } });
 
   async function onSubmit(data: Inputs) {
     const rawRes = await fetch(`${devServer}/auth/${mode}`, {
@@ -33,7 +37,7 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
     const res = await rawRes.json();
 
     if (res.status === 'success')
-      localStorage.setItem('isLoggedIn', 'true');
+      markSignIn(res.data);
   }
 
   return (

@@ -1,36 +1,22 @@
-import { Button } from '@nextui-org/button';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 
-import Auth from './Auth';
-import { devServer } from './utils/serverUrl';
+import Nav from './components/Nav';
 
-export default function App() {
-  const [fetchResult, setFetchResult] = useState();
-
-  function fetchData() {
-    fetch(`${devServer}/api/project`, {
-      credentials: 'include',
-    }).then(res => res.json()).then(setFetchResult);
-  }
-
-  function signOut() {
-    fetch(`${devServer}/auth/signout`, { method: 'POST', credentials: 'include' }).then(res => res.json()).then((data) => {
-      localStorage.setItem('isLoggedIn', 'false');
-      console.log(data);
-    });
-  }
+export default function App({ error }: { error?: React.ReactNode }) {
+  useEffect(() => {
+    const root = document.getElementById('root');
+    if (root)
+      root.role = 'presentation';
+  }, []);
 
   return (
-    <div className="min-h-screen w-screen" id="App">
-      <Button onPress={fetchData}>Fetch Data</Button>
-      <p>isLoggedIn (localStorage):</p>
-      <pre>{localStorage.getItem('isLoggedIn') === 'true' ? 'true' : 'false'}</pre>
-      <Button onPress={signOut}>Sign Out</Button>
-
-      <p>fetchResult:</p>
-      <pre>{JSON.stringify(fetchResult, null, 2)}</pre>
-      <Auth mode="signin" />
-      {/* <Auth mode="signup" /> */}
+    <div className="m-auto min-h-screen w-screen max-w-screen-2xl" id="App">
+      <h1 className="sr-only">Todo App - Made by Viet An</h1>
+      <Nav />
+      {error ?? (
+        <Outlet />
+      )}
     </div>
   );
 }
