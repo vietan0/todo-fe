@@ -2,6 +2,7 @@ import { DevTool } from '@hookform/devtools';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Input } from '@nextui-org/input';
+import { Helmet } from 'react-helmet';
 import { Controller, useForm } from 'react-hook-form';
 
 import useUserStore from '../store/useUserStore';
@@ -42,6 +43,13 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
 
   return (
     <div className="flex min-h-screen items-center">
+      <Helmet>
+        <title>
+          {mode === 'signin' ? 'Sign In' : 'Sign Up'}
+          {' '}
+          – Todo App
+        </title>
+      </Helmet>
       <Card className="m-auto max-w-screen-xs grow p-4">
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardHeader className="mb-8 flex gap-3">
