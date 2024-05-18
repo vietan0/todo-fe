@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet-async';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import LoadingScreen from '../components/LoadingScreen';
 import useUser from '../hooks/useUser';
 import { devServer } from '../utils/serverUrl';
 
@@ -17,14 +18,9 @@ interface Inputs {
 }
 
 export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
-  const { data: user } = useUser();
+  const { data: user, isLoading } = useUser();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user)
-      navigate('/');
-  }, [user]);
 
   const {
     handleSubmit,
@@ -49,54 +45,68 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
       queryClient.invalidateQueries({ queryKey: ['getUser'] });
   }
 
-  return (
-    <div className="flex min-h-screen items-center">
-      <Helmet>
-        <title>
-          {mode === 'signin' ? 'Sign In' : 'Sign Up'}
-          {' '}
-          – Todo App
-        </title>
-      </Helmet>
-      <Card className="m-auto max-w-screen-xs grow p-4">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardHeader className="mb-8 flex gap-3">
-            <p className="text-3xl font-bold">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</p>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-2">
-            <Controller
-              name="email"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  value={field.value}
-                  type="email"
-                  label="Email"
-                  placeholder="Enter your email"
-                />
-              )}
-            />
-            <Controller
-              name="password"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  value={field.value}
-                  type="password"
-                  label="Password"
-                  placeholder="Enter your password"
-                />
-              )}
-            />
-          </CardBody>
-          <CardFooter>
-            <Button type="submit" color="primary" className="font-bold">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</Button>
-          </CardFooter>
-        </form>
-        <DevTool control={control} />
-      </Card>
-    </div>
-  );
+  useEffect(() => {
+    if (user)
+      navigate('/');
+  }, [user]);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  else {
+    return (
+      <div className="flex min-h-screen items-center">
+        <Helmet>
+          <title>
+            {mode === 'signin' ? 'Sign In' : 'Sign Up'}
+            {' '}
+            – Todo App
+          </title>
+        </Helmet>
+        <Card classNames={{
+          base: 'm-auto max-w-screen-xs grow p-4',
+        }}
+        >
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CardHeader className="mb-8 flex gap-3">
+              <p className="text-3xl font-bold">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</p>
+            </CardHeader>
+            <CardBody className="flex flex-col gap-2">
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    value={field.value}
+                    type="email"
+                    label="Email"
+                    placeholder="Enter your email"
+                  />
+                )}
+              />
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    value={field.value}
+                    type="password"
+                    label="Password"
+                    placeholder="Enter your password"
+                  />
+                )}
+              />
+            </CardBody>
+            <CardFooter>
+              <Button type="submit" color="primary" className="font-bold">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</Button>
+            </CardFooter>
+          </form>
+          <DevTool control={control} />
+        </Card>
+      </div>
+    );
+  }
 }

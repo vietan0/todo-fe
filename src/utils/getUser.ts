@@ -9,5 +9,5 @@ export default async function getUser() {
   if (res.status === 'success')
     return res.data;
 
-  throw new Error(res.message);
+  return null;
 }
