@@ -2,10 +2,13 @@ import { DevTool } from '@hookform/devtools';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Input } from '@nextui-org/input';
-import { Helmet } from 'react-helmet';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
-import useUserStore from '../store/useUserStore';
+import useUser from '../hooks/useUser';
 import { devServer } from '../utils/serverUrl';
 
 interface Inputs {
@@ -14,18 +17,25 @@ interface Inputs {
 }
 
 export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
-  const markSignIn = useUserStore(state => state.markSignIn);
+  const { data: user } = useUser();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user)
+      navigate('/');
+  }, [user]);
 
   const {
     handleSubmit,
     control,
   } = useForm<Inputs>({ defaultValues: {
-    email: 'vite@gmail.com',
-    password: 'vite',
+    email: 'postman@gmail.com',
+    password: 'postman',
   } });
 
   async function onSubmit(data: Inputs) {
-    const rawRes = await fetch(`${devServer}/auth/${mode}`, {
+    const res = await fetch(`${devServer}/auth/${mode}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -33,12 +43,10 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
       },
       body: JSON.stringify(data),
       credentials: 'include',
-    });
-
-    const res = await rawRes.json();
+    }).then(res => res.json());
 
     if (res.status === 'success')
-      markSignIn(res.data);
+      queryClient.invalidateQueries({ queryKey: ['getUser'] });
   }
 
   return (
