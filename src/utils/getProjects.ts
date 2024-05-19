@@ -1,13 +1,18 @@
+import { getProjectsSchema } from '../types/schemas';
 import { devServer } from './serverUrl';
 
-export default async function getProjects() {
+import type { Project } from '../types/schemas';
+
+export default async function getProjects(): Promise<Project[] | null> {
   const res = await fetch(
     `${devServer}/api/project`,
     { credentials: 'include' },
   ).then(res => res.json());
 
-  if (res.status === 'success')
-    return res.data;
+  const validRes = getProjectsSchema.parse(res);
 
-  throw new Error(res.message);
+  if (validRes.status === 'success')
+    return validRes.data;
+
+  return null;
 }

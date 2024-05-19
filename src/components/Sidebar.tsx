@@ -2,11 +2,14 @@ import { Button } from '@nextui-org/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 
+import useProjects from '../hooks/useProjects';
 import useUser from '../hooks/useUser';
 import signOut from '../utils/signOut';
+import ProjectBtn from './ProjectBtn';
 
 export default function Sidebar() {
   const { data: user } = useUser();
+  const { data: projects } = useProjects();
   const queryClient = useQueryClient();
 
   return (
@@ -24,7 +27,8 @@ export default function Sidebar() {
       >
         Sign Out
       </Button>
-
+      Projects
+      {projects && projects.map(project => <ProjectBtn project={project} key={project.id} />)}
     </nav>
   );
 }
