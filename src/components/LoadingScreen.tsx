@@ -1,4 +1,4 @@
-import { CircularProgress } from '@nextui-org/progress';
+import { CircularProgress } from '@nextui-org/react';
 
 import viteLogo from '../assets/vite.svg';
 

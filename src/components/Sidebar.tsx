@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/button';
+import { Button } from '@nextui-org/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 
