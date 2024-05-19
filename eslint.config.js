@@ -20,8 +20,16 @@ export default antfu(
       'unused-imports/no-unused-vars': 'warn',
       'style/padding-line-between-statements': [
         'warn',
-        { blankLine: 'always', prev: '*', next: ['return', 'export'] },
-        { blankLine: 'never', prev: 'export', next: 'export' },
+        {
+          blankLine: 'always',
+          prev: '*',
+          next: ['return', 'export'],
+        },
+        {
+          blankLine: 'never',
+          prev: 'export',
+          next: 'export',
+        },
         {
           blankLine: 'always',
           prev: 'import',
@@ -99,5 +107,8 @@ export default antfu(
         extends: ['plugin:testing-library/react'],
       },
     ],
+  }),
+  ...compat.config({
+    extends: ['plugin:@tanstack/eslint-plugin-query/recommended'],
   }),
 );

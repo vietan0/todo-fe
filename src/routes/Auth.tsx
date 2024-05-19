@@ -1,11 +1,12 @@
 import { DevTool } from '@hookform/devtools';
-import { Button } from '@nextui-org/button';
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
-import { Input } from '@nextui-org/input';
-import { Helmet } from 'react-helmet';
+import { Button, Card, CardBody, CardFooter, CardHeader, Input } from '@nextui-org/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Helmet } from 'react-helmet-async';
 import { Controller, useForm } from 'react-hook-form';
+import { Navigate } from 'react-router-dom';
 
-import useUserStore from '../store/useUserStore';
+import LoadingScreen from '../components/LoadingScreen';
+import useUser from '../hooks/useUser';
 import { devServer } from '../utils/serverUrl';
 
 interface Inputs {
@@ -14,18 +15,19 @@ interface Inputs {
 }
 
 export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
-  const markSignIn = useUserStore(state => state.markSignIn);
+  const { data: user, isLoading } = useUser();
+  const queryClient = useQueryClient();
 
   const {
     handleSubmit,
     control,
   } = useForm<Inputs>({ defaultValues: {
-    email: 'vite@gmail.com',
-    password: 'vite',
+    email: 'postman@gmail.com',
+    password: 'postman',
   } });
 
   async function onSubmit(data: Inputs) {
-    const rawRes = await fetch(`${devServer}/auth/${mode}`, {
+    const res = await fetch(`${devServer}/auth/${mode}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -33,13 +35,17 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
       },
       body: JSON.stringify(data),
       credentials: 'include',
-    });
-
-    const res = await rawRes.json();
+    }).then(res => res.json());
 
     if (res.status === 'success')
-      markSignIn(res.data);
+      queryClient.invalidateQueries({ queryKey: ['getUser'] });
   }
+
+  if (isLoading)
+    return <LoadingScreen />;
+
+  else if (user)
+    return <Navigate to="/" />;
 
   return (
     <div className="flex min-h-screen items-center">
@@ -50,7 +56,10 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
           – Todo App
         </title>
       </Helmet>
-      <Card className="m-auto max-w-screen-xs grow p-4">
+      <Card classNames={{
+        base: 'm-auto max-w-screen-xs grow p-4',
+      }}
+      >
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardHeader className="mb-8 flex gap-3">
             <p className="text-3xl font-bold">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</p>
