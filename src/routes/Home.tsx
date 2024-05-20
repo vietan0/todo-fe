@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
 import Sidebar from '../components/Sidebar';
-import useUser from '../hooks/useUser';
+import useUser from '../queries/useUser';
 
 export default function Home() {
   const { data: user, isLoading } = useUser();

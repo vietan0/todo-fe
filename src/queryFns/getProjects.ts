@@ -1,5 +1,5 @@
 import { getProjectsSchema } from '../types/schemas';
-import { devServer } from './serverUrl';
+import { devServer } from '../utils/serverUrl';
 
 import type { Project } from '../types/schemas';
 

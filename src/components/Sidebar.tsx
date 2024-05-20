@@ -1,16 +1,24 @@
 import { Button } from '@nextui-org/react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 
-import useProjects from '../hooks/useProjects';
-import useUser from '../hooks/useUser';
-import signOut from '../utils/signOut';
+import useProjects from '../queries/useProjects';
+import useUser from '../queries/useUser';
+import { signOut } from '../queryFns/auth';
+import LoadingScreen from './LoadingScreen';
 import ProjectBtn from './ProjectBtn';
 
 export default function Sidebar() {
   const { data: user } = useUser();
-  const { data: projects } = useProjects();
+  const { data: projects, isLoading } = useProjects(user?.id);
   const queryClient = useQueryClient();
+
+  const signOutMutation = useMutation({
+    mutationFn: signOut,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getUser'] });
+    },
+  });
 
   return (
     <nav className="sticky top-0 flex h-screen w-72 flex-col p-4 outline">
@@ -20,14 +28,11 @@ export default function Sidebar() {
         <Link className="underline" to="/signin">Sign In</Link>
         <Link className="underline" to="/signup">Sign Up</Link>
       </div>
-      <Button onPress={async () => {
-        await signOut();
-        queryClient.invalidateQueries({ queryKey: ['getUser'] });
-      }}
-      >
+      <Button onPress={() => signOutMutation.mutate()}>
         Sign Out
       </Button>
       Projects
+      {isLoading && <LoadingScreen />}
       {projects && projects.map(project => <ProjectBtn project={project} key={project.id} />)}
     </nav>
   );

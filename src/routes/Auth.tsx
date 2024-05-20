@@ -1,15 +1,15 @@
 import { DevTool } from '@hookform/devtools';
 import { Button, Card, CardBody, CardFooter, CardHeader, Input } from '@nextui-org/react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 import { Controller, useForm } from 'react-hook-form';
 import { Navigate } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
-import useUser from '../hooks/useUser';
-import { devServer } from '../utils/serverUrl';
+import useUser from '../queries/useUser';
+import { signIn, signUp } from '../queryFns/auth';
 
-interface Inputs {
+export interface Inputs {
   email: string;
   password: string;
 }
@@ -26,19 +26,15 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
     password: 'postman',
   } });
 
-  async function onSubmit(data: Inputs) {
-    const res = await fetch(`${devServer}/auth/${mode}`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-      credentials: 'include',
-    }).then(res => res.json());
-
-    if (res.status === 'success')
+  const authMutation = useMutation({
+    mutationFn: mode === 'signin' ? signIn : signUp,
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getUser'] });
+    },
+  });
+
+  async function onSubmit(data: Inputs) {
+    authMutation.mutate(data);
   }
 
   if (isLoading)

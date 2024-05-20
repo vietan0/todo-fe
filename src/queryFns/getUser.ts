@@ -1,5 +1,5 @@
 import { getUserSchema } from '../types/schemas';
-import { devServer } from './serverUrl';
+import { devServer } from '../utils/serverUrl';
 
 import type { User } from '../types/schemas';
 
