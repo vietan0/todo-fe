@@ -2,6 +2,8 @@ import App from '../App';
 import Auth from './Auth';
 import ErrorPage from './ErrorPage';
 import Home from './Home';
+import NoProject from './NoProject';
+import Project from './Project';
 
 export default [
   {
@@ -9,7 +11,14 @@ export default [
     element: <App />,
     errorElement: <App error={<ErrorPage />} />,
     children: [
-      { index: true, element: <Home /> },
+      {
+        path: '/',
+        element: <Home />,
+        children: [
+          { index: true, element: <NoProject /> },
+          { path: '/project/:projectId', element: <Project /> },
+        ],
+      },
       { path: '/signin', element: <Auth mode="signin" /> },
       { path: '/signup', element: <Auth mode="signup" /> },
     ],

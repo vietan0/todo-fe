@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
 import Sidebar from '../components/Sidebar';
@@ -9,7 +9,7 @@ export default function Home() {
   const { data: user, isLoading } = useUser();
 
   if (isLoading)
-    return <LoadingScreen />;
+    return <LoadingScreen withLogo />;
 
   else if (!user)
     return <Navigate to="/signin" />;
@@ -22,9 +22,8 @@ export default function Home() {
         </title>
       </Helmet>
       <Sidebar />
-      <div className="p-4">
-        <h1 className="text-4xl font-bold">Home</h1>
-        <p>Projects</p>
+      <div className="w-full">
+        <Outlet />
       </div>
     </div>
   );

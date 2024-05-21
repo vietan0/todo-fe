@@ -8,7 +8,8 @@ export const userSchema = z.object({
   updatedAt: z.string().datetime(),
 });
 export type User = z.infer<typeof userSchema>;
-export const taskSchema = z.object({
+
+const taskScalarSchema = z.object({
   id: z.string().uuid(),
   name: z.string().max(255),
   completed: z.boolean(),
@@ -16,6 +17,10 @@ export const taskSchema = z.object({
   updatedAt: z.string().datetime(),
   projectId: z.string().uuid(),
   parentTaskId: z.string().uuid().nullable(),
+});
+
+export const taskSchema = taskScalarSchema.extend({
+  subTasks: z.array(taskScalarSchema),
 });
 export type Task = z.infer<typeof taskSchema>;
 export const projectSchema = z.object({
