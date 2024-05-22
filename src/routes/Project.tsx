@@ -9,7 +9,6 @@ export default function Project() {
   const params = useParams();
   const { data: user } = useUser();
   const { data: projects, isLoading } = useProjects(user?.id);
-  console.log('projects', projects);
 
   if (isLoading)
     return <LoadingScreen />;
@@ -21,9 +20,9 @@ export default function Project() {
   const { tasks } = project;
 
   return (
-    <div className="w-full p-4">
+    <div>
       <h1 className="text-3xl font-bold">{project.name}</h1>
-      {tasks.map(task => <Task task={task} />)}
+      {tasks.map(task => <Task task={task} key={task.id} />)}
     </div>
   );
 }

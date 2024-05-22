@@ -22,7 +22,7 @@ export default function Home() {
         </title>
       </Helmet>
       <Sidebar />
-      <div className="w-full">
+      <div className="grow p-8">
         <Outlet />
       </div>
     </div>

@@ -1,12 +1,13 @@
-import { Button } from '@nextui-org/react';
+import { Icon } from '@iconify/react';
+import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
 
 import useProjects from '../queries/useProjects';
 import useUser from '../queries/useUser';
 import { signOut } from '../queryFns/auth';
 import LoadingScreen from './LoadingScreen';
 import ProjectBtn from './ProjectBtn';
+import UserAvatar from './UserAvatar';
 
 export default function Sidebar() {
   const { data: user } = useUser();
@@ -21,19 +22,51 @@ export default function Sidebar() {
   });
 
   return (
-    <nav className="sticky top-0 flex h-screen w-72 flex-col p-4 outline">
-      <p className="font-bold">{user?.email}</p>
-      <div className="flex flex-col gap-2">
-        <Link className="underline" to="/">Home</Link>
-        <Link className="underline" to="/signin">Sign In</Link>
-        <Link className="underline" to="/signup">Sign Up</Link>
+    <nav className="sticky top-0 flex h-screen w-72 flex-col px-2 py-4 outline outline-default-100">
+      <Dropdown>
+        <DropdownTrigger>
+          <Button variant="ghost" isIconOnly className="w-fit rounded-full p-0">
+            <UserAvatar />
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu aria-label="User Options">
+          <DropdownSection title={user?.email} showDivider>
+            <DropdownItem
+              startContent={(<Icon icon="material-symbols:settings" className="text-lg" />)}
+              key="settings"
+            >
+              Settings
+            </DropdownItem>
+          </DropdownSection>
+          <DropdownSection aria-label="Danger zone">
+            <DropdownItem
+              onPress={() => signOutMutation.mutate()}
+              startContent={(<Icon icon="material-symbols:exit-to-app" className="text-lg" />)}
+              key="signout"
+              className="text-danger"
+              color="danger"
+            >
+              Sign out
+            </DropdownItem>
+          </DropdownSection>
+        </DropdownMenu>
+      </Dropdown>
+      <Divider className="my-4" />
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-default-500">My Projects</p>
+          <Button
+            isIconOnly
+            size="sm"
+            variant="light"
+            startContent={<Icon icon="material-symbols:add" className="text-lg text-default-500" />}
+            aria-label="Add Project"
+          >
+          </Button>
+        </div>
+        {isLoading && <LoadingScreen />}
+        {projects && projects.map(project => <ProjectBtn project={project} key={project.id} />)}
       </div>
-      <Button onPress={() => signOutMutation.mutate()}>
-        Sign Out
-      </Button>
-      Projects
-      {isLoading && <LoadingScreen />}
-      {projects && projects.map(project => <ProjectBtn project={project} key={project.id} />)}
     </nav>
   );
 }
