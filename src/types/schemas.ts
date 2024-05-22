@@ -51,3 +51,14 @@ export const getProjectsSchema = z.union([
   }),
   resErrSchema,
 ]);
+export const createProjectSchema = z.union([
+  z.object({
+    status: z.literal('success'),
+    data: projectSchema,
+  }),
+  resErrSchema,
+]);
+export const createProjectPayloadSchema = z.object({
+  name: z.string().max(255),
+});
+export type CreateProjectPayload = z.infer<typeof createProjectPayloadSchema>;

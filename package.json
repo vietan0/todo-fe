@@ -14,6 +14,7 @@
     "test:once": "vitest run"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.4.2",
     "@nextui-org/react": "^2.3.6",
     "@tanstack/query-core": "^5.36.1",
     "@tanstack/react-query": "^5.36.2",

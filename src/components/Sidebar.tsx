@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import useProjects from '../queries/useProjects';
 import useUser from '../queries/useUser';
-import { signOut } from '../queryFns/auth';
+import CreateProjectButton from './CreateProjectButton';
 import LoadingScreen from './LoadingScreen';
 import ProjectBtn from './ProjectBtn';
 import UserAvatar from './UserAvatar';
@@ -55,14 +55,7 @@ export default function Sidebar() {
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between">
           <p className="text-xs text-default-500">My Projects</p>
-          <Button
-            isIconOnly
-            size="sm"
-            variant="light"
-            startContent={<Icon icon="material-symbols:add" className="text-lg text-default-500" />}
-            aria-label="Add Project"
-          >
-          </Button>
+          <CreateProjectButton />
         </div>
         {isLoading && <LoadingScreen />}
         {projects && projects.map(project => <ProjectBtn project={project} key={project.id} />)}

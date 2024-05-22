@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
@@ -21,6 +22,13 @@ export default function Project() {
 
   return (
     <div>
+      <Helmet>
+        <title>
+          {project.name}
+          {' '}
+          – Todo App
+        </title>
+      </Helmet>
       <h1 className="text-3xl font-bold">{project.name}</h1>
       {tasks.map(task => <Task task={task} key={task.id} />)}
     </div>
