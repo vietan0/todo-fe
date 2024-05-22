@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
 import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import useProjects from '../queries/useProjects';
+import useSignOutMutation from '../queries/useSignOutMutation';
 import useUser from '../queries/useUser';
 import CreateProjectButton from './CreateProjectButton';
 import LoadingScreen from './LoadingScreen';
@@ -12,14 +12,7 @@ import UserAvatar from './UserAvatar';
 export default function Sidebar() {
   const { data: user } = useUser();
   const { data: projects, isLoading } = useProjects(user?.id);
-  const queryClient = useQueryClient();
-
-  const signOutMutation = useMutation({
-    mutationFn: signOut,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getUser'] });
-    },
-  });
+  const signOutMutation = useSignOutMutation();
 
   return (
     <nav className="sticky top-0 flex h-screen w-72 flex-col px-2 py-4 outline outline-default-100">

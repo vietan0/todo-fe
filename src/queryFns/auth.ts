@@ -1,8 +1,8 @@
 import { devServer } from '../utils/serverUrl';
 
-import type { Inputs } from '../routes/Auth';
+import type { AuthPayload } from '../routes/Auth';
 
-export async function signIn(data: Inputs) {
+export async function signIn(data: AuthPayload) {
   const res = await fetch(`${devServer}/auth/signin`, {
     method: 'POST',
     headers: {
@@ -16,7 +16,7 @@ export async function signIn(data: Inputs) {
   return res;
 }
 
-export async function signUp(data: Inputs) {
+export async function signUp(data: AuthPayload) {
   const res = await fetch(`${devServer}/auth/signup`, {
     method: 'POST',
     headers: {
