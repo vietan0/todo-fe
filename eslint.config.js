@@ -2,6 +2,7 @@ import antfu from '@antfu/eslint-config';
 import { FlatCompat } from '@eslint/eslintrc';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import tailwind from 'eslint-plugin-tailwindcss';
 
 const compat = new FlatCompat();
 
@@ -97,9 +98,7 @@ export default antfu(
       markdown: true,
     },
   },
-  ...compat.config({
-    extends: ['plugin:tailwindcss/recommended'],
-  }),
+  ...tailwind.configs['flat/recommended'],
   ...compat.config({
     overrides: [
       {
