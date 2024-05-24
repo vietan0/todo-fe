@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import useDeleteProjectMutation from '../queries/useDeleteProjectMutation';
 import useRenameProjectMutation from '../queries/useRenameProjectMutation';
-import { type Project, type RenameProjectPayload, renameProjectPayloadSchema } from '../types/schemas';
+import { type Project, type RenameProject, renameProjectZ } from '../types/dataSchemas';
 import cn from '../utils/cn';
 
 import type { SubmitHandler } from 'react-hook-form';
@@ -24,7 +24,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
   } = useDisclosure();
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(renameProjectPayloadSchema),
+    resolver: zodResolver(renameProjectZ),
     defaultValues: {
       name: project.name,
     },
@@ -32,7 +32,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
 
   const renameProjectMutation = useRenameProjectMutation(project.id);
 
-  const onSubmit: SubmitHandler<RenameProjectPayload> = (data) => {
+  const onSubmit: SubmitHandler<RenameProject> = (data) => {
     renameProjectMutation.mutate(data);
     reset();
   };

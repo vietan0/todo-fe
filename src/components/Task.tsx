@@ -1,4 +1,4 @@
-import type { Task as TaskT } from '../types/schemas';
+import type { Task as TaskT } from '../types/dataSchemas';
 
 export default function Task({ task }: { task: TaskT }) {
   return (

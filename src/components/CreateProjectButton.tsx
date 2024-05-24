@@ -5,9 +5,9 @@ import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader
 import { Controller, useForm } from 'react-hook-form';
 
 import useCreateProjectMutation from '../queries/useCreateProjectMutation';
-import { createProjectPayloadSchema } from '../types/schemas';
+import { createProjectZ } from '../types/dataSchemas';
 
-import type { CreateProjectPayload } from '../types/schemas';
+import type { CreateProject } from '../types/dataSchemas';
 import type { SubmitHandler } from 'react-hook-form';
 
 export default function CreateProjectButton() {
@@ -22,13 +22,13 @@ export default function CreateProjectButton() {
     control,
     formState,
     reset,
-  } = useForm<CreateProjectPayload>({
-    resolver: zodResolver(createProjectPayloadSchema),
+  } = useForm<CreateProject>({
+    resolver: zodResolver(createProjectZ),
   });
 
   const createProjectMutation = useCreateProjectMutation();
 
-  const onSubmit: SubmitHandler<CreateProjectPayload> = (data) => {
+  const onSubmit: SubmitHandler<CreateProject> = (data) => {
     createProjectMutation.mutate(data);
     reset();
   };

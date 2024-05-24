@@ -1,7 +1,7 @@
-import { getUserSchema } from '../types/schemas';
+import { resGetUserZ } from '../types/resSchemas';
 import { devServer } from '../utils/serverUrl';
 
-import type { User } from '../types/schemas';
+import type { User } from '../types/dataSchemas';
 
 export default async function getUser(): Promise<User | null> {
   const res = await fetch(
@@ -9,7 +9,7 @@ export default async function getUser(): Promise<User | null> {
     { credentials: 'include' },
   ).then(res => res.json());
 
-  const validRes = getUserSchema.parse(res);
+  const validRes = resGetUserZ.parse(res);
 
   if (validRes.status === 'success')
     return validRes.data;

@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import cn from '../utils/cn';
 import ProjectActionBtn from './ProjectActionBtn';
 
-import type { Project } from '../types/schemas';
+import type { Project } from '../types/dataSchemas';
 
 export default function ProjectBtn({ project }: { project: Project }) {
   const nav = useNavigate();

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import deleteProject from '../queryFns/deleteProject';
 
-import type { Project } from '../types/schemas';
+import type { Project } from '../types/dataSchemas';
 
 export default function useDeleteProjectMutation(projectId: Project['id']) {
   const nav = useNavigate();
