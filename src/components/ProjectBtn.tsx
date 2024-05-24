@@ -27,7 +27,7 @@ export default function ProjectBtn({ project }: { project: Project }) {
       className={cn('justify-start pl-2 pr-0', isProjectSelected && 'bg-default/40')}
       disableAnimation={isProjectSelected}
       startContent={<Icon icon="material-symbols:category" className="text-lg" />}
-      endContent={<ProjectActionBtn isHover={isHover} />}
+      endContent={<ProjectActionBtn project={project} isHover={isHover} />}
     >
       <p className="w-full text-left">{project.name}</p>
     </Button>

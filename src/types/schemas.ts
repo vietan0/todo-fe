@@ -58,7 +58,18 @@ export const createProjectSchema = z.union([
   }),
   resErrSchema,
 ]);
+export const renameProjectSchema = z.union([
+  z.object({
+    status: z.literal('success'),
+    data: projectSchema,
+  }),
+  resErrSchema,
+]);
 export const createProjectPayloadSchema = z.object({
   name: z.string().max(255),
 });
 export type CreateProjectPayload = z.infer<typeof createProjectPayloadSchema>;
+export const renameProjectPayloadSchema = z.object({
+  name: z.string().max(255),
+});
+export type RenameProjectPayload = z.infer<typeof renameProjectPayloadSchema>;
