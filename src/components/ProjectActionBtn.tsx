@@ -3,13 +3,24 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { Controller, useForm } from 'react-hook-form';
 
+import useDeleteProjectMutation from '../queries/useDeleteProjectMutation';
 import useRenameProjectMutation from '../queries/useRenameProjectMutation';
 import { type Project, type RenameProjectPayload, renameProjectPayloadSchema } from '../types/schemas';
 
 import type { SubmitHandler } from 'react-hook-form';
 
 export default function ProjectActionBtn({ project, isHover }: { project: Project; isHover: boolean }) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isRenameProjectOpen,
+    onOpen: onRenameProjectOpen,
+    onOpenChange: onRenameProjectOpenChange,
+  } = useDisclosure();
+
+  const {
+    isOpen: isDeleteProjectOpen,
+    onOpen: onDeleteProjectOpen,
+    onOpenChange: onDeleteProjectOpenChange,
+  } = useDisclosure();
 
   const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(renameProjectPayloadSchema),
@@ -24,6 +35,8 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
     renameProjectMutation.mutate(data);
     reset();
   };
+
+  const deleteProjectMutation = useDeleteProjectMutation(project.id);
 
   return (
     <>
@@ -45,18 +58,24 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
           aria-label="Project Actions"
         >
           <DropdownItem
-            onPress={onOpen}
+            onPress={onRenameProjectOpen}
             startContent={<Icon icon="material-symbols:edit" />}
             key="rename"
           >
             Rename
           </DropdownItem>
-          <DropdownItem startContent={<Icon icon="material-symbols:delete" />} key="delete" className="text-danger" color="danger">
+          <DropdownItem
+            onPress={onDeleteProjectOpen}
+            startContent={<Icon icon="material-symbols:delete" />}
+            key="delete"
+            className="text-danger"
+            color="danger"
+          >
             Delete
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isRenameProjectOpen} onOpenChange={onRenameProjectOpenChange}>
         <ModalContent>
           {onClose => (
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -91,6 +110,35 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
                 </Button>
               </ModalFooter>
             </form>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isDeleteProjectOpen} onOpenChange={onDeleteProjectOpenChange}>
+        <ModalContent>
+          {onClose => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Are you sure you want to delete this project?</ModalHeader>
+              <ModalBody>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="default"
+                  variant="light"
+                  onPress={onClose}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  color="danger"
+                  onPress={() => {
+                    deleteProjectMutation.mutate();
+                    onClose();
+                  }}
+                >
+                  Delete
+                </Button>
+              </ModalFooter>
+            </>
           )}
         </ModalContent>
       </Modal>

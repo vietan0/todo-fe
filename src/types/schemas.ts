@@ -65,6 +65,13 @@ export const renameProjectSchema = z.union([
   }),
   resErrSchema,
 ]);
+export const deleteProjectSchema = z.union([
+  z.object({
+    status: z.literal('success'),
+    data: projectSchema,
+  }),
+  resErrSchema,
+]);
 export const createProjectPayloadSchema = z.object({
   name: z.string().max(255),
 });
