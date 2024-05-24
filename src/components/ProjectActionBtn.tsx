@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import useDeleteProjectMutation from '../queries/useDeleteProjectMutation';
 import useRenameProjectMutation from '../queries/useRenameProjectMutation';
 import { type Project, type RenameProjectPayload, renameProjectPayloadSchema } from '../types/schemas';
+import cn from '../utils/cn';
 
 import type { SubmitHandler } from 'react-hook-form';
 
@@ -49,7 +50,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
           <Button
             isIconOnly
             variant="light"
-            className={isHover ? 'opacity-100' : 'opacity-0'}
+            className={cn('data-[focus-visible]:-outline-offset-2', isHover ? 'opacity-100' : 'opacity-0')}
           >
             <Icon icon="material-symbols:more-horiz" className="text-lg" />
           </Button>
