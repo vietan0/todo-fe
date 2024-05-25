@@ -2,6 +2,7 @@ import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import useCreateProjectMutation from '../queries/useCreateProjectMutation';
@@ -15,14 +16,17 @@ export default function CreateProjectButton() {
     isOpen,
     onOpen,
     onOpenChange,
+    onClose,
   } = useDisclosure();
 
   const {
     handleSubmit,
     control,
     formState,
-    reset,
+    reset: resetForm,
+    watch,
   } = useForm<CreateProject>({
+    defaultValues: { name: '' },
     resolver: zodResolver(createProjectZ),
   });
 
@@ -30,8 +34,23 @@ export default function CreateProjectButton() {
 
   const onSubmit: SubmitHandler<CreateProject> = (data) => {
     createProjectMutation.mutate(data);
-    reset();
   };
+
+  console.log('name:', watch('name')); // watch input value by passing the name of it
+
+  useEffect(() => {
+    if (createProjectMutation.isSuccess) {
+      onClose();
+      resetForm();
+    }
+  }, [createProjectMutation.isSuccess]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      resetForm();
+      createProjectMutation.reset();
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -47,7 +66,7 @@ export default function CreateProjectButton() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         classNames={{
-          footer: 'mt-6',
+          footer: 'mt-6 flex-col',
         }}
       >
         <ModalContent>
@@ -70,16 +89,34 @@ export default function CreateProjectButton() {
                 />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Cancel
-                </Button>
-                <Button
-                  color="primary"
-                  type="submit"
-                  onPress={onClose}
-                >
-                  Create
-                </Button>
+                <div className="flex justify-end gap-2">
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={() => {
+                      createProjectMutation.reset();
+                      resetForm();
+                      onClose();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={createProjectMutation.isPending}
+                  >
+                    Create
+                  </Button>
+                </div>
+                {createProjectMutation.isError
+                  ? (
+                    <p onClick={() => createProjectMutation.reset()} className="font-mono text-sm text-danger">
+                      An error occurred:
+                      {createProjectMutation.error.message}
+                    </p>
+                    )
+                  : null}
               </ModalFooter>
               <DevTool control={control} />
             </form>

@@ -33,7 +33,7 @@ export const projectZ = z.object({
 });
 export type Project = z.infer<typeof projectZ>;
 export const createProjectZ = z.object({
-  name: z.string().max(255),
+  name: z.string().trim().min(1).max(255),
 });
 export type CreateProject = z.infer<typeof createProjectZ>;
 export const renameProjectZ = z.object({
