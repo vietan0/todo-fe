@@ -1,11 +1,11 @@
 import { resDeleteProjectZ } from '../types/resSchemas';
-import { devServer } from '../utils/serverUrl';
+import { server } from '../utils/serverUrl';
 
 import type { Project } from '../types/dataSchemas';
 
 export default async function deleteProject(projectId: Project['id']): Promise<Project | null> {
   const res = await fetch(
-    `${devServer}/api/project/${projectId}`,
+    `${server}/api/project/${projectId}`,
     {
       method: 'DELETE',
       credentials: 'include',

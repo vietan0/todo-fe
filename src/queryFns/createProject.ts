@@ -1,11 +1,11 @@
 import { resCreateProjectZ } from '../types/resSchemas';
-import { devServer } from '../utils/serverUrl';
+import { server } from '../utils/serverUrl';
 
 import type { CreateProject, Project } from '../types/dataSchemas';
 
 export default async function createProject(data: CreateProject): Promise<Project | null> {
   const res = await fetch(
-    `${devServer}/api/project`,
+    `${server}/api/project`,
     {
       method: 'POST',
       headers: {

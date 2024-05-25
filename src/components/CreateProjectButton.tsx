@@ -24,7 +24,6 @@ export default function CreateProjectButton() {
     control,
     formState,
     reset: resetForm,
-    watch,
   } = useForm<CreateProject>({
     defaultValues: { name: '' },
     resolver: zodResolver(createProjectZ),
@@ -35,8 +34,6 @@ export default function CreateProjectButton() {
   const onSubmit: SubmitHandler<CreateProject> = (data) => {
     createProjectMutation.mutate(data);
   };
-
-  console.log('name:', watch('name')); // watch input value by passing the name of it
 
   useEffect(() => {
     if (createProjectMutation.isSuccess) {
@@ -81,7 +78,7 @@ export default function CreateProjectButton() {
                     <Input
                       {...field}
                       type="text"
-                      label="Project Name"
+                      label="Name"
                       isInvalid={Boolean(formState.errors.name)}
                       errorMessage={formState.errors.name?.message}
                     />

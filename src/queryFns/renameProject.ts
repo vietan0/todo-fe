@@ -1,11 +1,11 @@
 import { resRenameProjectZ } from '../types/resSchemas';
-import { devServer } from '../utils/serverUrl';
+import { server } from '../utils/serverUrl';
 
 import type { Project, RenameProject } from '../types/dataSchemas';
 
 export default async function renameProject(data: RenameProject, projectId: Project['id']): Promise<Project | null> {
   const res = await fetch(
-    `${devServer}/api/project/${projectId}`,
+    `${server}/api/project/${projectId}`,
     {
       method: 'PATCH',
       headers: {

@@ -1,9 +1,9 @@
-import { devServer } from '../utils/serverUrl';
+import { server } from '../utils/serverUrl';
 
 import type { AuthPayload } from '../routes/Auth';
 
 export async function signIn(data: AuthPayload) {
-  const res = await fetch(`${devServer}/auth/signin`, {
+  const res = await fetch(`${server}/auth/signin`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -17,7 +17,7 @@ export async function signIn(data: AuthPayload) {
 }
 
 export async function signUp(data: AuthPayload) {
-  const res = await fetch(`${devServer}/auth/signup`, {
+  const res = await fetch(`${server}/auth/signup`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -31,7 +31,7 @@ export async function signUp(data: AuthPayload) {
 }
 
 export async function signOut() {
-  const res = await fetch(`${devServer}/auth/signout`, { method: 'POST', credentials: 'include' }).then(res => res.json());
+  const res = await fetch(`${server}/auth/signout`, { method: 'POST', credentials: 'include' }).then(res => res.json());
 
   return res;
 }
