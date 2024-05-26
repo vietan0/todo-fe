@@ -1,6 +1,8 @@
+import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import useDeleteProjectMutation from '../queries/useDeleteProjectMutation';
@@ -15,29 +17,57 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
     isOpen: isRenameProjectOpen,
     onOpen: onRenameProjectOpen,
     onOpenChange: onRenameProjectOpenChange,
+    onClose: onRenameProjectClose,
   } = useDisclosure();
 
   const {
-    isOpen: isDeleteProjectOpen,
-    onOpen: onDeleteProjectOpen,
-    onOpenChange: onDeleteProjectOpenChange,
-  } = useDisclosure();
-
-  const { control, handleSubmit, reset } = useForm({
+    control,
+    handleSubmit,
+    formState,
+    reset: resetForm,
+  } = useForm({
+    defaultValues: { name: project.name },
     resolver: zodResolver(renameProjectZ),
-    defaultValues: {
-      name: project.name,
-    },
   });
 
   const renameProjectMutation = useRenameProjectMutation(project.id);
 
   const onSubmit: SubmitHandler<RenameProject> = (data) => {
     renameProjectMutation.mutate(data);
-    reset();
   };
 
+  useEffect(() => {
+    if (renameProjectMutation.isSuccess) {
+      onRenameProjectClose();
+      resetForm(undefined, { keepDirtyValues: true });
+    }
+  }, [renameProjectMutation.isSuccess]);
+
+  useEffect(() => {
+    if (!isRenameProjectOpen) {
+      resetForm(undefined, { keepDirtyValues: true });
+      renameProjectMutation.reset();
+    }
+  }, [isRenameProjectOpen]);
+
+  const {
+    isOpen: isDeleteProjectOpen,
+    onOpen: onDeleteProjectOpen,
+    onOpenChange: onDeleteProjectOpenChange,
+    onClose: onDeleteProjectClose,
+  } = useDisclosure();
+
   const deleteProjectMutation = useDeleteProjectMutation(project.id);
+
+  useEffect(() => {
+    if (deleteProjectMutation.isSuccess)
+      onDeleteProjectClose();
+  }, [deleteProjectMutation.isSuccess]);
+
+  useEffect(() => {
+    if (!isDeleteProjectOpen)
+      deleteProjectMutation.reset();
+  }, [isDeleteProjectOpen]);
 
   return (
     <>
@@ -76,7 +106,13 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <Modal isOpen={isRenameProjectOpen} onOpenChange={onRenameProjectOpenChange}>
+      <Modal
+        isOpen={isRenameProjectOpen}
+        onOpenChange={onRenameProjectOpenChange}
+        classNames={{
+          footer: 'mt-6 flex-col',
+        }}
+      >
         <ModalContent>
           {onClose => (
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -90,54 +126,95 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
                       {...field}
                       type="text"
                       label="Name"
+                      isInvalid={Boolean(formState.errors.name)}
+                      errorMessage={formState.errors.name?.message}
                     />
                   )}
                 />
               </ModalBody>
               <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="light"
-                  onPress={onClose}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  color="primary"
-                  onPress={onClose}
-                >
-                  Rename
-                </Button>
+                <div className="flex justify-end gap-2">
+
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={() => {
+                      renameProjectMutation.reset();
+                      resetForm();
+                      onClose();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={renameProjectMutation.isPending}
+
+                  >
+                    Rename
+                  </Button>
+                </div>
+                {renameProjectMutation.isError
+                  ? (
+                    <p onClick={() => renameProjectMutation.reset()} className="font-mono text-sm text-danger">
+                      An error occurred:
+                      {renameProjectMutation.error.message}
+                    </p>
+                    )
+                  : null}
               </ModalFooter>
+              <DevTool control={control} />
+
             </form>
           )}
         </ModalContent>
       </Modal>
-      <Modal isOpen={isDeleteProjectOpen} onOpenChange={onDeleteProjectOpenChange}>
+      <Modal
+        isOpen={isDeleteProjectOpen}
+        onOpenChange={onDeleteProjectOpenChange}
+        classNames={{
+          footer: 'mt-6 flex-col',
+        }}
+      >
         <ModalContent>
           {onClose => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Are you sure you want to delete this project?</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Are you sure you want to delete project "
+                {project.name}
+                "? This can't be reversed.
+              </ModalHeader>
               <ModalBody>
               </ModalBody>
               <ModalFooter>
-                <Button
-                  color="default"
-                  variant="light"
-                  onPress={onClose}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  color="danger"
-                  onPress={() => {
-                    deleteProjectMutation.mutate();
-                    onClose();
-                  }}
-                >
-                  Delete
-                </Button>
+                <div className="flex justify-end gap-2">
+
+                  <Button
+                    color="default"
+                    variant="light"
+                    onPress={onClose}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    color="danger"
+                    isLoading={deleteProjectMutation.isPending}
+                    onPress={() => {
+                      deleteProjectMutation.mutate();
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
+                {deleteProjectMutation.isError
+                  ? (
+                    <p onClick={() => deleteProjectMutation.reset()} className="font-mono text-sm text-danger">
+                      An error occurred:
+                      {deleteProjectMutation.error.message}
+                    </p>
+                    )
+                  : null}
               </ModalFooter>
             </>
           )}
