@@ -12,8 +12,8 @@ export default function useCreateProjectMutation() {
 
   return useMutation({
     mutationFn: createProject,
-    onSuccess: (newProject) => {
-      queryClient.invalidateQueries({ queryKey: ['getProjects'] });
+    onSuccess: async (newProject) => {
+      await queryClient.invalidateQueries({ queryKey: ['getProjects'] });
       nav(`/project/${newProject!.id}`);
     },
   });

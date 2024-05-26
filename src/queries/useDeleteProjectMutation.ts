@@ -12,8 +12,8 @@ export default function useDeleteProjectMutation(projectId: Project['id']) {
 
   return useMutation({
     mutationFn: () => deleteProject(projectId),
-    onSuccess: (_deletedProject) => {
-      queryClient.invalidateQueries({ queryKey: ['getProjects'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['getProjects'] });
       nav('/');
     },
   });

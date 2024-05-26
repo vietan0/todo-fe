@@ -1,5 +1,6 @@
+import { Button } from '@nextui-org/react';
 import { Helmet } from 'react-helmet-async';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
 import Task from '../components/Task';
@@ -16,8 +17,22 @@ export default function Project() {
 
   const project = projects!.find(p => p.id === params.projectId);
 
-  if (!project)
-    return 'something wrong';
+  if (!project) {
+    return (
+      <div className="flex size-full flex-col items-center justify-center gap-4">
+        <p className="text-2xl">Can't find this project.</p>
+        <div className="flex gap-4">
+          <Button variant="ghost" color="primary">
+            Retry
+          </Button>
+          <Button variant="ghost">
+            <Link to="/">Go Home</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   const { tasks } = project;
 
   return (
