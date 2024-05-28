@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
+import { Resizable } from 're-resizable';
 
 import useProjects from '../queries/useProjects';
 import useSignOutMutation from '../queries/useSignOutMutation';
@@ -15,35 +16,66 @@ export default function Sidebar() {
   const signOutMutation = useSignOutMutation();
 
   return (
-    <nav className="sticky top-0 flex h-screen w-72 flex-col px-2 py-4 outline outline-default-100">
-      <Dropdown>
-        <DropdownTrigger>
-          <Button variant="ghost" isIconOnly className="w-fit rounded-full p-0">
-            <UserAvatar />
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu aria-label="User Options">
-          <DropdownSection title={user?.email} showDivider>
-            <DropdownItem
-              startContent={(<Icon icon="material-symbols:settings" className="text-lg" />)}
-              key="settings"
+    <Resizable
+      defaultSize={{ width: 240 }}
+      minWidth={180}
+      maxWidth={380}
+      enable={{
+        // only allow dragging from the right
+        top: false,
+        right: true,
+        bottom: false,
+        left: false,
+        topRight: false,
+        bottomRight: false,
+        bottomLeft: false,
+        topLeft: false,
+      }}
+      as="nav"
+      className="sticky top-0 flex h-screen w-72 flex-col px-2 py-4 outline outline-default-100"
+    >
+      <div className="flex items-center justify-between">
+        <Dropdown>
+          <DropdownTrigger>
+            <Button
+              isIconOnly
+              aria-label="User Menu"
+              className="w-fit p-0"
             >
-              Settings
-            </DropdownItem>
-          </DropdownSection>
-          <DropdownSection aria-label="Danger zone">
-            <DropdownItem
-              onPress={() => signOutMutation.mutate()}
-              startContent={(<Icon icon="material-symbols:exit-to-app" className="text-lg" />)}
-              key="signout"
-              className="text-danger"
-              color="danger"
-            >
-              Sign out
-            </DropdownItem>
-          </DropdownSection>
-        </DropdownMenu>
-      </Dropdown>
+              <UserAvatar />
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="User Options">
+            <DropdownSection title={user?.email} showDivider>
+              <DropdownItem
+                startContent={(<Icon icon="material-symbols:settings" className="text-lg" />)}
+                key="settings"
+              >
+                Settings
+              </DropdownItem>
+            </DropdownSection>
+            <DropdownSection aria-label="Danger zone">
+              <DropdownItem
+                onPress={() => signOutMutation.mutate()}
+                startContent={(<Icon icon="material-symbols:exit-to-app" className="text-lg" />)}
+                key="signout"
+                className="text-danger"
+                color="danger"
+              >
+                Sign out
+              </DropdownItem>
+            </DropdownSection>
+          </DropdownMenu>
+        </Dropdown>
+        <Button
+          isIconOnly
+          aria-label="Toggle Sidebar"
+          radius="sm"
+          className="p-0"
+        >
+          <Icon icon="ph:sidebar-simple-fill" className="text-xl" />
+        </Button>
+      </div>
       <Divider className="my-4" />
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between">
@@ -53,6 +85,6 @@ export default function Sidebar() {
         {isLoading && <LoadingScreen />}
         {projects && projects.map(project => <ProjectBtn project={project} key={project.id} />)}
       </div>
-    </nav>
+    </Resizable>
   );
 }
