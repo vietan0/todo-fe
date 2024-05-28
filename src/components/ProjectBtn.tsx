@@ -28,10 +28,10 @@ export default function ProjectBtn({ project }: { project: Project }) {
       fullWidth
       className={cn('justify-start pl-2 pr-0', isProjectSelected && 'bg-default/40')}
       disableAnimation={isProjectSelected}
-      startContent={<Icon icon="material-symbols:category" className="text-lg" />}
+      startContent={<Icon icon="material-symbols:category" className="shrink-0 text-lg" />}
       endContent={<ProjectActionBtn project={project} isHover={isHover} />}
     >
-      <p className="w-full text-left">{project.name}</p>
+      <p className="w-full overflow-hidden text-ellipsis text-left">{project.name}</p>
     </Button>
   );
 }

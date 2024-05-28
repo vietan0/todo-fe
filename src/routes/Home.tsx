@@ -15,7 +15,7 @@ export default function Home() {
     return <Navigate to="/signin" />;
 
   return (
-    <div id="Home" className="flex">
+    <div id="Home" className="flex h-screen">
       <Helmet>
         <title>
           Home – Todo App
