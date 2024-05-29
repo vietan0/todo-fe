@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
 import { Resizable } from 're-resizable';
+import { useState } from 'react';
 
 import useProjects from '../queries/useProjects';
 import useSignOutMutation from '../queries/useSignOutMutation';
@@ -10,16 +11,24 @@ import LoadingScreen from './LoadingScreen';
 import ProjectBtn from './ProjectBtn';
 import UserAvatar from './UserAvatar';
 
-export default function Sidebar() {
+export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
+  isSidebarHidden: boolean;
+  setIsSidebarHidden: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { data: user } = useUser();
   const { data: projects, isLoading } = useProjects(user?.id);
   const signOutMutation = useSignOutMutation();
+  const [width, setWidth] = useState(240);
 
   return (
     <Resizable
+      as="nav"
       defaultSize={{ width: 240 }}
-      minWidth={180}
+      size={{ width }}
+      style={{ marginLeft: isSidebarHidden ? -width : 0 }}
+      minWidth={220}
       maxWidth={380}
+      onResizeStop={(e, direction, ref, d) => setWidth(width + d.width)}
       enable={{
         // only allow dragging from the right
         top: false,
@@ -31,8 +40,13 @@ export default function Sidebar() {
         bottomLeft: false,
         topLeft: false,
       }}
-      as="nav"
-      className="sticky top-0 flex h-screen w-72 flex-col px-2 py-4 outline outline-default-100"
+      className="flex flex-col p-2 duration-75"
+      handleStyles={{
+        right: {
+          width: 4,
+        },
+      }}
+      handleClasses={{ right: 'bg-default-100 hover:bg-default-200 focus:bg-default-200' }}
     >
       <div className="flex items-center justify-between">
         <Dropdown>
@@ -40,6 +54,7 @@ export default function Sidebar() {
             <Button
               isIconOnly
               aria-label="User Menu"
+              variant="light"
               className="w-fit p-0"
             >
               <UserAvatar />
@@ -48,7 +63,7 @@ export default function Sidebar() {
           <DropdownMenu aria-label="User Options">
             <DropdownSection title={user?.email} showDivider>
               <DropdownItem
-                startContent={(<Icon icon="material-symbols:settings" className="text-lg" />)}
+                startContent={<Icon icon="material-symbols:settings" className="text-lg" />}
                 key="settings"
               >
                 Settings
@@ -57,7 +72,7 @@ export default function Sidebar() {
             <DropdownSection aria-label="Danger zone">
               <DropdownItem
                 onPress={() => signOutMutation.mutate()}
-                startContent={(<Icon icon="material-symbols:exit-to-app" className="text-lg" />)}
+                startContent={<Icon icon="material-symbols:exit-to-app" className="text-lg" />}
                 key="signout"
                 className="text-danger"
                 color="danger"
@@ -71,12 +86,14 @@ export default function Sidebar() {
           isIconOnly
           aria-label="Toggle Sidebar"
           radius="sm"
+          variant="light"
           className="p-0"
+          onPress={() => setIsSidebarHidden(p => !p)}
         >
           <Icon icon="ph:sidebar-simple-fill" className="text-xl" />
         </Button>
       </div>
-      <Divider className="my-4" />
+      <Divider className="my-2" />
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between">
           <p className="text-xs text-default-500">My Projects</p>
