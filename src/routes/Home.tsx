@@ -26,7 +26,7 @@ export default function Home() {
         </title>
       </Helmet>
       <Sidebar isSidebarHidden={isSidebarHidden} setIsSidebarHidden={setIsSidebarHidden} />
-      <div className="grow">
+      <div className="flex grow flex-col">
         <div className="flex items-center justify-between p-2">
           {isSidebarHidden && (
             <Button
@@ -50,7 +50,7 @@ export default function Home() {
             <Icon icon="material-symbols:more-horiz" className="text-xl" />
           </Button>
         </div>
-        <div className="p-8">
+        <div className="grow p-8">
           <Outlet />
         </div>
       </div>
