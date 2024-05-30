@@ -32,7 +32,7 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
       enable={{
         // only allow dragging from the right
         top: false,
-        right: true,
+        right: !isSidebarHidden,
         bottom: false,
         left: false,
         topRight: false,
