@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { projectZ, userZ } from './dataSchemas';
+import { projectZ, taskZ, userZ } from './dataSchemas';
 
 import type { ZodTypeAny } from 'zod';
 
@@ -21,3 +21,4 @@ export const resGetProjectsZ = z.union([resSuccessZ(z.array(projectZ)), resErrZ]
 export const resCreateProjectZ = z.union([resSuccessZ(projectZ), resErrZ]);
 export const resRenameProjectZ = z.union([resSuccessZ(projectZ), resErrZ]);
 export const resDeleteProjectZ = z.union([resSuccessZ(projectZ), resErrZ]);
+export const resCompleteTaskZ = z.union([resSuccessZ(taskZ), resErrZ]);
