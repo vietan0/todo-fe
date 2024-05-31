@@ -2,6 +2,7 @@ import { Button } from '@nextui-org/react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
 
+import CreateTaskButton from '../components/CreateTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
 import Task from '../components/Task';
 import useProjects from '../queries/useProjects';
@@ -36,7 +37,10 @@ export default function Project() {
   const { tasks } = project;
 
   return (
-    <>
+    <div
+      id={`Project ${project.id}`}
+      className="flex flex-col gap-4"
+    >
       <Helmet>
         <title>
           {project.name}
@@ -45,9 +49,10 @@ export default function Project() {
         </title>
       </Helmet>
       <h1 className="text-3xl font-bold">{project.name}</h1>
+      <CreateTaskButton />
       <div className="flex flex-col gap-4">
         {tasks.map(task => <Task task={task} key={task.id} />)}
       </div>
-    </>
+    </div>
   );
 }

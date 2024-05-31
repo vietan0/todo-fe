@@ -40,6 +40,11 @@ export const renameProjectZ = z.object({
   name: z.string().max(255),
 });
 export type RenameProject = z.infer<typeof renameProjectZ>;
+export const createTaskZ = z.object({
+  name: z.string().trim().min(1).max(255),
+  parentTaskId: z.string().uuid().optional(),
+});
+export type CreateTask = z.infer<typeof createTaskZ>;
 export const completeTaskZ = z.object({
   completed: z.boolean(),
 });
