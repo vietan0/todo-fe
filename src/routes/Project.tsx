@@ -36,7 +36,7 @@ export default function Project() {
   const { tasks } = project;
 
   return (
-    <div>
+    <>
       <Helmet>
         <title>
           {project.name}
@@ -45,7 +45,9 @@ export default function Project() {
         </title>
       </Helmet>
       <h1 className="text-3xl font-bold">{project.name}</h1>
-      {tasks.map(task => <Task task={task} key={task.id} />)}
-    </div>
+      <div className="flex flex-col gap-4">
+        {tasks.map(task => <Task task={task} key={task.id} />)}
+      </div>
+    </>
   );
 }

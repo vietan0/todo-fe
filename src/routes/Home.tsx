@@ -19,19 +19,20 @@ export default function Home() {
     return <Navigate to="/signin" />;
 
   return (
-    <div id="Home" className="flex h-screen">
+    <div id="Home" className="flex min-h-screen">
       <Helmet>
         <title>
           Home – Todo App
         </title>
       </Helmet>
       <Sidebar isSidebarHidden={isSidebarHidden} setIsSidebarHidden={setIsSidebarHidden} />
-      <div className="flex grow flex-col">
-        <div className="flex items-center justify-between p-2">
+      <div className="flex grow flex-col p-2">
+        <div className="flex items-center justify-between">
           {isSidebarHidden && (
             <Button
               isIconOnly
               aria-label="Toggle Sidebar"
+              size="sm"
               radius="sm"
               variant="light"
               className="p-0"
@@ -43,6 +44,7 @@ export default function Home() {
           <Button
             isIconOnly
             aria-label="Toggle Sidebar"
+            size="sm"
             radius="sm"
             variant="light"
             className="ml-auto p-0"
@@ -50,7 +52,7 @@ export default function Home() {
             <Icon icon="material-symbols:more-horiz" className="text-xl" />
           </Button>
         </div>
-        <div className="grow p-8">
+        <div className="grow px-8 py-4">
           <Outlet />
         </div>
       </div>

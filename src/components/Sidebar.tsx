@@ -54,8 +54,9 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
             <Button
               isIconOnly
               aria-label="User Menu"
+              size="sm"
+              radius="sm"
               variant="light"
-              className="w-fit p-0"
             >
               <UserAvatar />
             </Button>
@@ -85,12 +86,13 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
         <Button
           isIconOnly
           aria-label="Toggle Sidebar"
+          size="sm"
           radius="sm"
           variant="light"
           className="p-0"
           onPress={() => setIsSidebarHidden(p => !p)}
         >
-          <Icon icon="ph:sidebar-simple-fill" className="text-xl" />
+          <Icon icon="ph:sidebar-simple-fill" className="text-lg" />
         </Button>
       </div>
       <Divider className="my-2" />

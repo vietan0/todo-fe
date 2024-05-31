@@ -24,6 +24,7 @@ export default function ProjectBtn({ project }: { project: Project }) {
       onMouseLeave={() => setIsHover(false)}
       onFocus={() => setIsHover(true)}
       onBlur={() => setIsHover(false)}
+      radius="sm"
       variant="light"
       fullWidth
       className={cn('justify-start pl-2 pr-0', isProjectSelected && 'bg-default/40')}
