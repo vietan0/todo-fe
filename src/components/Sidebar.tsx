@@ -25,7 +25,11 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
       as="nav"
       defaultSize={{ width: 240 }}
       size={{ width }}
-      style={{ marginLeft: isSidebarHidden ? -width : 0 }}
+      style={{
+        marginLeft: isSidebarHidden ? -width : 0,
+        visibility: isSidebarHidden ? 'hidden' : 'visible',
+        opacity: isSidebarHidden ? 0 : 1,
+      }}
       minWidth={220}
       maxWidth={380}
       onResizeStop={(e, direction, ref, d) => setWidth(width + d.width)}
