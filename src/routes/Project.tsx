@@ -48,7 +48,7 @@ export default function Project() {
           – Todo App
         </title>
       </Helmet>
-      <h1 className="text-3xl font-bold">{project.name}</h1>
+      <h1 className="text-2xl font-bold">{project.name}</h1>
       <CreateTaskButton />
       <div className="flex flex-col gap-4">
         {tasks.map(task => <Task task={task} key={task.id} />)}
