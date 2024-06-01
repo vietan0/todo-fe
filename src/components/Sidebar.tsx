@@ -42,9 +42,7 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
       }}
       className="flex flex-col p-2 duration-75"
       handleStyles={{
-        right: {
-          width: 4,
-        },
+        right: { width: 4 },
       }}
       handleClasses={{ right: 'bg-default-100 hover:bg-default-200 focus:bg-default-200' }}
     >
