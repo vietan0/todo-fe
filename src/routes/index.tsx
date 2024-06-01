@@ -16,7 +16,13 @@ export default [
         element: <Home />,
         children: [
           { index: true, element: <NoProject /> },
-          { path: '/project/:projectId', element: <Project /> },
+          {
+            path: '/project/:projectId',
+            element: <Project />,
+            children: [
+              { path: 'task/:taskId', element: null },
+            ],
+          },
         ],
       },
       { path: '/signin', element: <Auth mode="signin" /> },

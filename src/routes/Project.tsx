@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react';
+import { Button, useDisclosure } from '@nextui-org/react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
 
@@ -7,11 +7,13 @@ import LoadingScreen from '../components/LoadingScreen';
 import Task from '../components/Task';
 import useProjects from '../queries/useProjects';
 import useUser from '../queries/useUser';
+import TaskModal from './TaskModal';
 
 export default function Project() {
   const params = useParams();
   const { data: user } = useUser();
   const { data: projects, isLoading } = useProjects(user?.id);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   if (isLoading)
     return <LoadingScreen />;
@@ -51,8 +53,9 @@ export default function Project() {
       <h1 className="text-2xl font-bold">{project.name}</h1>
       <CreateTaskButton />
       <div className="flex flex-col gap-4">
-        {tasks.map(task => <Task task={task} key={task.id} />)}
+        {tasks.map(task => <Task task={task} onOpen={onOpen} key={task.id} />)}
       </div>
+      <TaskModal isOpen={isOpen} onOpenChange={onOpenChange} />
     </div>
   );
 }

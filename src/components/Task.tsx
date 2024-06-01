@@ -1,15 +1,21 @@
 import { Button, Checkbox, CircularProgress, Code } from '@nextui-org/react';
+import { useNavigate } from 'react-router-dom';
 
 import useCompleteTaskMutation from '../queries/useCompleteTaskMutation';
 import cn from '../utils/cn';
 
 import type { Task as TaskT } from '../types/dataSchemas';
 
-export default function Task({ task }: { task: TaskT }) {
+export default function Task({ task, onOpen }: { task: TaskT; onOpen: () => void }) {
   const completeTaskMutation = useCompleteTaskMutation(task.id);
+  const nav = useNavigate();
 
   return (
     <Button
+      onPress={() => {
+        nav(`task/${task.id}`);
+        onOpen();
+      }}
       radius="sm"
       variant="bordered"
       disableAnimation

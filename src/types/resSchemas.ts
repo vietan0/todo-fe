@@ -21,5 +21,6 @@ export const resGetProjectsZ = z.union([resSuccessZ(z.array(projectZ)), resErrZ]
 export const resCreateProjectZ = z.union([resSuccessZ(projectZ), resErrZ]);
 export const resRenameProjectZ = z.union([resSuccessZ(projectZ), resErrZ]);
 export const resDeleteProjectZ = z.union([resSuccessZ(projectZ), resErrZ]);
+export const resGetTasksZ = z.union([resSuccessZ(z.array(taskZ)), resErrZ]);
 export const resCreateTaskZ = z.union([resSuccessZ(taskZ), resErrZ]);
 export const resCompleteTaskZ = z.union([resSuccessZ(taskZ), resErrZ]);
