@@ -72,6 +72,7 @@ export default function CreateTaskButton({ parentTaskId }: { parentTaskId?: stri
                   {...field}
                   type="text"
                   label="Task name"
+                  autoFocus
                   variant="underlined"
                   isInvalid={Boolean(formState.errors.name)}
                   errorMessage={formState.errors.name?.message}

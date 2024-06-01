@@ -63,6 +63,7 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
                   type="email"
                   label="Email"
                   placeholder="Enter your email"
+                  autoFocus
                 />
               )}
             />
