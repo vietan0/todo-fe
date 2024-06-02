@@ -46,7 +46,7 @@ export default function Project() {
       </Helmet>
       <h1 className="text-2xl font-bold">{project.name}</h1>
       <CreateTaskButton />
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {project.tasks.map(task => <Task task={task} onOpen={onOpen} key={task.id} />)}
       </div>
       {taskId && <TaskModal isOpen={isOpen} onOpenChange={onOpenChange} />}
