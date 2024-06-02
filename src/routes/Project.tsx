@@ -9,7 +9,7 @@ import useProject from '../queries/useProject';
 import TaskModal from './TaskModal';
 
 export default function Project() {
-  const { projectId, taskId } = useParams();
+  const { projectId, taskId } = useParams<'projectId' | 'taskId'>();
   const { data: project, isLoading } = useProject(projectId);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 

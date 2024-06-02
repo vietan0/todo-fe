@@ -10,7 +10,7 @@ import type { Project } from '../types/dataSchemas';
 
 export default function ProjectBtn({ project }: { project: Project }) {
   const nav = useNavigate();
-  const params = useParams();
+  const params = useParams<'projectId' | 'taskId'>();
   const isProjectSelected = params.projectId === project.id;
   const [isHover, setIsHover] = useState(false);
 

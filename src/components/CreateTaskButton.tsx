@@ -27,7 +27,7 @@ export default function CreateTaskButton({ parentTaskId }: { parentTaskId?: stri
   });
 
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const params = useParams();
+  const params = useParams<'projectId' | 'taskId'>();
   const createTaskMutation = useCreateTaskMutation(params.projectId || '');
 
   const onSubmit: SubmitHandler<CreateTask> = (data) => {
