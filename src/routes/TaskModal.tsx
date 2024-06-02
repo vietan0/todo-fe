@@ -1,8 +1,9 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react';
+import { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
-import useTasks from '../queries/useTasks';
+import useTask from '../queries/useTask';
 
 export default function TaskModal({ isOpen, onOpenChange }: {
   isOpen: boolean;
@@ -10,12 +11,15 @@ export default function TaskModal({ isOpen, onOpenChange }: {
 }) {
   const params = useParams<'projectId' | 'taskId'>();
   const nav = useNavigate();
-  const { data: tasks, isLoading } = useTasks(params.projectId);
+  const { data: task, isLoading } = useTask(params.taskId);
+
+  useEffect(() => {
+    if (!isOpen)
+      nav(-1);
+  }, [isOpen]);
 
   if (isLoading)
     return <LoadingScreen />;
-
-  const task = tasks!.find(p => p.id === params.taskId);
 
   if (!task) {
     return (
@@ -48,16 +52,11 @@ export default function TaskModal({ isOpen, onOpenChange }: {
               <pre>
                 {JSON.stringify(task, null, 2)}
               </pre>
-              <p>Subtasks:</p>
-              <pre>{JSON.stringify(task.subTasks, null, 2)}</pre>
             </ModalBody>
             <ModalFooter>
               <Button
                 color="primary"
-                onPress={() => {
-                  onClose();
-                  nav(-1);
-                }}
+                onPress={onClose}
               >
                 Close
               </Button>

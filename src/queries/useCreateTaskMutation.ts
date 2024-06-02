@@ -10,8 +10,8 @@ export default function useCreateTaskMutation(projectId: Project['id']) {
 
   return useMutation({
     mutationFn: (data: CreateTask) => createTask(data, projectId),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['getProjects'] });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getProject', projectId] });
     },
   });
 }

@@ -10,8 +10,8 @@ export default function useCompleteTaskMutation(taskId: Task['id']) {
 
   return useMutation({
     mutationFn: (completed: boolean) => completeTask(completed, taskId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getProjects'] });
+    onSuccess: (task) => {
+      queryClient.invalidateQueries({ queryKey: ['getProject', task?.projectId] });
     },
   });
 }

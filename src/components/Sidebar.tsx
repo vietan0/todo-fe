@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
+import { Button, Code, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
 import { Resizable } from 're-resizable';
 import { useState } from 'react';
 
@@ -16,7 +16,7 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
   setIsSidebarHidden: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { data: user } = useUser();
-  const { data: projects, isLoading } = useProjects(user?.id);
+  const { data: projects, isLoading, error } = useProjects(user?.id);
   const signOutMutation = useSignOutMutation();
   const [width, setWidth] = useState(240);
 
@@ -105,6 +105,15 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
         </div>
         {isLoading && <LoadingScreen />}
         {projects && projects.map(project => <ProjectBtn project={project} key={project.id} />)}
+        {error && (
+          <p className="text-danger">
+            There's been an error. Check
+            {' '}
+            <Code color="danger">useProjects</Code>
+            {' '}
+            's error state.
+          </p>
+        )}
       </div>
     </Resizable>
   );

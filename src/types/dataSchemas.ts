@@ -23,12 +23,14 @@ export const taskZ = taskScalarZ.extend({
   subTasks: z.array(taskScalarZ),
 });
 export type Task = z.infer<typeof taskZ>;
-export const projectZ = z.object({
+export const projectScalarZ = z.object({
   id: z.string().uuid(),
   name: z.string().max(255),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   userId: z.string().uuid(),
+});
+export const projectZ = projectScalarZ.extend({
   tasks: z.array(taskZ),
 });
 export type Project = z.infer<typeof projectZ>;

@@ -5,20 +5,16 @@ import { Link, useParams } from 'react-router-dom';
 import CreateTaskButton from '../components/CreateTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
 import Task from '../components/Task';
-import useProjects from '../queries/useProjects';
-import useUser from '../queries/useUser';
+import useProject from '../queries/useProject';
 import TaskModal from './TaskModal';
 
 export default function Project() {
-  const params = useParams();
-  const { data: user } = useUser();
-  const { data: projects, isLoading } = useProjects(user?.id);
+  const { projectId, taskId } = useParams();
+  const { data: project, isLoading } = useProject(projectId);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   if (isLoading)
     return <LoadingScreen />;
-
-  const project = projects!.find(p => p.id === params.projectId);
 
   if (!project) {
     return (
@@ -36,8 +32,6 @@ export default function Project() {
     );
   }
 
-  const { tasks } = project;
-
   return (
     <div
       id={`Project ${project.id}`}
@@ -53,9 +47,9 @@ export default function Project() {
       <h1 className="text-2xl font-bold">{project.name}</h1>
       <CreateTaskButton />
       <div className="flex flex-col gap-4">
-        {tasks.map(task => <Task task={task} onOpen={onOpen} key={task.id} />)}
+        {project.tasks.map(task => <Task task={task} onOpen={onOpen} key={task.id} />)}
       </div>
-      <TaskModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      {taskId && <TaskModal isOpen={isOpen} onOpenChange={onOpenChange} />}
     </div>
   );
 }
