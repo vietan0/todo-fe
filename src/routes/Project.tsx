@@ -11,7 +11,12 @@ import TaskModal from './TaskModal';
 export default function Project() {
   const { projectId, taskId } = useParams<'projectId' | 'taskId'>();
   const { data: project, isLoading } = useProject(projectId);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const {
+    isOpen: isTaskModalOpen,
+    onOpen: onTaskModalOpen,
+    onOpenChange: onTaskModalOpenChange,
+  } = useDisclosure();
 
   if (isLoading)
     return <LoadingScreen />;
@@ -47,9 +52,9 @@ export default function Project() {
       <h1 className="text-2xl font-bold">{project.name}</h1>
       <CreateTaskButton />
       <div className="flex flex-col gap-3">
-        {project.tasks.map(task => <Task task={task} onOpen={onOpen} key={task.id} />)}
+        {project.tasks.map(task => <Task task={task} onTaskModalOpen={onTaskModalOpen} key={task.id} />)}
       </div>
-      {taskId && <TaskModal isOpen={isOpen} onOpenChange={onOpenChange} />}
+      {taskId && <TaskModal isOpen={isTaskModalOpen} onOpenChange={onTaskModalOpenChange} />}
     </div>
   );
 }

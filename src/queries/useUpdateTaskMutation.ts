@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { resCompleteTaskZ } from '../types/resSchemas';
+import { resUpdateTaskZ } from '../types/resSchemas';
 import { server } from '../utils/serverUrl';
 
 import type { Task, UpdateTask } from '../types/dataSchemas';
@@ -31,7 +31,7 @@ async function updateTask(data: UpdateTask, taskId: Task['id']): Promise<Task | 
     },
   ).then(res => res.json());
 
-  const validRes = resCompleteTaskZ.parse(res);
+  const validRes = resUpdateTaskZ.parse(res);
 
   if (validRes.status === 'success')
     return validRes.data;

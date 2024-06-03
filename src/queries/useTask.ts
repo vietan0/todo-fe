@@ -17,7 +17,6 @@ export default function useTask(taskId: Task['id'] | undefined) {
 }
 
 async function getTask(taskId: Task['id'] | undefined): Promise<Task | null> {
-  console.log('taskId', taskId);
   if (!taskId)
     return null;
 

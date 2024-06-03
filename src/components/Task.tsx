@@ -1,19 +1,27 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Checkbox, CircularProgress, Code } from '@nextui-org/react';
+import { Button, Checkbox, CircularProgress, Code, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import useDeleteTaskMutation from '../queries/useDeleteTaskMutation';
 import useUpdateTaskMutation from '../queries/useUpdateTaskMutation';
 import cn from '../utils/cn';
 import TaskForm from './TaskForm';
 
 import type { Task as TaskT } from '../types/dataSchemas';
 
-export default function Task({ task, onOpen }: { task: TaskT; onOpen: () => void }) {
+export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskModalOpen: () => void }) {
   const updateTaskMutation = useUpdateTaskMutation(task.id);
+  const deleteTaskMutation = useDeleteTaskMutation(task.id);
   const nav = useNavigate();
   const [isHover, setIsHover] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const {
+    isOpen: isDeleteTaskOpen,
+    onOpen: onDeleteTaskOpen,
+    onOpenChange: onDeleteTaskOpenChange,
+  } = useDisclosure();
 
   if (isFormOpen) {
     return (
@@ -30,7 +38,7 @@ export default function Task({ task, onOpen }: { task: TaskT; onOpen: () => void
     <Button
       onPress={() => {
         nav(`task/${task.id}`);
-        onOpen();
+        onTaskModalOpen();
       }}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
@@ -59,6 +67,7 @@ export default function Task({ task, onOpen }: { task: TaskT; onOpen: () => void
             <Icon icon="material-symbols:edit" className="text-xl text-default-700" />
           </Button>
           <Button
+            onPress={onDeleteTaskOpen}
             isIconOnly
             aria-label="Delete Task"
             variant="light"
@@ -70,6 +79,55 @@ export default function Task({ task, onOpen }: { task: TaskT; onOpen: () => void
           >
             <Icon icon="material-symbols:delete" className="text-xl text-default-700" />
           </Button>
+          <Modal
+            isOpen={isDeleteTaskOpen}
+            onOpenChange={onDeleteTaskOpenChange}
+            classNames={{
+              footer: 'mt-6 flex-col',
+            }}
+          >
+            <ModalContent>
+              {onClose => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    Are you sure you want to delete task "
+                    {task.name}
+                    "? This can't be reversed.
+                  </ModalHeader>
+                  <ModalBody>
+                  </ModalBody>
+                  <ModalFooter>
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        color="default"
+                        variant="light"
+                        onPress={onClose}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        color="danger"
+                        isLoading={deleteTaskMutation.isPending}
+                        onPress={() => {
+                          deleteTaskMutation.mutate();
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                    {deleteTaskMutation.isError
+                      ? (
+                        <p onClick={() => deleteTaskMutation.reset()} className="font-mono text-sm text-danger">
+                          An error occurred while deleting the task:
+                          {deleteTaskMutation.error.message}
+                        </p>
+                        )
+                      : null}
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
         </div>
       )}
     >
