@@ -2,16 +2,18 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button } from '@nextui-org/react';
 import { useState } from 'react';
 
-import CreateTaskForm from './CreateTaskForm';
+import TaskForm from './TaskForm';
 
 export default function CreateTaskButton({ parentTaskId }: { parentTaskId?: string }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   if (isFormOpen) {
     return (
-      <CreateTaskForm
+      <TaskForm
+        mode="create"
         parentTaskId={parentTaskId}
         setIsFormOpen={setIsFormOpen}
+        task={undefined}
       />
     );
   }

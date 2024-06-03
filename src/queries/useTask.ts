@@ -5,11 +5,11 @@ import { server } from '../utils/serverUrl';
 
 import type { Project as Task } from '../types/dataSchemas';
 
-export default function useTask(task: Task['id'] | undefined) {
+export default function useTask(taskId: Task['id'] | undefined) {
   return useQuery({
-    queryKey: ['getTask', task],
-    queryFn: () => getTask(task),
-    enabled: Boolean(task),
+    queryKey: ['getTask', taskId],
+    queryFn: () => getTask(taskId),
+    enabled: Boolean(taskId),
     retry: 0,
     staleTime: 1000 * 60 * 30,
     refetchOnWindowFocus: false,

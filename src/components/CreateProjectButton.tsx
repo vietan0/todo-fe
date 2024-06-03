@@ -110,7 +110,7 @@ export default function CreateProjectButton() {
                 {createProjectMutation.isError
                   ? (
                     <p onClick={() => createProjectMutation.reset()} className="font-mono text-sm text-danger">
-                      An error occurred:
+                      An error occurred while creating the project:
                       {createProjectMutation.error.message}
                     </p>
                     )

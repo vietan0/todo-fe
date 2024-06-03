@@ -159,7 +159,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
                 {renameProjectMutation.isError
                   ? (
                     <p onClick={() => renameProjectMutation.reset()} className="font-mono text-sm text-danger">
-                      An error occurred:
+                      An error occurred while updating the project:
                       {renameProjectMutation.error.message}
                     </p>
                     )
@@ -211,7 +211,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
                 {deleteProjectMutation.isError
                   ? (
                     <p onClick={() => deleteProjectMutation.reset()} className="font-mono text-sm text-danger">
-                      An error occurred:
+                      An error occurred while deleting the project:
                       {deleteProjectMutation.error.message}
                     </p>
                     )

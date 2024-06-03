@@ -6,39 +6,70 @@ import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 import useCreateTaskMutation from '../queries/useCreateTaskMutation';
-import { createTaskZ } from '../types/dataSchemas';
+import useUpdateTaskMutation from '../queries/useUpdateTaskMutation';
+import { createTaskZ, updateTaskZ } from '../types/dataSchemas';
 
-import type { CreateTask } from '../types/dataSchemas';
+import type { CreateTask, Task } from '../types/dataSchemas';
 import type { SubmitHandler } from 'react-hook-form';
 
-export default function CreateTaskForm({ parentTaskId, setIsFormOpen }: {
-  parentTaskId?: string;
+interface CommonProps {
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}
+
+type CreateProps = CommonProps & {
+  mode: 'create';
+  task: undefined;
+  parentTaskId?: string;
+};
+
+type UpdateProps = CommonProps & {
+  mode: 'update';
+  task: Task;
+  parentTaskId: undefined;
+};
+
+type Props = CreateProps | UpdateProps;
+
+export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Props) {
   const {
     handleSubmit,
     control,
     formState,
     reset: resetForm,
-  } = useForm<CreateTask>({
-    defaultValues: { name: '' },
-    resolver: zodResolver(createTaskZ),
+  } = useForm<{ name: string }>({
+    defaultValues: { name: mode === 'create' ? '' : task.name },
+    resolver: zodResolver(mode === 'create' ? createTaskZ : updateTaskZ),
   });
 
   const params = useParams<'projectId' | 'taskId'>();
   const createTaskMutation = useCreateTaskMutation(params.projectId || '');
+  const updateTaskMutation = useUpdateTaskMutation(task?.id || '');
 
   const onSubmit: SubmitHandler<CreateTask> = (data) => {
-    createTaskMutation.mutate({
-      name: data.name,
-      parentTaskId,
-    });
+    if (mode === 'create') {
+      createTaskMutation.mutate({
+        name: data.name,
+        parentTaskId,
+      });
+    }
+    else {
+      // TODO: only send request if something changed from current task
+      updateTaskMutation.mutate({
+        name: data.name,
+      // TODO: projectId, parentTaskId will be provided somewhere else in the form (not an <input> field)
+      });
+    }
   };
 
   useEffect(() => {
     if (createTaskMutation.isSuccess)
       setIsFormOpen(false);
   }, [createTaskMutation.isSuccess]);
+
+  useEffect(() => {
+    if (updateTaskMutation.isSuccess)
+      setIsFormOpen(false);
+  }, [updateTaskMutation.isSuccess]);
 
   return (
     <Card
@@ -76,7 +107,7 @@ export default function CreateTaskForm({ parentTaskId, setIsFormOpen }: {
               variant="ghost"
               radius="sm"
               onPress={() => {
-                createTaskMutation.reset();
+                mode === 'create' ? createTaskMutation.reset() : updateTaskMutation.reset();
                 setIsFormOpen(false);
                 resetForm();
               }}
@@ -87,16 +118,24 @@ export default function CreateTaskForm({ parentTaskId, setIsFormOpen }: {
               type="submit"
               color="primary"
               radius="sm"
-              isLoading={createTaskMutation.isPending}
+              isLoading={mode === 'create' ? createTaskMutation.isPending : updateTaskMutation.isPending}
             >
-              Create Task
+              {mode === 'create' ? 'Create Task' : 'Update Task'}
             </Button>
           </div>
           {createTaskMutation.isError
             ? (
               <p onClick={() => createTaskMutation.reset()} className="font-mono text-sm text-danger">
-                An error occurred:
+                An error occurred while creating the task:
                 {createTaskMutation.error.message}
+              </p>
+              )
+            : null}
+          {updateTaskMutation.isError
+            ? (
+              <p onClick={() => updateTaskMutation.reset()} className="font-mono text-sm text-danger">
+                An error occurred while updating the task:
+                {updateTaskMutation.error.message}
               </p>
               )
             : null}

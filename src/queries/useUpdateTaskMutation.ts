@@ -10,8 +10,9 @@ export default function useUpdateTaskMutation(taskId: Task['id']) {
 
   return useMutation({
     mutationFn: (data: UpdateTask) => updateTask(data, taskId),
-    onSuccess: (task) => {
-      queryClient.invalidateQueries({ queryKey: ['getProject', task?.projectId] });
+    onSuccess: async (task) => {
+      await queryClient.invalidateQueries({ queryKey: ['getProject', task!.projectId] });
+      await queryClient.invalidateQueries({ queryKey: ['getTask', taskId] });
     },
   });
 }
