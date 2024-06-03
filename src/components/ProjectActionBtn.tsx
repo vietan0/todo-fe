@@ -126,6 +126,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
                       {...field}
                       type="text"
                       label="Name"
+                      autoFocus
                       isInvalid={Boolean(formState.errors.name)}
                       errorMessage={formState.errors.name?.message}
                     />

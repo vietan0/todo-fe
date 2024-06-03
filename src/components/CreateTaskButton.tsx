@@ -9,11 +9,8 @@ import { useParams } from 'react-router-dom';
 import useCreateTaskMutation from '../queries/useCreateTaskMutation';
 import { createTaskZ } from '../types/dataSchemas';
 
+import type { CreateTask } from '../types/dataSchemas';
 import type { SubmitHandler } from 'react-hook-form';
-
-interface CreateTask {
-  name: string;
-}
 
 export default function CreateTaskButton({ parentTaskId }: { parentTaskId?: string }) {
   const {
