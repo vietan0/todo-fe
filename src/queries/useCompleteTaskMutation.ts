@@ -3,20 +3,20 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { resCompleteTaskZ } from '../types/resSchemas';
 import { server } from '../utils/serverUrl';
 
-import type { Task } from '../types/dataSchemas';
+import type { Task, UpdateTask } from '../types/dataSchemas';
 
-export default function useCompleteTaskMutation(taskId: Task['id']) {
+export default function useUpdateTaskMutation(taskId: Task['id']) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (completed: boolean) => completeTask(completed, taskId),
+    mutationFn: (data: UpdateTask) => updateTask(data, taskId),
     onSuccess: (task) => {
       queryClient.invalidateQueries({ queryKey: ['getProject', task?.projectId] });
     },
   });
 }
 
-async function completeTask(completed: boolean, taskId: Task['id']): Promise<Task | null> {
+async function updateTask(data: UpdateTask, taskId: Task['id']): Promise<Task | null> {
   const res = await fetch(
     `${server}/api/task/${taskId}`,
     {
@@ -25,7 +25,7 @@ async function completeTask(completed: boolean, taskId: Task['id']): Promise<Tas
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ completed }),
+      body: JSON.stringify(data),
       credentials: 'include',
     },
   ).then(res => res.json());

@@ -47,7 +47,10 @@ export const createTaskZ = z.object({
   parentTaskId: z.string().uuid().optional(),
 });
 export type CreateTask = z.infer<typeof createTaskZ>;
-export const completeTaskZ = z.object({
-  completed: z.boolean(),
+export const updateTaskZ = z.object({
+  name: z.string().trim().min(1).max(255).optional(),
+  completed: z.boolean().optional(),
+  projectId: z.string().uuid().optional(),
+  parentTaskId: z.string().uuid().optional(),
 });
-export type CompleteTask = z.infer<typeof completeTaskZ>;
+export type UpdateTask = z.infer<typeof updateTaskZ>;

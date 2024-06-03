@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import useCompleteTaskMutation from '../queries/useCompleteTaskMutation';
+import useUpdateTaskMutation from '../queries/useCompleteTaskMutation';
 import useCreateTaskMutation from '../queries/useCreateTaskMutation';
 // eslint-disable-next-line import/no-duplicates
 import { type Task as TaskT, createTaskZ } from '../types/dataSchemas';
@@ -17,7 +17,7 @@ import type { CreateTask } from '../types/dataSchemas';
 import type { SubmitHandler } from 'react-hook-form';
 
 export default function Task({ task, onOpen }: { task: TaskT; onOpen: () => void }) {
-  const completeTaskMutation = useCompleteTaskMutation(task.id);
+  const updateTaskMutation = useUpdateTaskMutation(task.id);
   const nav = useNavigate();
   const [isHover, setIsHover] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -177,7 +177,7 @@ export default function Task({ task, onOpen }: { task: TaskT; onOpen: () => void
         isSelected={task.completed}
         onValueChange={
           (isSelected: boolean) => {
-            completeTaskMutation.mutate(isSelected);
+            updateTaskMutation.mutate({ completed: isSelected });
           }
         }
       />
@@ -194,7 +194,7 @@ export default function Task({ task, onOpen }: { task: TaskT; onOpen: () => void
           </div>
         )}
       </div>
-      {completeTaskMutation.isPending && (
+      {updateTaskMutation.isPending && (
         <CircularProgress
           aria-label="Loading"
           classNames={{
