@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Checkbox, CircularProgress, Code, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
+import { Button, Checkbox, CircularProgress, Code, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -36,6 +36,7 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
 
   return (
     <Button
+      as={Link}
       onPress={() => {
         nav(`task/${task.id}`);
         onTaskModalOpen();

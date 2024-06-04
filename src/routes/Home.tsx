@@ -52,7 +52,7 @@ export default function Home() {
             <Icon icon="material-symbols:more-horiz" className="text-xl" />
           </Button>
         </div>
-        <div className="m-auto max-w-5xl px-8 py-4">
+        <div id="OutletContainer" className="m-auto max-w-5xl px-8 py-4">
           <Outlet />
         </div>
       </div>

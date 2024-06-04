@@ -9,17 +9,13 @@ export default function useTask(taskId: Task['id'] | undefined) {
   return useQuery({
     queryKey: ['getTask', taskId],
     queryFn: () => getTask(taskId),
-    enabled: Boolean(taskId),
     retry: 0,
     staleTime: 1000 * 60 * 30,
     refetchOnWindowFocus: false,
   });
 }
 
-async function getTask(taskId: Task['id'] | undefined): Promise<Task | null> {
-  if (!taskId)
-    return null;
-
+async function getTask(taskId: Task['id'] | undefined): Promise<Task> {
   const res = await fetch(
     `${server}/api/task/${taskId}`,
     { credentials: 'include' },
@@ -30,5 +26,5 @@ async function getTask(taskId: Task['id'] | undefined): Promise<Task | null> {
   if (validRes.status === 'success')
     return validRes.data;
 
-  return null;
+  throw new Error(validRes.error || validRes.message);
 }

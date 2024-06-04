@@ -1,8 +1,10 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react';
 import { useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
+import QueryError from '../components/QueryError';
 import useTask from '../queries/useTask';
 
 export default function TaskModal({ isOpen, onOpenChange }: {
@@ -11,31 +13,15 @@ export default function TaskModal({ isOpen, onOpenChange }: {
 }) {
   const params = useParams<'projectId' | 'taskId'>();
   const nav = useNavigate();
-  const { data: task, isLoading } = useTask(params.taskId);
+  const { data: task, isLoading, error } = useTask(params.taskId);
 
   useEffect(() => {
     if (!isOpen)
-      nav(-1);
+      nav(`/project/${params.projectId}`);
   }, [isOpen]);
 
   if (isLoading)
     return <LoadingScreen />;
-
-  if (!task) {
-    return (
-      <div className="flex size-full flex-col items-center justify-center gap-4">
-        <p className="text-2xl">Can't find this task.</p>
-        <div className="flex gap-4">
-          <Button variant="ghost" color="primary">
-            Retry
-          </Button>
-          <Button variant="ghost">
-            <Link to="/">Go Home</Link>
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <Modal
@@ -47,11 +33,23 @@ export default function TaskModal({ isOpen, onOpenChange }: {
       <ModalContent>
         {onClose => (
           <>
-            <ModalHeader className="flex flex-col gap-1">{task.name}</ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">{task ? task.name : 'Error'}</ModalHeader>
             <ModalBody>
-              <pre>
-                {JSON.stringify(task, null, 2)}
-              </pre>
+              {task && (
+                <>
+                  <Helmet>
+                    <title>
+                      {task.name}
+                      {' '}
+                      – Todo App
+                    </title>
+                  </Helmet>
+                  <pre>
+                    {JSON.stringify(task, null, 2)}
+                  </pre>
+                </>
+              )}
+              {error && <QueryError error={error} queryName="useTask" />}
             </ModalBody>
             <ModalFooter>
               <Button

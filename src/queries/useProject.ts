@@ -15,7 +15,7 @@ export default function useProject(projectId: Project['id'] | undefined) {
   });
 }
 
-async function getProject(projectId: Project['id'] | undefined): Promise<Project | null> {
+async function getProject(projectId: Project['id'] | undefined): Promise<Project> {
   const res = await fetch(
     `${server}/api/project/${projectId}`,
     { credentials: 'include' },
@@ -26,5 +26,5 @@ async function getProject(projectId: Project['id'] | undefined): Promise<Project
   if (validRes.status === 'success')
     return validRes.data;
 
-  return null;
+  throw new Error(validRes.error || validRes.message);
 }

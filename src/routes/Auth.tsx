@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Navigate } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
+import QueryError from '../components/QueryError';
 import useAuthMutation from '../queries/useAuthMutation';
 import useUser from '../queries/useUser';
 
@@ -14,7 +15,7 @@ export interface AuthPayload {
 }
 
 export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
-  const { data: user, isLoading } = useUser();
+  const { data: user, isLoading, error } = useUser();
   const authMutation = useAuthMutation();
 
   const {
@@ -32,7 +33,7 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
   if (isLoading)
     return <LoadingScreen />;
 
-  else if (user)
+  if (user)
     return <Navigate to="/" />;
 
   return (
@@ -49,8 +50,9 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
       }}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <CardHeader className="mb-8 flex gap-3">
+          <CardHeader className="mb-8 flex-col items-start">
             <p className="text-3xl font-bold">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</p>
+            {error && <QueryError error={error} queryName="useUser" />}
           </CardHeader>
           <CardBody className="flex flex-col gap-2">
             <Controller
@@ -82,7 +84,14 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
             />
           </CardBody>
           <CardFooter>
-            <Button type="submit" color="primary" className="font-bold">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</Button>
+            <Button
+              type="submit"
+              color="primary"
+              className="font-bold"
+              isLoading={authMutation.isPending}
+            >
+              {mode === 'signin' ? 'Sign In' : 'Sign Up'}
+            </Button>
           </CardFooter>
         </form>
         <DevTool control={control} />

@@ -26,5 +26,8 @@ async function getUser(): Promise<User | null> {
   if (validRes.status === 'success')
     return validRes.data;
 
-  return null;
+  if (validRes.status === 'error' && validRes.message === 'Token doesn\'t exist')
+    return null;
+
+  throw new Error('Error while fetching user');
 }

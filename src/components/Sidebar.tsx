@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { Button, Code, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
+import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
 import { Resizable } from 're-resizable';
 import { useState } from 'react';
 
@@ -9,6 +9,7 @@ import useUser from '../queries/useUser';
 import CreateProjectButton from './CreateProjectButton';
 import LoadingScreen from './LoadingScreen';
 import ProjectBtn from './ProjectBtn';
+import QueryError from './QueryError';
 import UserAvatar from './UserAvatar';
 
 export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
@@ -104,16 +105,8 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
           <CreateProjectButton />
         </div>
         {isLoading && <LoadingScreen />}
+        {error && <QueryError error={error} queryName="useProjects" />}
         {projects && projects.map(project => <ProjectBtn project={project} key={project.id} />)}
-        {error && (
-          <p className="text-danger">
-            There's been an error. Check
-            {' '}
-            <Code color="danger">useProjects</Code>
-            {' '}
-            's error state.
-          </p>
-        )}
       </div>
     </Resizable>
   );
