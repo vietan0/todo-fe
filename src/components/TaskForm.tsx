@@ -53,7 +53,6 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
       });
     }
     else {
-      // TODO: only send request if something changed from current task
       updateTaskMutation.mutate({
         name: data.name,
       // TODO: projectId, parentTaskId will be provided somewhere else in the form (not an <input> field)
@@ -118,6 +117,7 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
               type="submit"
               color="primary"
               radius="sm"
+              isDisabled={!formState.isDirty}
               isLoading={mode === 'create' ? createTaskMutation.isPending : updateTaskMutation.isPending}
             >
               {mode === 'create' ? 'Create Task' : 'Update Task'}

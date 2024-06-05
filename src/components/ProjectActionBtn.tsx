@@ -150,6 +150,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
                   <Button
                     color="primary"
                     type="submit"
+                    isDisabled={!formState.isDirty}
                     isLoading={renameProjectMutation.isPending}
 
                   >
