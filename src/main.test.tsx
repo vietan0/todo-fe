@@ -24,15 +24,11 @@ async function renderWithProviders() {
   return render(<AllProviders />);
 }
 
-function SimpleComp() {
-  return <span>SimpleComp</span>;
-}
-
 afterEach(() => {
   cleanup();
 });
 
 test('first test', async () => {
-  render(<SimpleComp />);
+  renderWithProviders();
   screen.debug();
 });

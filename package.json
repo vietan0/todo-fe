@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "prepare": "husky",
     "preview": "vite preview",
+    "reinstall": "rm -rf node_modules && pnpm i",
     "test": "vitest",
     "test:once": "vitest run"
   },
