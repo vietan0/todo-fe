@@ -104,6 +104,10 @@ export default antfu(
       {
         files: ['**/?(*.)+(spec|test).[jt]s?(x)'],
         extends: ['plugin:testing-library/react'],
+        rules: {
+          'testing-library/no-debugging-utils': 'off',
+          'testing-library/no-manual-cleanup': 'off',
+        },
       },
     ],
   }),
