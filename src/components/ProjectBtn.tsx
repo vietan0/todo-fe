@@ -6,9 +6,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import cn from '../utils/cn';
 import ProjectActionBtn from './ProjectActionBtn';
 
-import type { Project } from '../types/dataSchemas';
+import type { ProjectScalar } from '../types/dataSchemas';
 
-export default function ProjectBtn({ project }: { project: Project }) {
+export default function ProjectBtn({ project }: { project: ProjectScalar }) {
   const nav = useNavigate();
   const params = useParams<'projectId' | 'taskId'>();
   const isProjectSelected = params.projectId === project.id;

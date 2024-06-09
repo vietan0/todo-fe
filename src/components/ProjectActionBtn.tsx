@@ -7,12 +7,12 @@ import { Controller, useForm } from 'react-hook-form';
 
 import useDeleteProjectMutation from '../queries/useDeleteProjectMutation';
 import useRenameProjectMutation from '../queries/useRenameProjectMutation';
-import { type Project, type RenameProject, renameProjectZ } from '../types/dataSchemas';
+import { type ProjectScalar, type RenameProject, renameProjectZ } from '../types/dataSchemas';
 import cn from '../utils/cn';
 
 import type { SubmitHandler } from 'react-hook-form';
 
-export default function ProjectActionBtn({ project, isHover }: { project: Project; isHover: boolean }) {
+export default function ProjectActionBtn({ project, isHover }: { project: ProjectScalar; isHover: boolean }) {
   const {
     isOpen: isRenameProjectOpen,
     onOpen: onRenameProjectOpen,

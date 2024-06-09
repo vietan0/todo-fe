@@ -30,6 +30,7 @@ export const projectScalarZ = z.object({
   updatedAt: z.string().datetime(),
   userId: z.string().uuid(),
 });
+export type ProjectScalar = z.infer<typeof projectScalarZ>;
 export const projectZ = projectScalarZ.extend({
   tasks: z.array(taskZ),
 });
