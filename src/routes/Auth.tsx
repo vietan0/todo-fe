@@ -37,7 +37,10 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
     return <Navigate to="/" />;
 
   return (
-    <div className="flex min-h-screen items-center">
+    <div
+      className="flex min-h-screen items-center"
+      data-testid="Auth"
+    >
       <Helmet>
         <title>
           {mode === 'signin' ? 'Sign In' : 'Sign Up'}
