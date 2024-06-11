@@ -9,6 +9,7 @@ import useDeleteProjectMutation from '../mutations/useDeleteProjectMutation';
 import useRenameProjectMutation from '../mutations/useRenameProjectMutation';
 import { type ProjectScalar, type RenameProject, renameProjectZ } from '../types/dataSchemas';
 import cn from '../utils/cn';
+import MutationError from './MutationError';
 
 import type { SubmitHandler } from 'react-hook-form';
 
@@ -157,17 +158,14 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
                     Rename
                   </Button>
                 </div>
-                {renameProjectMutation.isError
-                  ? (
-                    <p onClick={() => renameProjectMutation.reset()} className="font-mono text-sm text-danger">
-                      An error occurred while updating the project:
-                      {renameProjectMutation.error.message}
-                    </p>
-                    )
-                  : null}
+                {renameProjectMutation.isError && (
+                  <MutationError
+                    error={renameProjectMutation.error}
+                    mutationName="renameProject"
+                  />
+                )}
               </ModalFooter>
               <DevTool control={control} />
-
             </form>
           )}
         </ModalContent>
@@ -209,14 +207,12 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
                     Delete
                   </Button>
                 </div>
-                {deleteProjectMutation.isError
-                  ? (
-                    <p onClick={() => deleteProjectMutation.reset()} className="font-mono text-sm text-danger">
-                      An error occurred while deleting the project:
-                      {deleteProjectMutation.error.message}
-                    </p>
-                    )
-                  : null}
+                {deleteProjectMutation.isError && (
+                  <MutationError
+                    error={deleteProjectMutation.error}
+                    mutationName="deleteProject"
+                  />
+                )}
               </ModalFooter>
             </>
           )}

@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import useCreateTaskMutation from '../mutations/useCreateTaskMutation';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import { createTaskZ, updateTaskZ } from '../types/dataSchemas';
+import MutationError from './MutationError';
 
 import type { CreateTask, Task } from '../types/dataSchemas';
 import type { SubmitHandler } from 'react-hook-form';
@@ -76,7 +77,7 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
       classNames={{
         base: 'outline outline-1 outline-default-500',
         body: 'gap-0',
-        footer: 'justify-end gap-2',
+        footer: 'flex-col items-end gap-2',
       }}
     >
       <form
@@ -101,7 +102,7 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
           />
         </CardBody>
         <CardFooter>
-          <div className="flex gap-2">
+          <div className="flex justify-end gap-2">
             <Button
               variant="ghost"
               radius="sm"
@@ -123,22 +124,20 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
               {mode === 'create' ? 'Create Task' : 'Update Task'}
             </Button>
           </div>
-          {createTaskMutation.isError
-            ? (
-              <p onClick={() => createTaskMutation.reset()} className="font-mono text-sm text-danger">
-                An error occurred while creating the task:
-                {createTaskMutation.error.message}
-              </p>
-              )
-            : null}
-          {updateTaskMutation.isError
-            ? (
-              <p onClick={() => updateTaskMutation.reset()} className="font-mono text-sm text-danger">
-                An error occurred while updating the task:
-                {updateTaskMutation.error.message}
-              </p>
-              )
-            : null}
+          {createTaskMutation.error
+          && (
+            <MutationError
+              error={createTaskMutation.error}
+              mutationName="createTask"
+            />
+          )}
+          {updateTaskMutation.error
+          && (
+            <MutationError
+              error={updateTaskMutation.error}
+              mutationName="updateTask"
+            />
+          )}
         </CardFooter>
         <DevTool control={control} />
       </form>

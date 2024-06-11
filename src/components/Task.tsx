@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import cn from '../utils/cn';
+import MutationError from './MutationError';
 import TaskForm from './TaskForm';
 
 import type { Task as TaskT } from '../types/dataSchemas';
@@ -54,6 +55,15 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
       )}
       endContent={isHover && (
         <div className="ml-auto flex gap-1.5">
+          {updateTaskMutation.isPending && (
+            <CircularProgress
+              aria-label="Loading"
+              classNames={{
+                base: 'self-center ml-auto',
+                svg: 'w-5 h-5',
+              }}
+            />
+          )}
           <Button
             onPress={() => setIsFormOpen(true)}
             isIconOnly
@@ -116,14 +126,13 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
                         Delete
                       </Button>
                     </div>
-                    {deleteTaskMutation.isError
-                      ? (
-                        <p onClick={() => deleteTaskMutation.reset()} className="font-mono text-sm text-danger">
-                          An error occurred while deleting the task:
-                          {deleteTaskMutation.error.message}
-                        </p>
-                        )
-                      : null}
+                    {deleteTaskMutation.error
+                    && (
+                      <MutationError
+                        error={deleteTaskMutation.error}
+                        mutationName="deleteTask"
+                      />
+                    )}
                   </ModalFooter>
                 </>
               )}
@@ -147,27 +156,26 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
         }
       />
       <div>
-        <p>{task.name}</p>
-        {task.parentTaskId
-        && (
-          <div>
-            <span>
-              parent:
-              {' '}
-            </span>
-            <Code className="text-xs">{task.parentTaskId}</Code>
-          </div>
+        <div>
+          <p>{task.name}</p>
+          {task.parentTaskId
+          && (
+            <div>
+              <span>
+                parent:
+                {' '}
+              </span>
+              <Code className="text-xs">{task.parentTaskId}</Code>
+            </div>
+          )}
+        </div>
+        {updateTaskMutation.error && (
+          <MutationError
+            error={updateTaskMutation.error}
+            mutationName="updateTask"
+          />
         )}
       </div>
-      {updateTaskMutation.isPending && (
-        <CircularProgress
-          aria-label="Loading"
-          classNames={{
-            base: 'self-center ml-auto',
-            svg: 'w-5 h-5',
-          }}
-        />
-      )}
     </Button>
   );
 }

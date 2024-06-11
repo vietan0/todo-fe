@@ -1,6 +1,6 @@
 import { cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, beforeEach, expect, test, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, expect, test, vi } from 'vitest';
 
 import { signIn } from '../mutations/mutationFns/auth';
 import getProjects from '../queries/queryFns/getProjects';
@@ -13,6 +13,10 @@ vi.mock('../queries/queryFns/getProjects.ts');
 vi.mock('../mutations/mutationFns/auth.ts');
 const user = userEvent.setup();
 
+beforeAll(() => {
+  vi.spyOn(console, 'error').mockImplementation(() => {});
+});
+
 beforeEach(async () => {
   vi.clearAllMocks();
   vi.mocked(getUser).mockResolvedValue(null);
@@ -22,6 +26,10 @@ beforeEach(async () => {
 });
 
 afterEach(cleanup);
+
+afterAll(() => {
+  vi.restoreAllMocks();
+});
 
 test('sign in successfully', async () => {
   const fakeUser = userFactory();

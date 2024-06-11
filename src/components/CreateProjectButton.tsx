@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import useCreateProjectMutation from '../mutations/useCreateProjectMutation';
 import { createProjectZ } from '../types/dataSchemas';
+import MutationError from './MutationError';
 
 import type { CreateProject } from '../types/dataSchemas';
 import type { SubmitHandler } from 'react-hook-form';
@@ -29,23 +30,23 @@ export default function CreateProjectButton() {
     resolver: zodResolver(createProjectZ),
   });
 
-  const createProjectMutation = useCreateProjectMutation();
+  const { mutate, reset, isSuccess, isPending, error } = useCreateProjectMutation();
 
   const onSubmit: SubmitHandler<CreateProject> = (data) => {
-    createProjectMutation.mutate(data);
+    mutate(data);
   };
 
   useEffect(() => {
-    if (createProjectMutation.isSuccess) {
+    if (isSuccess) {
       onClose();
       resetForm();
     }
-  }, [createProjectMutation.isSuccess]);
+  }, [isSuccess]);
 
   useEffect(() => {
     if (!isOpen) {
       resetForm();
-      createProjectMutation.reset();
+      reset();
     }
   }, [isOpen]);
 
@@ -92,7 +93,7 @@ export default function CreateProjectButton() {
                     color="danger"
                     variant="light"
                     onPress={() => {
-                      createProjectMutation.reset();
+                      reset();
                       resetForm();
                       onClose();
                     }}
@@ -102,19 +103,17 @@ export default function CreateProjectButton() {
                   <Button
                     color="primary"
                     type="submit"
-                    isLoading={createProjectMutation.isPending}
+                    isLoading={isPending}
                   >
                     Create
                   </Button>
                 </div>
-                {createProjectMutation.isError
-                  ? (
-                    <p onClick={() => createProjectMutation.reset()} className="font-mono text-sm text-danger">
-                      An error occurred while creating the project:
-                      {createProjectMutation.error.message}
-                    </p>
-                    )
-                  : null}
+                {error && (
+                  <MutationError
+                    error={error}
+                    mutationName="createProject"
+                  />
+                )}
               </ModalFooter>
               <DevTool control={control} />
             </form>

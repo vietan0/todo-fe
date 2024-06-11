@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Navigate } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
+import MutationError from '../components/MutationError';
 import QueryError from '../components/QueryError';
 import useAuthMutation from '../mutations/useAuthMutation';
 import useUser from '../queries/useUser';
@@ -105,18 +106,13 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
                 {mode === 'signin' ? 'Sign In' : 'Sign Up'}
               </Button>
             </div>
-            {authMutation.isError
-              ? (
-                <p onClick={() => authMutation.reset()} className="font-mono text-sm text-danger" data-testid="MutationError">
-                  An error occurred while
-                  {' '}
-                  {mode === 'signin' ? 'signing in' : 'signing up'}
-                  :
-                  {' '}
-                  {authMutation.error.message}
-                </p>
-                )
-              : null}
+            {authMutation.error
+            && (
+              <MutationError
+                error={authMutation.error}
+                mutationName="auth"
+              />
+            )}
           </CardFooter>
         </form>
         <DevTool control={control} />
