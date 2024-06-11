@@ -73,30 +73,30 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
 
   return (
     <Card
-      shadow="none"
       classNames={{
         base: 'outline outline-1 outline-default-500',
         body: 'gap-0',
         footer: 'flex-col items-end gap-2',
       }}
+      shadow="none"
     >
       <form
-        onSubmit={handleSubmit(onSubmit)}
         className="rounded-lg outline outline-1 outline-default"
+        onSubmit={handleSubmit(onSubmit)}
       >
         <CardBody>
           <Controller
-            name="name"
             control={control}
+            name="name"
             render={({ field }) => (
               <Input
                 {...field}
-                type="text"
-                label="Task name"
                 autoFocus
-                variant="underlined"
-                isInvalid={Boolean(formState.errors.name)}
                 errorMessage={formState.errors.name?.message}
+                isInvalid={Boolean(formState.errors.name)}
+                label="Task name"
+                type="text"
+                variant="underlined"
               />
             )}
           />
@@ -104,22 +104,22 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
         <CardFooter>
           <div className="flex justify-end gap-2">
             <Button
-              variant="ghost"
-              radius="sm"
               onPress={() => {
                 mode === 'create' ? createTaskMutation.reset() : updateTaskMutation.reset();
                 setIsFormOpen(false);
                 resetForm();
               }}
+              radius="sm"
+              variant="ghost"
             >
               Cancel
             </Button>
             <Button
-              type="submit"
               color="primary"
-              radius="sm"
               isDisabled={!formState.isDirty}
               isLoading={mode === 'create' ? createTaskMutation.isPending : updateTaskMutation.isPending}
+              radius="sm"
+              type="submit"
             >
               {mode === 'create' ? 'Create Task' : 'Update Task'}
             </Button>

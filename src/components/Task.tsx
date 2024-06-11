@@ -28,9 +28,9 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
     return (
       <TaskForm
         mode="update"
-        task={task}
-        setIsFormOpen={setIsFormOpen}
         parentTaskId={undefined}
+        setIsFormOpen={setIsFormOpen}
+        task={task}
       />
     );
   }
@@ -38,21 +38,11 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
   return (
     <Button
       as={Link}
-      onPress={() => {
-        nav(`task/${task.id}`);
-        onTaskModalOpen();
-      }}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-      onFocus={() => setIsHover(true)}
-      onBlur={() => setIsHover(false)}
-      radius="sm"
-      variant="bordered"
-      disableAnimation
       className={cn(
         task.completed ? 'opacity-disabled' : 'hover:bg-default-100',
         'h-auto min-h-[55px] items-start justify-start p-3 text-start',
       )}
+      disableAnimation
       endContent={isHover && (
         <div className="ml-auto flex gap-1.5">
           {updateTaskMutation.isPending && (
@@ -65,37 +55,37 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
             />
           )}
           <Button
-            onPress={() => setIsFormOpen(true)}
-            isIconOnly
             aria-label="Edit Task"
-            variant="light"
-            radius="sm"
-            size="sm"
-            disableAnimation
             // eslint-disable-next-line tailwindcss/enforces-shorthand
             className="h-7 w-7 min-w-0 data-[hover=true]:bg-default/60"
+            disableAnimation
+            isIconOnly
+            onPress={() => setIsFormOpen(true)}
+            radius="sm"
+            size="sm"
+            variant="light"
           >
-            <Icon icon="material-symbols:edit" className="text-xl text-default-700" />
+            <Icon className="text-xl text-default-700" icon="material-symbols:edit" />
           </Button>
           <Button
-            onPress={onDeleteTaskOpen}
-            isIconOnly
             aria-label="Delete Task"
-            variant="light"
-            radius="sm"
-            size="sm"
-            disableAnimation
             // eslint-disable-next-line tailwindcss/enforces-shorthand
             className="h-7 w-7 min-w-0 data-[hover=true]:bg-default/60"
+            disableAnimation
+            isIconOnly
+            onPress={onDeleteTaskOpen}
+            radius="sm"
+            size="sm"
+            variant="light"
           >
-            <Icon icon="material-symbols:delete" className="text-xl text-default-700" />
+            <Icon className="text-xl text-default-700" icon="material-symbols:delete" />
           </Button>
           <Modal
-            isOpen={isDeleteTaskOpen}
-            onOpenChange={onDeleteTaskOpenChange}
             classNames={{
               footer: 'mt-6 flex-col',
             }}
+            isOpen={isDeleteTaskOpen}
+            onOpenChange={onDeleteTaskOpenChange}
           >
             <ModalContent>
               {onClose => (
@@ -111,8 +101,8 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
                     <div className="flex justify-end gap-2">
                       <Button
                         color="default"
-                        variant="light"
                         onPress={onClose}
+                        variant="light"
                       >
                         Cancel
                       </Button>
@@ -140,20 +130,30 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
           </Modal>
         </div>
       )}
+      onBlur={() => setIsHover(false)}
+      onFocus={() => setIsHover(true)}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
+      onPress={() => {
+        nav(`task/${task.id}`);
+        onTaskModalOpen();
+      }}
+      radius="sm"
+      variant="bordered"
     >
       <Checkbox
-        radius="full"
-        id={task.id}
         classNames={{
           base: 'outline-1 outline-red-400',
           wrapper: 'mr-0',
         }}
+        id={task.id}
         isSelected={task.completed}
         onValueChange={
           (isSelected: boolean) => {
             updateTaskMutation.mutate({ completed: isSelected });
           }
         }
+        radius="full"
       />
       <div>
         <div>

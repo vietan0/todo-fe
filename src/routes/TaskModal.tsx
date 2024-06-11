@@ -25,10 +25,10 @@ export default function TaskModal({ isOpen, onOpenChange }: {
 
   return (
     <Modal
-      size="4xl"
-      scrollBehavior="inside"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
+      scrollBehavior="inside"
+      size="4xl"
     >
       <ModalContent>
         {onClose => (

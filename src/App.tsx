@@ -9,7 +9,7 @@ export default function App({ error }: { error?: React.ReactNode }) {
   }, []);
 
   return (
-    <div id="App" className="m-auto w-screen max-w-screen-2xl">
+    <div className="m-auto w-screen max-w-screen-2xl" id="App">
       <h1 className="sr-only">Todo App - Made by Viet An</h1>
       {error ?? <Outlet />}
     </div>

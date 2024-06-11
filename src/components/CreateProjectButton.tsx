@@ -53,19 +53,19 @@ export default function CreateProjectButton() {
   return (
     <>
       <Button
-        isIconOnly
-        size="sm"
-        variant="light"
-        startContent={<Icon icon="material-symbols:add" className="text-lg text-default-500" />}
         aria-label="Add Project"
+        isIconOnly
         onPress={onOpen}
+        size="sm"
+        startContent={<Icon className="text-lg text-default-500" icon="material-symbols:add" />}
+        variant="light"
       />
       <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
         classNames={{
           footer: 'mt-6 flex-col',
         }}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
       >
         <ModalContent>
           {onClose => (
@@ -73,16 +73,16 @@ export default function CreateProjectButton() {
               <ModalHeader className="flex flex-col gap-1">Create Project</ModalHeader>
               <ModalBody>
                 <Controller
-                  name="name"
                   control={control}
+                  name="name"
                   render={({ field }) => (
                     <Input
                       {...field}
-                      type="text"
-                      label="Name"
                       autoFocus
-                      isInvalid={Boolean(formState.errors.name)}
                       errorMessage={formState.errors.name?.message}
+                      isInvalid={Boolean(formState.errors.name)}
+                      label="Name"
+                      type="text"
                     />
                   )}
                 />
@@ -91,19 +91,19 @@ export default function CreateProjectButton() {
                 <div className="flex justify-end gap-2">
                   <Button
                     color="danger"
-                    variant="light"
                     onPress={() => {
                       reset();
                       resetForm();
                       onClose();
                     }}
+                    variant="light"
                   >
                     Cancel
                   </Button>
                   <Button
                     color="primary"
-                    type="submit"
                     isLoading={isPending}
+                    type="submit"
                   >
                     Create
                   </Button>

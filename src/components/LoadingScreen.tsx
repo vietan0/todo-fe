@@ -5,11 +5,11 @@ import viteLogo from '../assets/vite.svg';
 
 export default function LoadingScreen({ withLogo }: { withLogo?: boolean } = { withLogo: true }) {
   return (
-    <div id="LoadingScreen" className="flex h-screen w-full flex-col items-center justify-center">
+    <div className="flex h-screen w-full flex-col items-center justify-center" id="LoadingScreen">
       <Helmet>
         <title>Loading... – Todo App</title>
       </Helmet>
-      { withLogo && <img src={viteLogo} alt="" className="mb-6 size-24" /> }
+      { withLogo && <img alt="" className="mb-6 size-24" src={viteLogo} /> }
       <CircularProgress aria-label="Loading" />
     </div>
   );

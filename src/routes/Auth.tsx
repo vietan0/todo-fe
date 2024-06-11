@@ -64,33 +64,33 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
           </CardHeader>
           <CardBody className="flex flex-col gap-2">
             <Controller
-              name="email"
               control={control}
+              name="email"
               render={({ field }) => (
                 <Input
                   {...field}
-                  value={field.value}
-                  type="email"
+                  autoFocus
+                  errorMessage={formState.errors.email?.message}
+                  isInvalid={Boolean(formState.errors.email)}
                   label="Email"
                   placeholder="Enter your email"
-                  autoFocus
-                  isInvalid={Boolean(formState.errors.email)}
-                  errorMessage={formState.errors.email?.message}
+                  type="email"
+                  value={field.value}
                 />
               )}
             />
             <Controller
-              name="password"
               control={control}
+              name="password"
               render={({ field }) => (
                 <Input
                   {...field}
-                  value={field.value}
-                  type="password"
+                  errorMessage={formState.errors.password?.message}
+                  isInvalid={Boolean(formState.errors.password)}
                   label="Password"
                   placeholder="Enter your password"
-                  isInvalid={Boolean(formState.errors.password)}
-                  errorMessage={formState.errors.password?.message}
+                  type="password"
+                  value={field.value}
                 />
               )}
             />
@@ -98,10 +98,10 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
           <CardFooter>
             <div className="flex justify-end gap-2">
               <Button
-                type="submit"
-                color="primary"
                 className="font-bold"
+                color="primary"
                 isLoading={authMutation.isPending}
+                type="submit"
               >
                 {mode === 'signin' ? 'Sign In' : 'Sign Up'}
               </Button>

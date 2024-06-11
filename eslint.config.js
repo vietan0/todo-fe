@@ -63,6 +63,7 @@ export default antfu(
         },
       ],
       'import/order': 'off',
+      'perfectionist/sort-jsx-props': 'error',
       'perfectionist/sort-imports': [
         'error',
         {

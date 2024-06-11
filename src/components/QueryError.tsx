@@ -13,9 +13,9 @@ export default function QueryError({
     <p className="text-sm text-danger">
       There's been an error with query
       {' '}
-      <Code color="danger" className="whitespace-normal text-[12px]">{queryName}</Code>
+      <Code className="whitespace-normal text-[12px]" color="danger">{queryName}</Code>
       :
-      <Code color="danger" className="whitespace-normal text-[12px]">{JSON.stringify(error.message, null, 2)}</Code>
+      <Code className="whitespace-normal text-[12px]" color="danger">{JSON.stringify(error.message, null, 2)}</Code>
     </p>
   );
 }

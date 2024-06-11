@@ -24,16 +24,8 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
   return (
     <Resizable
       as="nav"
+      className="flex flex-col p-2 duration-75"
       defaultSize={{ width: 240 }}
-      size={{ width }}
-      style={{
-        marginLeft: isSidebarHidden ? -width : 0,
-        visibility: isSidebarHidden ? 'hidden' : 'visible',
-        opacity: isSidebarHidden ? 0 : 1,
-      }}
-      minWidth={220}
-      maxWidth={380}
-      onResizeStop={(e, direction, ref, d) => setWidth(width + d.width)}
       enable={{
         // only allow dragging from the right
         top: false,
@@ -45,41 +37,49 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
         bottomLeft: false,
         topLeft: false,
       }}
-      className="flex flex-col p-2 duration-75"
+      handleClasses={{ right: 'bg-default-100 hover:bg-default-200 focus:bg-default-200' }}
       handleStyles={{
         right: { width: 4 },
       }}
-      handleClasses={{ right: 'bg-default-100 hover:bg-default-200 focus:bg-default-200' }}
+      maxWidth={380}
+      minWidth={220}
+      onResizeStop={(e, direction, ref, d) => setWidth(width + d.width)}
+      size={{ width }}
+      style={{
+        marginLeft: isSidebarHidden ? -width : 0,
+        visibility: isSidebarHidden ? 'hidden' : 'visible',
+        opacity: isSidebarHidden ? 0 : 1,
+      }}
     >
       <div className="flex items-center justify-between">
         <Dropdown>
           <DropdownTrigger>
             <Button
-              isIconOnly
               aria-label="User Menu"
-              size="sm"
+              isIconOnly
               radius="sm"
+              size="sm"
               variant="light"
             >
               <UserAvatar />
             </Button>
           </DropdownTrigger>
           <DropdownMenu aria-label="User Options">
-            <DropdownSection title={user?.email} showDivider>
+            <DropdownSection showDivider title={user?.email}>
               <DropdownItem
-                startContent={<Icon icon="material-symbols:settings" className="text-lg" />}
                 key="settings"
+                startContent={<Icon className="text-lg" icon="material-symbols:settings" />}
               >
                 Settings
               </DropdownItem>
             </DropdownSection>
             <DropdownSection aria-label="Danger zone">
               <DropdownItem
-                onPress={() => signOutMutation.mutate()}
-                startContent={<Icon icon="material-symbols:exit-to-app" className="text-lg" />}
-                key="signout"
                 className="text-danger"
                 color="danger"
+                key="signout"
+                onPress={() => signOutMutation.mutate()}
+                startContent={<Icon className="text-lg" icon="material-symbols:exit-to-app" />}
               >
                 Sign out
               </DropdownItem>
@@ -87,15 +87,15 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
           </DropdownMenu>
         </Dropdown>
         <Button
-          isIconOnly
           aria-label="Toggle Sidebar"
-          size="sm"
-          radius="sm"
-          variant="light"
           className="p-0"
+          isIconOnly
           onPress={() => setIsSidebarHidden(p => !p)}
+          radius="sm"
+          size="sm"
+          variant="light"
         >
-          <Icon icon="ph:sidebar-simple-fill" className="text-lg" />
+          <Icon className="text-lg" icon="ph:sidebar-simple-fill" />
         </Button>
       </div>
       <Divider className="my-2" />
@@ -106,7 +106,7 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
         </div>
         {isLoading && <LoadingScreen />}
         {error && <QueryError error={error} queryName="useProjects" />}
-        {projects && projects.map(project => <ProjectBtn project={project} key={project.id} />)}
+        {projects && projects.map(project => <ProjectBtn key={project.id} project={project} />)}
       </div>
     </Resizable>
   );

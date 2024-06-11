@@ -17,20 +17,20 @@ export default function ProjectBtn({ project }: { project: ProjectScalar }) {
   return (
     <Button
       as={Link}
+      className={cn('justify-start pl-2 pr-0', isProjectSelected && 'bg-default/40')}
+      disableAnimation={isProjectSelected}
+      endContent={<ProjectActionBtn isHover={isHover} project={project} />}
+      fullWidth
+      onBlur={() => setIsHover(false)}
+      onFocus={() => setIsHover(true)}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
       onPress={() => {
         isProjectSelected || nav(`/project/${project.id}`);
       }}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-      onFocus={() => setIsHover(true)}
-      onBlur={() => setIsHover(false)}
       radius="sm"
+      startContent={<Icon className="shrink-0 text-lg" icon="material-symbols:category" />}
       variant="light"
-      fullWidth
-      className={cn('justify-start pl-2 pr-0', isProjectSelected && 'bg-default/40')}
-      disableAnimation={isProjectSelected}
-      startContent={<Icon icon="material-symbols:category" className="shrink-0 text-lg" />}
-      endContent={<ProjectActionBtn project={project} isHover={isHover} />}
     >
       <p className="w-full overflow-hidden text-ellipsis text-left">{project.name}</p>
     </Button>

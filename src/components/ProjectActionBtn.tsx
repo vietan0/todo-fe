@@ -79,40 +79,40 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
       >
         <DropdownTrigger>
           <Button
+            className={cn('data-[focus-visible]:-outline-offset-2', isHover ? 'opacity-100' : 'opacity-0')}
             isIconOnly
             variant="light"
-            className={cn('data-[focus-visible]:-outline-offset-2', isHover ? 'opacity-100' : 'opacity-0')}
           >
-            <Icon icon="material-symbols:more-horiz" className="text-lg" />
+            <Icon className="text-lg" icon="material-symbols:more-horiz" />
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           aria-label="Project Actions"
         >
           <DropdownItem
+            key="rename"
             onPress={onRenameProjectOpen}
             startContent={<Icon icon="material-symbols:edit" />}
-            key="rename"
           >
             Rename
           </DropdownItem>
           <DropdownItem
-            onPress={onDeleteProjectOpen}
-            startContent={<Icon icon="material-symbols:delete" />}
-            key="delete"
             className="text-danger"
             color="danger"
+            key="delete"
+            onPress={onDeleteProjectOpen}
+            startContent={<Icon icon="material-symbols:delete" />}
           >
             Delete
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
       <Modal
-        isOpen={isRenameProjectOpen}
-        onOpenChange={onRenameProjectOpenChange}
         classNames={{
           footer: 'mt-6 flex-col',
         }}
+        isOpen={isRenameProjectOpen}
+        onOpenChange={onRenameProjectOpenChange}
       >
         <ModalContent>
           {onClose => (
@@ -120,16 +120,16 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
               <ModalHeader className="flex flex-col gap-1">Rename</ModalHeader>
               <ModalBody>
                 <Controller
-                  name="name"
                   control={control}
+                  name="name"
                   render={({ field }) => (
                     <Input
                       {...field}
-                      type="text"
-                      label="Name"
                       autoFocus
-                      isInvalid={Boolean(formState.errors.name)}
                       errorMessage={formState.errors.name?.message}
+                      isInvalid={Boolean(formState.errors.name)}
+                      label="Name"
+                      type="text"
                     />
                   )}
                 />
@@ -139,20 +139,20 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
 
                   <Button
                     color="danger"
-                    variant="light"
                     onPress={() => {
                       renameProjectMutation.reset();
                       resetForm();
                       onClose();
                     }}
+                    variant="light"
                   >
                     Cancel
                   </Button>
                   <Button
                     color="primary"
-                    type="submit"
                     isDisabled={!formState.isDirty}
                     isLoading={renameProjectMutation.isPending}
+                    type="submit"
 
                   >
                     Rename
@@ -171,11 +171,11 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
         </ModalContent>
       </Modal>
       <Modal
-        isOpen={isDeleteProjectOpen}
-        onOpenChange={onDeleteProjectOpenChange}
         classNames={{
           footer: 'mt-6 flex-col',
         }}
+        isOpen={isDeleteProjectOpen}
+        onOpenChange={onDeleteProjectOpenChange}
       >
         <ModalContent>
           {onClose => (
@@ -192,8 +192,8 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
 
                   <Button
                     color="default"
-                    variant="light"
                     onPress={onClose}
+                    variant="light"
                   >
                     Cancel
                   </Button>
