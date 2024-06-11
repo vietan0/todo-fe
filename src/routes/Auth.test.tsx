@@ -21,9 +21,7 @@ beforeEach(async () => {
   await waitFor(() => expect(auth).toBeInTheDocument());
 });
 
-afterEach(() => {
-  cleanup();
-});
+afterEach(cleanup);
 
 test('sign in successfully', async () => {
   const fakeUser = userFactory();
@@ -31,12 +29,12 @@ test('sign in successfully', async () => {
   vi.mocked(getUser).mockResolvedValue(fakeUser);
   vi.mocked(getProjects).mockResolvedValue(genProjects());
   await user.click(signInButton);
-  expect(signIn).toHaveBeenCalled();
+  expect(signIn).toHaveBeenCalledTimes(1);
   const home = await screen.findByTestId('Home');
   await waitFor(() => expect(home).toBeInTheDocument());
 });
 
-test('sign in without email should display error', async () => {
+test('sign in without email', async () => {
   const emailInput = await screen.findByLabelText('Email');
   const signInButton = await screen.findByRole('button', { name: 'Sign In' });
 
@@ -57,8 +55,7 @@ test('sign in with non-existing email', async () => {
   await user.type(emailInput, 'nonExisting@email.com');
   await user.click(signInButton);
 
-  expect(signIn).toHaveBeenCalled();
-  await waitFor(() => expect(signIn).toHaveBeenCalled());
+  expect(signIn).toHaveBeenCalledTimes(1);
   const mutationErr = await screen.findByTestId('MutationError');
   expect(mutationErr).toBeInTheDocument();
 });
@@ -66,14 +63,13 @@ test('sign in with non-existing email', async () => {
 test('sign in with incorrect password', async () => {
   const passwordInput = await screen.findByLabelText('Password');
   const signInButton = await screen.findByRole('button', { name: 'Sign In' });
-  vi.mocked(signIn).mockRejectedValue(new Error('No User found'));
+  vi.mocked(signIn).mockRejectedValue(new Error('Password is incorrect'));
 
   await user.clear(passwordInput);
   await user.type(passwordInput, 'wrongPassword');
   await user.click(signInButton);
 
-  expect(signIn).toHaveBeenCalled();
-  await waitFor(() => expect(signIn).toHaveBeenCalled());
+  expect(signIn).toHaveBeenCalledTimes(1);
   const mutationErr = await screen.findByTestId('MutationError');
   expect(mutationErr).toBeInTheDocument();
 });

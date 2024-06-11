@@ -43,6 +43,9 @@ test('create project successfully', async () => {
   vi.mocked(getProject).mockResolvedValue(newFakeProject as Project);
   await user.click(screen.getByText('Create'));
 
+  expect(createProject).toHaveBeenCalledTimes(1);
+  expect(getProjects).toHaveBeenCalledTimes(2);
+
   // should see new row in Sidebar's project list
   const newProjectBtn = await screen.findByRole('button', { name: newFakeProject.name });
   expect(newProjectBtn).toBeInTheDocument();
@@ -53,6 +56,19 @@ test('create project successfully', async () => {
   });
 
   await waitFor(() => expect(newProjectH1).toBeInTheDocument());
+  await waitFor(() => expect(getProject).toHaveBeenCalledTimes(1));
 });
 
-test.todo('create project without name should display error');
+test('create project without name', async () => {
+  const createProjectBtn = await screen.findByLabelText('Add Project');
+  await user.click(createProjectBtn);
+  const projectNameInput = await screen.findByLabelText('Name');
+  await user.clear(projectNameInput);
+  await user.click(screen.getByText('Create'));
+
+  expect(createProject).not.toHaveBeenCalled();
+  expect(getProject).not.toHaveBeenCalled();
+
+  const errMsg = await screen.findByText('String must contain at least 1 character(s)');
+  expect(errMsg).toBeInTheDocument();
+});
