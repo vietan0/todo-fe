@@ -39,13 +39,13 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
   useEffect(() => {
     if (renameProjectMutation.isSuccess) {
       onRenameProjectClose();
-      resetForm(undefined, { keepDirtyValues: true });
+      resetForm();
     }
   }, [renameProjectMutation.isSuccess]);
 
   useEffect(() => {
     if (!isRenameProjectOpen) {
-      resetForm(undefined, { keepDirtyValues: true });
+      resetForm();
       renameProjectMutation.reset();
     }
   }, [isRenameProjectOpen]);

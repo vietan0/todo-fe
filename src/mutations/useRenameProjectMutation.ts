@@ -9,8 +9,9 @@ export default function useRenameProjectMutation(projectId: Project['id']) {
 
   return useMutation({
     mutationFn: (data: RenameProject) => renameProject(data, projectId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getProjects'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['getProjects'] });
+      await queryClient.invalidateQueries({ queryKey: ['getProject', projectId] });
     },
   });
 }

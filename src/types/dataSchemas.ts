@@ -8,7 +8,7 @@ export type AuthPayload = z.infer<typeof authPayloadZ>;
 export const userZ = z.object({
   id: z.string().uuid(),
   email: z.string().email().max(255),
-  password: z.string(),
+  password: z.string().trim().min(4).max(255),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });
@@ -16,7 +16,7 @@ export type User = z.infer<typeof userZ>;
 
 const taskScalarZ = z.object({
   id: z.string().uuid(),
-  name: z.string().max(255),
+  name: z.string().trim().min(1).max(255),
   completed: z.boolean(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -30,7 +30,7 @@ export const taskZ = taskScalarZ.extend({
 export type Task = z.infer<typeof taskZ>;
 export const projectScalarZ = z.object({
   id: z.string().uuid(),
-  name: z.string().max(255),
+  name: z.string().trim().min(1).max(255),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   userId: z.string().uuid(),
@@ -45,7 +45,7 @@ export const createProjectZ = z.object({
 });
 export type CreateProject = z.infer<typeof createProjectZ>;
 export const renameProjectZ = z.object({
-  name: z.string().max(255),
+  name: z.string().trim().min(1).max(255),
 });
 export type RenameProject = z.infer<typeof renameProjectZ>;
 export const createTaskZ = z.object({
