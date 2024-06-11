@@ -3,8 +3,8 @@ import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection,
 import { Resizable } from 're-resizable';
 import { useState } from 'react';
 
+import useSignOutMutation from '../mutations/useSignOutMutation';
 import useProjects from '../queries/useProjects';
-import useSignOutMutation from '../queries/useSignOutMutation';
 import useUser from '../queries/useUser';
 import CreateProjectButton from './CreateProjectButton';
 import LoadingScreen from './LoadingScreen';

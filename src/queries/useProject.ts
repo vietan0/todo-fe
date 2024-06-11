@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import getProject from './getProject';
+import getProject from './queryFns/getProject';
 
 import type { Project } from '../types/dataSchemas';
 

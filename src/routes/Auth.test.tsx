@@ -2,15 +2,15 @@ import { cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 
-import { signIn } from '../queries/auth';
-import getProjects from '../queries/getProjects';
-import getUser from '../queries/getUser';
+import { signIn } from '../mutations/mutationFns/auth';
+import getProjects from '../queries/queryFns/getProjects';
+import getUser from '../queries/queryFns/getUser';
 import { genProjects, userFactory } from '../test/fakeData';
 import { renderWithProviders } from '../test/renderWithProviders';
 
-vi.mock('../queries/getUser.ts');
-vi.mock('../queries/auth.ts');
-vi.mock('../queries/getProjects.ts');
+vi.mock('../queries/queryFns/getUser.ts');
+vi.mock('../queries/queryFns/getProjects.ts');
+vi.mock('../mutations/mutationFns/auth.ts');
 const user = userEvent.setup();
 
 beforeEach(async () => {

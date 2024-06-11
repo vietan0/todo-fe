@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
 import QueryError from '../components/QueryError';
-import useAuthMutation from '../queries/useAuthMutation';
+import useAuthMutation from '../mutations/useAuthMutation';
 import useUser from '../queries/useUser';
 import { authPayloadZ } from '../types/dataSchemas';
 

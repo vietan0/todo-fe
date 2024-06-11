@@ -5,8 +5,8 @@ import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, M
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import useDeleteProjectMutation from '../queries/useDeleteProjectMutation';
-import useRenameProjectMutation from '../queries/useRenameProjectMutation';
+import useDeleteProjectMutation from '../mutations/useDeleteProjectMutation';
+import useRenameProjectMutation from '../mutations/useRenameProjectMutation';
 import { type ProjectScalar, type RenameProject, renameProjectZ } from '../types/dataSchemas';
 import cn from '../utils/cn';
 

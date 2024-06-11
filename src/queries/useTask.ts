@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { resGetTaskZ } from '../types/resSchemas';
-import { server } from '../utils/serverUrl';
+import getTask from './queryFns/getTask';
 
-import type { Project as Task } from '../types/dataSchemas';
+import type { Task } from '../types/dataSchemas';
 
 export default function useTask(taskId: Task['id'] | undefined) {
   return useQuery({
@@ -13,18 +12,4 @@ export default function useTask(taskId: Task['id'] | undefined) {
     staleTime: 1000 * 60 * 30,
     refetchOnWindowFocus: false,
   });
-}
-
-async function getTask(taskId: Task['id'] | undefined): Promise<Task> {
-  const res = await fetch(
-    `${server}/api/task/${taskId}`,
-    { credentials: 'include' },
-  ).then(res => res.json());
-
-  const validRes = resGetTaskZ.parse(res);
-
-  if (validRes.status === 'success')
-    return validRes.data;
-
-  throw new Error(validRes.error || validRes.message);
 }

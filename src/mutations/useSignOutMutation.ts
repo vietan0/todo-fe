@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { server } from '../utils/serverUrl';
+import signOut from './mutationFns/signOut';
 
 export default function useSignOutMutation() {
   const queryClient = useQueryClient();
@@ -11,13 +11,4 @@ export default function useSignOutMutation() {
       queryClient.invalidateQueries({ queryKey: ['getUser'] });
     },
   });
-}
-
-export async function signOut() {
-  const res = await fetch(
-    `${server}/auth/signout`,
-    { method: 'POST', credentials: 'include' },
-  ).then(res => res.json());
-
-  return res;
 }

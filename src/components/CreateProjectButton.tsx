@@ -5,7 +5,7 @@ import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import useCreateProjectMutation from '../queries/useCreateProjectMutation';
+import useCreateProjectMutation from '../mutations/useCreateProjectMutation';
 import { createProjectZ } from '../types/dataSchemas';
 
 import type { CreateProject } from '../types/dataSchemas';

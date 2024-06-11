@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-import createProject from './createProject';
+import createProject from './mutationFns/createProject';
 
 export default function useCreateProjectMutation() {
   const nav = useNavigate();
@@ -12,7 +12,6 @@ export default function useCreateProjectMutation() {
     onSuccess: async (newProject) => {
       await queryClient.invalidateQueries({ queryKey: ['getProjects'] });
       nav(`/project/${newProject!.id}`);
-      console.log('im navigating');
     },
   });
 }

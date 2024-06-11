@@ -3,8 +3,8 @@ import { Button, Checkbox, CircularProgress, Code, Link, Modal, ModalBody, Modal
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useDeleteTaskMutation from '../queries/useDeleteTaskMutation';
-import useUpdateTaskMutation from '../queries/useUpdateTaskMutation';
+import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
+import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import cn from '../utils/cn';
 import TaskForm from './TaskForm';
 

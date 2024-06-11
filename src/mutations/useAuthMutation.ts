@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { signIn, signUp } from './auth';
+import { signIn, signUp } from './mutationFns/auth';
 
 import type { AuthPayload } from '../types/dataSchemas';
 

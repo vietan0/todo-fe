@@ -1,7 +1,7 @@
-import { resGetProjectsZ } from '../types/resSchemas';
-import { server } from '../utils/serverUrl';
+import { resGetProjectsZ } from '../../types/resSchemas';
+import { server } from '../../utils/serverUrl';
 
-import type { ProjectScalar } from '../types/dataSchemas';
+import type { ProjectScalar } from '../../types/dataSchemas';
 
 export default async function getProjects(): Promise<ProjectScalar[]> {
   const res = await fetch(

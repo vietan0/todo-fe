@@ -1,7 +1,7 @@
-import { resGetProjectZ } from '../types/resSchemas';
-import { server } from '../utils/serverUrl';
+import { resGetProjectZ } from '../../types/resSchemas';
+import { server } from '../../utils/serverUrl';
 
-import type { Project } from '../types/dataSchemas';
+import type { Project } from '../../types/dataSchemas';
 
 export default async function getProject(projectId: Project['id'] | undefined): Promise<Project> {
   const res = await fetch(

@@ -5,8 +5,8 @@ import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
-import useCreateTaskMutation from '../queries/useCreateTaskMutation';
-import useUpdateTaskMutation from '../queries/useUpdateTaskMutation';
+import useCreateTaskMutation from '../mutations/useCreateTaskMutation';
+import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import { createTaskZ, updateTaskZ } from '../types/dataSchemas';
 
 import type { CreateTask, Task } from '../types/dataSchemas';

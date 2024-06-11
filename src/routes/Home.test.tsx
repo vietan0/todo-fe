@@ -1,13 +1,13 @@
 import { cleanup, screen, waitFor } from '@testing-library/react';
 import { afterEach, expect, test, vi } from 'vitest';
 
-import getProjects from '../queries/getProjects';
-import getUser from '../queries/getUser';
+import getProjects from '../queries/queryFns/getProjects';
+import getUser from '../queries/queryFns/getUser';
 import { genProjects, userFactory } from '../test/fakeData';
 import { renderWithProviders } from '../test/renderWithProviders';
 
-vi.mock('../queries/getUser.ts');
-vi.mock('../queries/getProjects.ts');
+vi.mock('../queries/queryFns/getUser.ts');
+vi.mock('../queries/queryFns/getProjects.ts');
 
 afterEach(cleanup);
 

@@ -2,19 +2,19 @@ import { cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 
-import createProject from '../queries/createProject';
-import getProject from '../queries/getProject';
-import getProjects from '../queries/getProjects';
-import getUser from '../queries/getUser';
+import createProject from '../mutations/mutationFns/createProject';
+import getProject from '../queries/queryFns/getProject';
+import getProjects from '../queries/queryFns/getProjects';
+import getUser from '../queries/queryFns/getUser';
 import { genProjects, projectFactory, userFactory } from '../test/fakeData';
 import { renderWithProviders } from '../test/renderWithProviders';
 
 import type { Project } from '../types/dataSchemas';
 
-vi.mock('../queries/getUser.ts');
-vi.mock('../queries/getProjects.ts');
-vi.mock('../queries/createProject.ts');
-vi.mock('../queries/getProject.ts');
+vi.mock('../queries/queryFns/getUser.ts');
+vi.mock('../queries/queryFns/getProjects.ts');
+vi.mock('../queries/queryFns/getProject.ts');
+vi.mock('../mutations/mutationFns/createProject.ts');
 const user = userEvent.setup();
 const fakeProjects = genProjects();
 const fakeUser = userFactory();
