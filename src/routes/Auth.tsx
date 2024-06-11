@@ -1,4 +1,5 @@
 import { DevTool } from '@hookform/devtools';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Card, CardBody, CardFooter, CardHeader, Input } from '@nextui-org/react';
 import { Helmet } from 'react-helmet-async';
 import { Controller, useForm } from 'react-hook-form';
@@ -8,11 +9,9 @@ import LoadingScreen from '../components/LoadingScreen';
 import QueryError from '../components/QueryError';
 import useAuthMutation from '../queries/useAuthMutation';
 import useUser from '../queries/useUser';
+import { authPayloadZ } from '../types/dataSchemas';
 
-export interface AuthPayload {
-  email: string;
-  password: string;
-}
+import type { AuthPayload } from '../types/dataSchemas';
 
 export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
   const { data: user, isLoading, error } = useUser();
@@ -21,10 +20,14 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
   const {
     handleSubmit,
     control,
-  } = useForm<AuthPayload>({ defaultValues: {
-    email: 'postman@gmail.com',
-    password: 'postman',
-  } });
+    formState,
+  } = useForm<AuthPayload>({
+    defaultValues: {
+      email: 'postman@gmail.com',
+      password: 'postman',
+    },
+    resolver: zodResolver(authPayloadZ),
+  });
 
   async function onSubmit(data: AuthPayload) {
     authMutation.mutate({ mode, data });
@@ -50,6 +53,7 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
       </Helmet>
       <Card classNames={{
         base: 'm-auto max-w-screen-xs grow p-4',
+        footer: 'flex-col items-stretch gap-2',
       }}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -69,6 +73,8 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
                   label="Email"
                   placeholder="Enter your email"
                   autoFocus
+                  isInvalid={Boolean(formState.errors.email)}
+                  errorMessage={formState.errors.email?.message}
                 />
               )}
             />
@@ -82,19 +88,35 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
                   type="password"
                   label="Password"
                   placeholder="Enter your password"
+                  isInvalid={Boolean(formState.errors.password)}
+                  errorMessage={formState.errors.password?.message}
                 />
               )}
             />
           </CardBody>
           <CardFooter>
-            <Button
-              type="submit"
-              color="primary"
-              className="font-bold"
-              isLoading={authMutation.isPending}
-            >
-              {mode === 'signin' ? 'Sign In' : 'Sign Up'}
-            </Button>
+            <div className="flex justify-end gap-2">
+              <Button
+                type="submit"
+                color="primary"
+                className="font-bold"
+                isLoading={authMutation.isPending}
+              >
+                {mode === 'signin' ? 'Sign In' : 'Sign Up'}
+              </Button>
+            </div>
+            {authMutation.isError
+              ? (
+                <p onClick={() => authMutation.reset()} className="font-mono text-sm text-danger" data-testid="MutationError">
+                  An error occurred while
+                  {' '}
+                  {mode === 'signin' ? 'signing in' : 'signing up'}
+                  :
+                  {' '}
+                  {authMutation.error.message}
+                </p>
+                )
+              : null}
           </CardFooter>
         </form>
         <DevTool control={control} />

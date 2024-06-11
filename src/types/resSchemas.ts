@@ -14,8 +14,9 @@ export function resSuccessZ(dataZ: ZodTypeAny) {
 export const resErrZ = z.object({
   status: z.literal('error'),
   message: z.string(),
-  error: z.string().optional(),
+  error: z.any().optional(),
 });
+export const resSignInZ = z.union([resSuccessZ(userZ), resErrZ]);
 export const resGetUserZ = z.union([resSuccessZ(userZ), resErrZ]);
 export const resGetProjectsZ = z.union([resSuccessZ(z.array(projectScalarZ)), resErrZ]);
 export const resGetProjectZ = z.union([resSuccessZ(projectZ), resErrZ]);

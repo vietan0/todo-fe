@@ -107,6 +107,7 @@ export default antfu(
         rules: {
           'testing-library/no-debugging-utils': 'off',
           'testing-library/no-manual-cleanup': 'off',
+          'testing-library/no-render-in-lifecycle': 'off',
         },
       },
     ],

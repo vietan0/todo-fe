@@ -1,5 +1,10 @@
 import { z } from 'zod';
 
+export const authPayloadZ = z.object({
+  email: z.string().email().max(255),
+  password: z.string(),
+});
+export type AuthPayload = z.infer<typeof authPayloadZ>;
 export const userZ = z.object({
   id: z.string().uuid(),
   email: z.string().email().max(255),

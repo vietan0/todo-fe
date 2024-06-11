@@ -2,13 +2,13 @@ import { faker } from '@faker-js/faker';
 
 import type { Project, ProjectScalar, Task, User } from '../types/dataSchemas';
 
-export function userFactory(): User {
+export function userFactory(user?: Partial<User>): User {
   return {
-    id: faker.string.uuid(),
-    email: faker.internet.email(),
-    password: faker.string.hexadecimal(),
-    createdAt: faker.date.past().toISOString(),
-    updatedAt: faker.date.past().toISOString(),
+    id: user?.id || faker.string.uuid(),
+    email: user?.email || faker.internet.email(),
+    password: user?.password || faker.string.hexadecimal(),
+    createdAt: user?.createdAt || faker.date.past().toISOString(),
+    updatedAt: user?.updatedAt || faker.date.past().toISOString(),
   };
 }
 
