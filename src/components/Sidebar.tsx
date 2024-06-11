@@ -37,18 +37,25 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
         bottomLeft: false,
         topLeft: false,
       }}
-      handleClasses={{ right: 'bg-default-100 hover:bg-default-200 focus:bg-default-200' }}
+      handleClasses={{ right: 'bg-default-100 hover:bg-default-200 focus:bg-default-200 rounded' }}
       handleStyles={{
-        right: { width: 4 },
+        right: {
+          width: 4,
+          right: 0,
+          height: '100vh',
+        },
       }}
-      maxWidth={380}
+      maxWidth={400}
       minWidth={220}
       onResizeStop={(e, direction, ref, d) => setWidth(width + d.width)}
-      size={{ width }}
+      size={{ width, height: '100vh' }}
       style={{
         marginLeft: isSidebarHidden ? -width : 0,
         visibility: isSidebarHidden ? 'hidden' : 'visible',
         opacity: isSidebarHidden ? 0 : 1,
+        overflowX: 'hidden',
+        overflowY: 'scroll',
+        scrollbarWidth: 'none',
       }}
     >
       <div className="flex items-center justify-between">
