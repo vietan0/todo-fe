@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button } from '@nextui-org/react';
+import { Button, Tooltip } from '@nextui-org/react';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Navigate, Outlet } from 'react-router-dom';
@@ -29,20 +29,25 @@ export default function Home() {
       <div className="grow p-2">
         <div className="flex items-center justify-between">
           {isSidebarHidden && (
-            <Button
-              aria-label="Toggle Sidebar"
-              className="p-0"
-              isIconOnly
-              onPress={() => setIsSidebarHidden(p => !p)}
-              radius="sm"
-              size="sm"
-              variant="light"
+            <Tooltip
+              content="Toggle Sidebar"
+              delay={500}
             >
-              <Icon className="text-xl" icon="ph:sidebar-simple-fill" />
-            </Button>
+              <Button
+                aria-label="Toggle Sidebar"
+                className="p-0"
+                isIconOnly
+                onPress={() => setIsSidebarHidden(p => !p)}
+                radius="sm"
+                size="sm"
+                variant="light"
+              >
+                <Icon className="text-xl" icon="ph:sidebar-simple-fill" />
+              </Button>
+            </Tooltip>
           )}
           <Button
-            aria-label="Toggle Sidebar"
+            aria-label="More"
             className="ml-auto p-0"
             isIconOnly
             radius="sm"

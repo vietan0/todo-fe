@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Checkbox, CircularProgress, Code, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
+import { Button, Checkbox, CircularProgress, Code, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,32 +54,42 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
               }}
             />
           )}
-          <Button
-            aria-label="Edit Task"
-            // eslint-disable-next-line tailwindcss/enforces-shorthand
-            className="h-7 w-7 min-w-0 data-[hover=true]:bg-default/60"
-            disableAnimation
-            isIconOnly
-            onPress={() => setIsFormOpen(true)}
-            radius="sm"
-            size="sm"
-            variant="light"
+          <Tooltip
+            content="Edit Task"
+            delay={500}
           >
-            <Icon className="text-xl text-default-700" icon="material-symbols:edit" />
-          </Button>
-          <Button
-            aria-label="Delete Task"
+            <Button
+              aria-label="Edit Task"
             // eslint-disable-next-line tailwindcss/enforces-shorthand
-            className="h-7 w-7 min-w-0 data-[hover=true]:bg-default/60"
-            disableAnimation
-            isIconOnly
-            onPress={onDeleteTaskOpen}
-            radius="sm"
-            size="sm"
-            variant="light"
+              className="h-7 w-7 min-w-0 data-[hover=true]:bg-default/60"
+              disableAnimation
+              isIconOnly
+              onPress={() => setIsFormOpen(true)}
+              radius="sm"
+              size="sm"
+              variant="light"
+            >
+              <Icon className="text-xl text-default-700" icon="material-symbols:edit" />
+            </Button>
+          </Tooltip>
+          <Tooltip
+            content="Delete Task"
+            delay={500}
           >
-            <Icon className="text-xl text-default-700" icon="material-symbols:delete" />
-          </Button>
+            <Button
+              aria-label="Delete Task"
+            // eslint-disable-next-line tailwindcss/enforces-shorthand
+              className="h-7 w-7 min-w-0 data-[hover=true]:bg-default/60"
+              disableAnimation
+              isIconOnly
+              onPress={onDeleteTaskOpen}
+              radius="sm"
+              size="sm"
+              variant="light"
+            >
+              <Icon className="text-xl text-default-700" icon="material-symbols:delete" />
+            </Button>
+          </Tooltip>
           <Modal
             classNames={{
               footer: 'mt-6 flex-col',

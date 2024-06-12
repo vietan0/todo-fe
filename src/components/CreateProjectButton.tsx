@@ -1,7 +1,7 @@
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -52,14 +52,20 @@ export default function CreateProjectButton() {
 
   return (
     <>
-      <Button
-        aria-label="Add Project"
-        isIconOnly
-        onPress={onOpen}
-        size="sm"
-        startContent={<Icon className="text-lg text-default-500" icon="material-symbols:add" />}
-        variant="light"
-      />
+      <Tooltip
+        content="Create Project"
+        delay={500}
+        placement="bottom"
+      >
+        <Button
+          aria-label="Create Project"
+          isIconOnly
+          onPress={onOpen}
+          size="sm"
+          startContent={<Icon className="text-lg text-default-500" icon="material-symbols:add" />}
+          variant="light"
+        />
+      </Tooltip>
       <Modal
         classNames={{
           footer: 'mt-6 flex-col',

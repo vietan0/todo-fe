@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@nextui-org/react';
+import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Tooltip } from '@nextui-org/react';
 import { Resizable } from 're-resizable';
 import { useState } from 'react';
 
@@ -93,17 +93,22 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
             </DropdownSection>
           </DropdownMenu>
         </Dropdown>
-        <Button
-          aria-label="Toggle Sidebar"
-          className="p-0"
-          isIconOnly
-          onPress={() => setIsSidebarHidden(p => !p)}
-          radius="sm"
-          size="sm"
-          variant="light"
+        <Tooltip
+          content="Toggle Sidebar"
+          delay={500}
         >
-          <Icon className="text-lg" icon="ph:sidebar-simple-fill" />
-        </Button>
+          <Button
+            aria-label="Toggle Sidebar"
+            className="p-0"
+            isIconOnly
+            onPress={() => setIsSidebarHidden(p => !p)}
+            radius="sm"
+            size="sm"
+            variant="light"
+          >
+            <Icon className="text-lg" icon="ph:sidebar-simple-fill" />
+          </Button>
+        </Tooltip>
       </div>
       <Divider className="my-2" />
       <div className="flex flex-col gap-1">

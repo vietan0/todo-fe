@@ -32,7 +32,7 @@ beforeEach(async () => {
 afterEach(cleanup);
 
 test('create project successfully', async () => {
-  const createProjectBtn = await screen.findByLabelText('Add Project');
+  const createProjectBtn = await screen.findByLabelText('Create Project');
   await user.click(createProjectBtn);
   const projectNameInput = await screen.findByLabelText('Name');
   await user.type(projectNameInput, 'New Project');
@@ -60,7 +60,7 @@ test('create project successfully', async () => {
 });
 
 test('create project without name', async () => {
-  const createProjectBtn = await screen.findByLabelText('Add Project');
+  const createProjectBtn = await screen.findByLabelText('Create Project');
   await user.click(createProjectBtn);
   const projectNameInput = await screen.findByLabelText('Name');
   await user.clear(projectNameInput);
