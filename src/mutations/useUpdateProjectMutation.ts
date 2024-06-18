@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import renameProject from './mutationFns/renameProject';
+import updateProject from './mutationFns/updateProject';
 
-import type { Project, RenameProject } from '../types/dataSchemas';
+import type { Project, UpdateProject } from '../types/dataSchemas';
 
-export default function useRenameProjectMutation(projectId: Project['id']) {
+export default function useUpdateProjectMutation(projectId: Project['id']) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: RenameProject) => renameProject(data, projectId),
+    mutationFn: (data: UpdateProject) => updateProject(data, projectId),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['getProjects'] });
       await queryClient.invalidateQueries({ queryKey: ['getProject', projectId] });

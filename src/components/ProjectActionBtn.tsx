@@ -6,8 +6,8 @@ import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import useDeleteProjectMutation from '../mutations/useDeleteProjectMutation';
-import useRenameProjectMutation from '../mutations/useRenameProjectMutation';
-import { type ProjectScalar, type RenameProject, renameProjectZ } from '../types/dataSchemas';
+import useUpdateProjectMutation from '../mutations/useUpdateProjectMutation';
+import { type ProjectScalar, type UpdateProject, updateProjectZ } from '../types/dataSchemas';
 import cn from '../utils/cn';
 import MutationError from './MutationError';
 
@@ -28,12 +28,12 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
     reset: resetForm,
   } = useForm({
     defaultValues: { name: project.name },
-    resolver: zodResolver(renameProjectZ),
+    resolver: zodResolver(updateProjectZ),
   });
 
-  const renameProjectMutation = useRenameProjectMutation(project.id);
+  const renameProjectMutation = useUpdateProjectMutation(project.id);
 
-  const onSubmit: SubmitHandler<RenameProject> = (data) => {
+  const onSubmit: SubmitHandler<UpdateProject> = (data) => {
     renameProjectMutation.mutate(data);
   };
 

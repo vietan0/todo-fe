@@ -1,9 +1,9 @@
-import { resRenameProjectZ } from '../../types/resSchemas';
+import { resUpdateProjectZ } from '../../types/resSchemas';
 import { server } from '../../utils/serverUrl';
 
-import type { Project, RenameProject } from '../../types/dataSchemas';
+import type { Project, UpdateProject } from '../../types/dataSchemas';
 
-export default async function renameProject(data: RenameProject, projectId: Project['id']): Promise<Project | null> {
+export default async function updateProject(data: UpdateProject, projectId: Project['id']): Promise<Project | null> {
   const res = await fetch(
     `${server}/api/project/${projectId}`,
     {
@@ -17,7 +17,7 @@ export default async function renameProject(data: RenameProject, projectId: Proj
     },
   ).then(res => res.json());
 
-  const validRes = resRenameProjectZ.parse(res);
+  const validRes = resUpdateProjectZ.parse(res);
 
   if (validRes.status === 'success')
     return validRes.data;
