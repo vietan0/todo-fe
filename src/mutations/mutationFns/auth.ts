@@ -16,7 +16,6 @@ export async function signIn(data: AuthPayload) {
 
   const validRes = resSignInZ.parse(res);
 
-  console.log('validRes', validRes);
   if (validRes.status === 'success')
     return validRes.data;
 

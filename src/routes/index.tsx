@@ -17,7 +17,7 @@ export default [
         children: [
           { index: true, element: <NoProject /> },
           {
-            path: '/project/:projectId',
+            path: 'project/:projectId',
             element: <Project />,
             children: [
               { path: 'task/:taskId', element: null },
