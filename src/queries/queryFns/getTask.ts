@@ -1,4 +1,5 @@
 import { resGetTaskZ } from '../../types/resSchemas';
+import { sortByRank } from '../../utils/lexorank';
 import { server } from '../../utils/serverUrl';
 
 import type { Task } from '../../types/dataSchemas';
@@ -11,8 +12,12 @@ export default async function getTask(taskId: Task['id'] | undefined): Promise<T
 
   const validRes = resGetTaskZ.parse(res);
 
-  if (validRes.status === 'success')
-    return validRes.data;
+  if (validRes.status === 'success') {
+    const task = validRes.data;
+    task.subTasks = sortByRank(task.subTasks);
+
+    return task;
+  }
 
   throw new Error(validRes.error || validRes.message);
 }

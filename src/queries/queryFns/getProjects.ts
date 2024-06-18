@@ -1,4 +1,5 @@
 import { resGetProjectsZ } from '../../types/resSchemas';
+import { sortByRank } from '../../utils/lexorank';
 import { server } from '../../utils/serverUrl';
 
 import type { ProjectScalar } from '../../types/dataSchemas';
@@ -11,8 +12,12 @@ export default async function getProjects(): Promise<ProjectScalar[]> {
 
   const validRes = resGetProjectsZ.parse(res);
 
-  if (validRes.status === 'success')
-    return validRes.data;
+  if (validRes.status === 'success') {
+    let projects = validRes.data;
+    projects = sortByRank(projects);
+
+    return projects;
+  }
 
   throw new Error(validRes.error || validRes.message);
 }

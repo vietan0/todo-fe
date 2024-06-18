@@ -17,6 +17,7 @@ export function subTaskFactory(parentTaskId: string): Task {
     id: faker.string.uuid(),
     name: `${faker.word.adjective()} ${faker.word.noun()}`,
     completed: faker.datatype.boolean(),
+    lexorank: `${faker.string.numeric()}|${faker.string.fromCharacters('ihz', 6)}:`,
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     projectId: faker.string.uuid(),
@@ -32,6 +33,7 @@ export function baseTaskFactory(subTasks = 0): Task {
     id: taskId,
     name: `${faker.word.adjective()} ${faker.word.noun()}`,
     completed: faker.datatype.boolean(),
+    lexorank: `${faker.string.numeric()}|${faker.string.fromCharacters('ihz', 6)}:`,
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     projectId: faker.string.uuid(),
@@ -52,6 +54,7 @@ export function projectFactory(scalarOnly = false): ProjectScalar | Project {
   return {
     id: faker.string.uuid(),
     name: `${faker.word.adjective()} ${faker.word.noun()}`,
+    lexorank: `${faker.string.numeric()}|${faker.string.fromCharacters('ihz', 6)}:`,
     userId: faker.string.uuid(),
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),

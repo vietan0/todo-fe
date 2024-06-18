@@ -39,6 +39,7 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
     <Button
       as={Link}
       className={cn(
+        task.parentTaskId && 'ml-8',
         task.completed ? 'opacity-disabled' : 'hover:bg-default-100',
         'h-auto min-h-[55px] items-start justify-start p-3 text-start',
       )}

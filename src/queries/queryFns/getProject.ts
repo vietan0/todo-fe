@@ -1,4 +1,5 @@
 import { resGetProjectZ } from '../../types/resSchemas';
+import { sortTasks } from '../../utils/lexorank';
 import { server } from '../../utils/serverUrl';
 
 import type { Project } from '../../types/dataSchemas';
@@ -11,8 +12,12 @@ export default async function getProject(projectId: Project['id'] | undefined): 
 
   const validRes = resGetProjectZ.parse(res);
 
-  if (validRes.status === 'success')
-    return validRes.data;
+  if (validRes.status === 'success') {
+    const project = validRes.data;
+    project.tasks = sortTasks(project.tasks);
+
+    return project;
+  }
 
   throw new Error(validRes.error || validRes.message);
 }

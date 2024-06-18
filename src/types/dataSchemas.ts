@@ -18,12 +18,14 @@ const taskScalarZ = z.object({
   id: z.string().uuid(),
   name: z.string().trim().min(1).max(255),
   completed: z.boolean(),
+  lexorank: z.string().trim().min(1),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   projectId: z.string().uuid(),
   parentTaskId: z.string().uuid().nullable(),
 });
 
+export type TaskScalar = z.infer<typeof taskScalarZ>;
 export const taskZ = taskScalarZ.extend({
   subTasks: z.array(taskScalarZ),
 });
@@ -31,6 +33,7 @@ export type Task = z.infer<typeof taskZ>;
 export const projectScalarZ = z.object({
   id: z.string().uuid(),
   name: z.string().trim().min(1).max(255),
+  lexorank: z.string().trim().min(1),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   userId: z.string().uuid(),
@@ -56,6 +59,7 @@ export type CreateTask = z.infer<typeof createTaskZ>;
 export const updateTaskZ = z.object({
   name: z.string().trim().min(1).max(255).optional(),
   completed: z.boolean().optional(),
+  lexorank: z.string().trim().min(1).optional(),
   projectId: z.string().uuid().optional(),
   parentTaskId: z.string().uuid().optional(),
 });
