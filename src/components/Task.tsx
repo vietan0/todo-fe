@@ -1,3 +1,5 @@
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button, Checkbox, CircularProgress, Code, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
@@ -19,6 +21,19 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: task.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  const {
     isOpen: isDeleteTaskOpen,
     onOpen: onDeleteTaskOpen,
     onOpenChange: onDeleteTaskOpenChange,
@@ -37,6 +52,11 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
 
   return (
     <Button
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      // eslint-disable-next-line perfectionist/sort-jsx-props
       as={Link}
       className={cn(
         task.parentTaskId && 'ml-8',
