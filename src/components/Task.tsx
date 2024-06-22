@@ -1,7 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Checkbox, CircularProgress, Code, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
+import { Button, Checkbox, CircularProgress, Code, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,10 +26,11 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
     setNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({ id: task.id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
     transition,
   };
 
@@ -51,20 +52,55 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
   }
 
   return (
-    <Button
+    <a
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      style={style}
-      // eslint-disable-next-line perfectionist/sort-jsx-props
-      as={Link}
       className={cn(
         task.parentTaskId && 'ml-8',
         task.completed ? 'opacity-disabled' : 'hover:bg-default-100',
-        'h-auto min-h-[55px] items-start justify-start p-3 text-start',
+        isDragging && 'cursor-grabbing',
+        'border border-default h-auto min-h-[55px] items-start justify-start p-3 text-start text-sm',
+        'tap-highlight-transparent no-underline active:opacity-disabled transition-opacity z-0 group relative inline-flex box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 min-w-20 text-small gap-2 rounded-small [&>svg]:max-w-[theme(spacing.8)] !transition-none bg-transparent text-foreground data-[hover=true]:opacity-hover',
       )}
-      disableAnimation
-      endContent={isHover && (
+      onBlur={() => setIsHover(false)}
+      onClick={() => {
+        nav(`task/${task.id}`);
+        onTaskModalOpen();
+      }}
+      onFocus={() => setIsHover(true)}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
+      style={style}
+    >
+      <Checkbox
+        classNames={{
+          base: 'outline-1 outline-red-400',
+          wrapper: 'mr-0',
+        }}
+        id={task.id}
+        isSelected={task.completed}
+        onValueChange={
+          (isSelected: boolean) => {
+            updateTaskMutation.mutate({ completed: isSelected });
+          }
+        }
+        radius="full"
+      />
+      <div>
+        <div>
+          <p>{task.name}</p>
+          <Code className="text-xs">{task.id.slice(0, 8)}</Code>
+          <Code className="text-xs">{task.lexorank}</Code>
+        </div>
+        {updateTaskMutation.error && (
+          <MutationError
+            error={updateTaskMutation.error}
+            mutationName="updateTask"
+          />
+        )}
+      </div>
+      {isHover && (
         <div className="ml-auto flex gap-1.5">
           {updateTaskMutation.isPending && (
             <CircularProgress
@@ -161,52 +197,6 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
           </Modal>
         </div>
       )}
-      onBlur={() => setIsHover(false)}
-      onFocus={() => setIsHover(true)}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-      onPress={() => {
-        nav(`task/${task.id}`);
-        onTaskModalOpen();
-      }}
-      radius="sm"
-      variant="bordered"
-    >
-      <Checkbox
-        classNames={{
-          base: 'outline-1 outline-red-400',
-          wrapper: 'mr-0',
-        }}
-        id={task.id}
-        isSelected={task.completed}
-        onValueChange={
-          (isSelected: boolean) => {
-            updateTaskMutation.mutate({ completed: isSelected });
-          }
-        }
-        radius="full"
-      />
-      <div>
-        <div>
-          <p>{task.name}</p>
-          {task.parentTaskId
-          && (
-            <div>
-              <span>
-                parent:
-                {' '}
-              </span>
-              <Code className="text-xs">{task.parentTaskId}</Code>
-            </div>
-          )}
-        </div>
-        {updateTaskMutation.error && (
-          <MutationError
-            error={updateTaskMutation.error}
-            mutationName="updateTask"
-          />
-        )}
-      </div>
-    </Button>
+    </a>
   );
 }
