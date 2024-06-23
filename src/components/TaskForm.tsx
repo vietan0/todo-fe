@@ -44,7 +44,7 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
 
   const params = useParams<'projectId' | 'taskId'>();
   const createTaskMutation = useCreateTaskMutation(params.projectId || '');
-  const updateTaskMutation = useUpdateTaskMutation(task?.id || '');
+  const updateTaskMutation = useUpdateTaskMutation();
 
   const onSubmit: SubmitHandler<CreateTask> = (data) => {
     if (mode === 'create') {
@@ -55,8 +55,8 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
     }
     else {
       updateTaskMutation.mutate({
-        name: data.name,
-      // TODO: projectId, parentTaskId will be provided somewhere else in the form (not an <input> field)
+        data: { name: data.name },
+        taskId: task.id,
       });
     }
   };

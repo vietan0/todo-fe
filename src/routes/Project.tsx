@@ -8,7 +8,9 @@ import CreateTaskButton from '../components/CreateTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
 import QueryError from '../components/QueryError';
 import SortableTask from '../components/SortableTask';
+import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import useProject from '../queries/useProject';
+import { sortTasks } from '../utils/sortTasks';
 import TaskModal from './TaskModal';
 
 import type { DragEndEvent } from '@dnd-kit/core';
@@ -23,11 +25,17 @@ export default function Project() {
     onOpenChange: onTaskModalOpenChange,
   } = useDisclosure({ defaultOpen: Boolean(taskId) });
 
+  const updateTaskMutation = useUpdateTaskMutation();
+
   function handleDragEnd(event: DragEndEvent): void {
     const { active, over } = event;
 
-    if (project && over && active.id !== over.id)
-      sortTasks(active, over, project);
+    if (project && over && active.id !== over.id) {
+      updateTaskMutation.mutate({
+        data: sortTasks(active, over, project),
+        taskId: active.id as string,
+      });
+    }
   }
 
   const sensors = useSensors(useSensor(PointerSensor));

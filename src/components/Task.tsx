@@ -26,12 +26,21 @@ type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
   };
 };
 
-const Task = forwardRef<HTMLAnchorElement, Props>(({ task, onTaskModalOpen, isDragging, attributes, listeners, style, ...props }, ref) => {
-  const updateTaskMutation = useUpdateTaskMutation(task.id);
+const Task = forwardRef<HTMLAnchorElement, Props>(({
+  task,
+  onTaskModalOpen,
+  isDragging,
+  attributes,
+  listeners,
+  style,
+  ...props
+}, ref) => {
+  const updateTaskMutation = useUpdateTaskMutation();
   const deleteTaskMutation = useDeleteTaskMutation(task.id);
   const nav = useNavigate();
   const [isHover, setIsHover] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const childrenCount = task.subTasks.length;
 
   const {
     isOpen: isDeleteTaskOpen,
@@ -82,7 +91,10 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({ task, onTaskModalOpen, isDr
         isSelected={task.completed}
         onValueChange={
           (isSelected: boolean) => {
-            updateTaskMutation.mutate({ completed: isSelected });
+            updateTaskMutation.mutate({
+              data: { completed: isSelected },
+              taskId: task.id,
+            });
           }
         }
         radius="full"
@@ -92,6 +104,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({ task, onTaskModalOpen, isDr
           <p>{task.name}</p>
           <Code className="text-xs">{task.id.slice(0, 8)}</Code>
           <Code className="text-xs">{task.lexorank}</Code>
+          {isDragging && childrenCount > 0 && <Code className="text-xs">{childrenCount}</Code> }
         </div>
         {updateTaskMutation.error && (
           <MutationError
