@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import CreateTaskButton from '../components/CreateTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
 import QueryError from '../components/QueryError';
-import Task from '../components/Task';
+import SortableTask from '../components/SortableTask';
 import useProject from '../queries/useProject';
 import TaskModal from './TaskModal';
 
@@ -25,12 +25,9 @@ export default function Project() {
 
   function handleDragEnd(event: DragEndEvent): void {
     const { active, over } = event;
-    console.log('active', active);
-    console.log('over', over);
 
-    // if (active.id !== over.id) {
-    //   // update rank
-    // }
+    if (project && over && active.id !== over.id)
+      sortTasks(active, over, project);
   }
 
   const sensors = useSensors(useSensor(PointerSensor));
@@ -63,7 +60,7 @@ export default function Project() {
               items={project.tasks}
               strategy={verticalListSortingStrategy}
             >
-              {project.tasks.map(task => <Task key={task.id} onTaskModalOpen={onTaskModalOpen} task={task} />)}
+              {project.tasks.map(task => <SortableTask key={task.id} onTaskModalOpen={onTaskModalOpen} task={task} />)}
             </SortableContext>
           </DndContext>
         </div>

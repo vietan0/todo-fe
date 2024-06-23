@@ -1,8 +1,6 @@
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button, Checkbox, CircularProgress, Code, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
@@ -12,27 +10,28 @@ import MutationError from './MutationError';
 import TaskForm from './TaskForm';
 
 import type { Task as TaskT } from '../types/dataSchemas';
+import type { DraggableAttributes } from '@dnd-kit/core';
+import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
+import type { HTMLAttributes } from 'react';
 
-export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskModalOpen: () => void }) {
+type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
+  task: TaskT;
+  onTaskModalOpen: () => void;
+  isDragging: boolean;
+  attributes: DraggableAttributes ;
+  listeners: SyntheticListenerMap | undefined ;
+  style: {
+    transform: string | undefined;
+    transition: string | undefined;
+  };
+};
+
+const Task = forwardRef<HTMLAnchorElement, Props>(({ task, onTaskModalOpen, isDragging, attributes, listeners, style, ...props }, ref) => {
   const updateTaskMutation = useUpdateTaskMutation(task.id);
   const deleteTaskMutation = useDeleteTaskMutation(task.id);
   const nav = useNavigate();
   const [isHover, setIsHover] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
-
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: task.id });
-
-  const style = {
-    transform: CSS.Translate.toString(transform),
-    transition,
-  };
 
   const {
     isOpen: isDeleteTaskOpen,
@@ -53,9 +52,10 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
 
   return (
     <a
-      ref={setNodeRef}
+      ref={ref}
       {...attributes}
       {...listeners}
+      {...props}
       className={cn(
         task.parentTaskId && 'ml-8',
         task.completed ? 'opacity-disabled' : 'hover:bg-default-100',
@@ -199,4 +199,6 @@ export default function Task({ task, onTaskModalOpen }: { task: TaskT; onTaskMod
       )}
     </a>
   );
-}
+});
+
+export default Task;
