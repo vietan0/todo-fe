@@ -28,17 +28,19 @@ export default function Project() {
   const updateTaskMutation = useUpdateTaskMutation();
 
   function handleDragEnd(event: DragEndEvent): void {
-    const { active, over } = event;
+    if (project && event.over) {
+      const payload = sortTasks(event, project);
 
-    if (project && over && active.id !== over.id) {
-      updateTaskMutation.mutate({
-        data: sortTasks(active, over, project),
-        taskId: active.id as string,
-      });
+      if (payload) {
+        updateTaskMutation.mutate({
+          data: payload,
+          taskId: event.active.id as string,
+        });
+      }
     }
   }
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 15 } }));
 
   if (isLoading)
     return <LoadingScreen />;
