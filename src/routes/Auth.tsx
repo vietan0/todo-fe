@@ -7,7 +7,6 @@ import { Navigate } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
 import MutationError from '../components/MutationError';
-import QueryError from '../components/QueryError';
 import useAuthMutation from '../mutations/useAuthMutation';
 import useUser from '../queries/useUser';
 import { authPayloadZ } from '../types/dataSchemas';
@@ -15,7 +14,7 @@ import { authPayloadZ } from '../types/dataSchemas';
 import type { AuthPayload } from '../types/dataSchemas';
 
 export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
-  const { data: user, isLoading, error } = useUser();
+  const { data: user, isLoading } = useUser();
   const authMutation = useAuthMutation();
 
   const {
@@ -60,7 +59,6 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardHeader className="mb-8 flex-col items-start">
             <p className="text-3xl font-bold">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</p>
-            {error && <QueryError error={error} queryName="useUser" />}
           </CardHeader>
           <CardBody className="flex flex-col gap-2">
             <Controller
