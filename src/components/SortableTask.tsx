@@ -5,7 +5,17 @@ import Task from './Task';
 
 import type { Task as TaskT } from '../types/dataSchemas';
 
-export default function SortableTask({ task, onTaskModalOpen }: { task: TaskT; onTaskModalOpen: () => void }) {
+export default function SortableTask({
+  deltaX,
+  isOverlay = false,
+  onTaskModalOpen,
+  task,
+}: {
+  deltaX: number;
+  isOverlay?: boolean;
+  onTaskModalOpen: () => void;
+  task: TaskT;
+}) {
   const {
     attributes,
     listeners,
@@ -23,7 +33,9 @@ export default function SortableTask({ task, onTaskModalOpen }: { task: TaskT; o
   return (
     <Task
       attributes={attributes}
+      deltaX={deltaX}
       isDragging={isDragging}
+      isOverlay={isOverlay}
       listeners={listeners}
       onTaskModalOpen={onTaskModalOpen}
       ref={setNodeRef}

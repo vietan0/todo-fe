@@ -5,10 +5,11 @@ import type { DragEndEvent } from '@dnd-kit/core';
 
 type LevelChange = 'base-to-base' | 'base-to-sub' | 'sub-to-base' | 'sub-to-sub';
 
+export const indent = 40;
+
 export function sortTasks(event: DragEndEvent, project: Project,
 ) {
   const { active, over, delta } = event;
-  const indent = 32;
   const activeIndex = project.tasks.findIndex(t => t.id === active.id);
   const activeTask = project.tasks[activeIndex];
   const activeIsBase = activeTask.parentTaskId === null;

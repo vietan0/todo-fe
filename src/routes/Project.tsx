@@ -1,6 +1,7 @@
-import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useDisclosure } from '@nextui-org/react';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 
@@ -13,11 +14,14 @@ import useProject from '../queries/useProject';
 import { sortTasks } from '../utils/sortTasks';
 import TaskModal from './TaskModal';
 
-import type { DragEndEvent } from '@dnd-kit/core';
+import type { Task as TaskT } from '../types/dataSchemas';
+import type { DragEndEvent, DragMoveEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 
 export default function Project() {
   const { projectId, taskId } = useParams<'projectId' | 'taskId'>();
   const { data: project, isLoading, error } = useProject(projectId);
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const [deltaX, setDeltaX] = useState(0);
 
   const {
     isOpen: isTaskModalOpen,
@@ -27,7 +31,18 @@ export default function Project() {
 
   const updateTaskMutation = useUpdateTaskMutation();
 
+  function handleDragStart(event: DragStartEvent): void {
+    setActiveId(event.active.id);
+  }
+
+  function handleDragMove(event: DragMoveEvent): void {
+    setDeltaX(event.delta.x);
+  }
+
   function handleDragEnd(event: DragEndEvent): void {
+    setActiveId(null);
+    setDeltaX(0);
+
     if (project && event.over) {
       const payload = sortTasks(event, project);
 
@@ -62,16 +77,35 @@ export default function Project() {
         <CreateTaskButton />
         <div className="flex flex-col gap-3">
           <DndContext
-            collisionDetection={closestCenter}
+            collisionDetection={closestCorners}
             onDragEnd={handleDragEnd}
+            onDragMove={handleDragMove}
+            onDragStart={handleDragStart}
             sensors={sensors}
           >
             <SortableContext
               items={project.tasks}
               strategy={verticalListSortingStrategy}
             >
-              {project.tasks.map(task => <SortableTask key={task.id} onTaskModalOpen={onTaskModalOpen} task={task} />)}
+              {project.tasks.map(task => (
+                <SortableTask
+                  deltaX={task.id === activeId ? deltaX : 0} // ghost indentation, only apply to task being dragged
+                  key={task.id}
+                  onTaskModalOpen={onTaskModalOpen}
+                  task={task}
+                />
+              ))}
             </SortableContext>
+            <DragOverlay>
+              {activeId && (
+                <SortableTask
+                  deltaX={0}
+                  isOverlay={true}
+                  onTaskModalOpen={onTaskModalOpen}
+                  task={project.tasks.find(t => t.id === activeId) as TaskT}
+                />
+              )}
+            </DragOverlay>
           </DndContext>
         </div>
         {taskId && <TaskModal isOpen={isTaskModalOpen} onOpenChange={onTaskModalOpenChange} />}
