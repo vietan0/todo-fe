@@ -10,6 +10,7 @@ import MutationError from '../components/MutationError';
 import useAuthMutation from '../mutations/useAuthMutation';
 import useUser from '../queries/useUser';
 import { authPayloadZ } from '../types/dataSchemas';
+import cn from '../utils/cn';
 
 import type { AuthPayload } from '../types/dataSchemas';
 
@@ -52,8 +53,8 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
         </title>
       </Helmet>
       <Card classNames={{
-        base: 'm-auto max-w-screen-xs grow p-4',
-        footer: 'flex-col items-stretch gap-2',
+        base: cn('m-auto max-w-screen-xs grow p-4'),
+        footer: cn('flex-col items-stretch gap-2'),
       }}
       >
         <form onSubmit={handleSubmit(onSubmit)}>

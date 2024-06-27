@@ -68,6 +68,11 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
     onOpenChange: onDeleteTaskOpenChange,
   } = useDisclosure();
 
+  function handleClick() {
+    nav(`task/${task.id}`);
+    onTaskModalOpen();
+  }
+
   if (isFormOpen) {
     return (
       <TaskForm
@@ -87,18 +92,15 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
       {...props}
       className={cn(
         task.completed ? 'opacity-disabled' : 'hover:bg-default-100',
-        'bg-default-50 border border-default h-auto min-h-[55px] items-start justify-start p-3 text-start text-sm',
-        'tap-highlight-transparent no-underline active:opacity-disabled transition-opacity z-0 group relative inline-flex box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 min-w-20 text-small gap-2 rounded-small [&>svg]:max-w-[theme(spacing.8)] !transition-none text-foreground data-[hover=true]:opacity-hover',
+        'h-auto min-h-[55px] items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
+        'group relative z-0 box-border inline-flex min-w-20 select-none appearance-none gap-2 whitespace-nowrap rounded-small font-normal text-foreground no-underline subpixel-antialiased outline-none transition-opacity tap-highlight-transparent active:opacity-disabled data-[focus-visible=true]:z-10 data-[hover=true]:opacity-hover data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:outline-focus [&>svg]:max-w-[theme(spacing.8)]',
         isDragging && 'cursor-grabbing',
-        isDragging && `before:ml-0.5 before:absolute before:-left-2.5 before:-top-3 before:w-3 before:h-3 before:border-3 before:border-primary before:rounded-full`,
-        isDragging && `after:ml-0.5 after:absolute after:left-0 after:-top-2 after:w-full after:h-0.5 after:bg-primary`,
+        isDragging && `before:absolute before:-left-2.5 before:-top-3 before:ml-0.5 before:size-3 before:rounded-full before:border-3 before:border-primary`,
+        isDragging && `after:absolute after:-top-2 after:left-0 after:ml-0.5 after:h-0.5 after:w-full after:bg-primary`,
         isOverlay && 'border border-primary',
       )}
       onBlur={isOverlay ? noop : () => setIsHover(false)}
-      onClick={() => {
-        nav(`task/${task.id}`);
-        onTaskModalOpen();
-      }}
+      onClick={isOverlay ? noop : handleClick}
       onFocus={isOverlay ? noop : () => setIsHover(true)}
       onMouseEnter={isOverlay ? noop : () => setIsHover(true)}
       onMouseLeave={isOverlay ? noop : () => setIsHover(false)}
@@ -106,8 +108,9 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
     >
       <Checkbox
         classNames={{
-          base: 'outline-1 outline-red-400',
-          wrapper: 'mr-0',
+          icon: cn('flex items-center'),
+          base: cn('outline-1 outline-red-400'),
+          wrapper: cn('mr-0'),
         }}
         id={task.id}
         isSelected={task.completed}
@@ -139,8 +142,9 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
             <CircularProgress
               aria-label="Loading"
               classNames={{
-                base: 'self-center ml-auto',
-                svg: 'w-5 h-5',
+                base: cn('ml-auto self-center'),
+                // eslint-disable-next-line tailwindcss/enforces-shorthand
+                svg: cn('h-5 w-5'),
               }}
             />
           )}
@@ -182,7 +186,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
           </Tooltip>
           <Modal
             classNames={{
-              footer: 'mt-6 flex-col',
+              footer: cn('mt-6 flex-col'),
             }}
             isOpen={isDeleteTaskOpen}
             onOpenChange={onDeleteTaskOpenChange}

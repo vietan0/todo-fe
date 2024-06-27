@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import useCreateTaskMutation from '../mutations/useCreateTaskMutation';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import { createTaskZ, updateTaskZ } from '../types/dataSchemas';
+import cn from '../utils/cn';
 import MutationError from './MutationError';
 
 import type { CreateTask, Task } from '../types/dataSchemas';
@@ -74,9 +75,9 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
   return (
     <Card
       classNames={{
-        base: 'outline outline-1 outline-default-500',
-        body: 'gap-0',
-        footer: 'flex-col items-end gap-2',
+        base: cn('outline outline-1 outline-default-500'),
+        body: cn('gap-0'),
+        footer: cn('flex-col items-end gap-2'),
       }}
       shadow="none"
     >
