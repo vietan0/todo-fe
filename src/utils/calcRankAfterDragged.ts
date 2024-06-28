@@ -7,7 +7,7 @@ type LevelChange = 'base-to-base' | 'base-to-sub' | 'sub-to-base' | 'sub-to-sub'
 
 export const indent = 40;
 
-export function sortTasks(event: DragEndEvent, project: Project,
+export function calcRankAfterDragged(event: DragEndEvent, project: Project,
 ) {
   const { active, over, delta } = event;
   const activeIndex = project.tasks.findIndex(t => t.id === active.id);
@@ -259,5 +259,6 @@ export function sortTasks(event: DragEndEvent, project: Project,
   return {
     lexorank: newRank.toString(),
     parentTaskId,
+    projectId: project.id,
   };
 }

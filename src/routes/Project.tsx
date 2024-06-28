@@ -11,7 +11,7 @@ import QueryError from '../components/QueryError';
 import SortableTask from '../components/SortableTask';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import useProject from '../queries/useProject';
-import { sortTasks } from '../utils/sortTasks';
+import { calcRankAfterDragged } from '../utils/calcRankAfterDragged';
 import TaskModal from './TaskModal';
 
 import type { Task as TaskT } from '../types/dataSchemas';
@@ -44,7 +44,7 @@ export default function Project() {
     setDeltaX(0);
 
     if (project && event.over) {
-      const payload = sortTasks(event, project);
+      const payload = calcRankAfterDragged(event, project);
 
       if (payload) {
         updateTaskMutation.mutate({

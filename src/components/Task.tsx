@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
+import { indent } from '../utils/calcRankAfterDragged';
 import cn from '../utils/cn';
-import { indent } from '../utils/sortTasks';
 import MutationError from './MutationError';
 import TaskForm from './TaskForm';
 
