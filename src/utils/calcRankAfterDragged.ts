@@ -259,6 +259,5 @@ export function calcRankAfterDragged(event: DragEndEvent, project: Project,
   return {
     lexorank: newRank.toString(),
     parentTaskId,
-    projectId: project.id,
   };
 }

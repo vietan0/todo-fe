@@ -94,7 +94,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
         task.completed ? 'opacity-disabled' : 'hover:bg-default-100',
         'h-auto min-h-[55px] items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
         'group relative z-0 box-border inline-flex min-w-20 select-none appearance-none gap-2 whitespace-nowrap rounded-small font-normal text-foreground no-underline subpixel-antialiased outline-none transition-opacity tap-highlight-transparent active:opacity-disabled data-[focus-visible=true]:z-10 data-[hover=true]:opacity-hover data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:outline-focus [&>svg]:max-w-[theme(spacing.8)]',
-        isDragging && 'cursor-grabbing',
+        isDragging && 'z-50 cursor-grabbing',
         isDragging && `before:absolute before:-left-2.5 before:-top-3 before:ml-0.5 before:size-3 before:rounded-full before:border-3 before:border-primary`,
         isDragging && `after:absolute after:-top-2 after:left-0 after:ml-0.5 after:h-0.5 after:w-full after:bg-primary`,
         isOverlay && 'border border-primary',
