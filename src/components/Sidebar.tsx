@@ -24,7 +24,7 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
   return (
     <Resizable
       as="nav"
-      className="flex flex-col p-2 duration-75"
+      className="flex duration-75"
       defaultSize={{ width: 240 }}
       enable={{
         // only allow dragging from the right
@@ -37,88 +37,86 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
         bottomLeft: false,
         topLeft: false,
       }}
-      handleClasses={{ right: 'bg-default-100 hover:bg-default-200 focus:bg-default-200 rounded' }}
+      handleClasses={{ right: 'bg-default-100 hover:bg-default-300 focus:bg-default-300' }}
       handleStyles={{
         right: {
           width: 4,
           right: 0,
-          height: '100vh',
         },
       }}
       maxWidth={400}
-      minWidth={220}
+      minWidth={200}
       onResizeStop={(e, direction, ref, d) => setWidth(width + d.width)}
       size={{ width, height: '100vh' }}
       style={{
         marginLeft: isSidebarHidden ? -width : 0,
         visibility: isSidebarHidden ? 'hidden' : 'visible',
         opacity: isSidebarHidden ? 0 : 1,
-        overflowX: 'hidden',
-        overflowY: 'scroll',
-        scrollbarWidth: 'none',
       }}
     >
-      <div className="flex items-center justify-between">
-        <Dropdown>
-          <DropdownTrigger>
+      <div className="flex h-screen w-full flex-col overflow-y-scroll p-2" id="NavContent">
+        <div className="flex items-center justify-between">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                aria-label="User Menu"
+                isIconOnly
+                radius="sm"
+                size="sm"
+                variant="light"
+              >
+                <UserAvatar />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="User Options">
+              <DropdownSection showDivider title={user?.email}>
+                <DropdownItem
+                  key="settings"
+                  startContent={<Icon className="text-lg" icon="material-symbols:settings" />}
+                >
+                  Settings
+                </DropdownItem>
+              </DropdownSection>
+              <DropdownSection aria-label="Danger zone">
+                <DropdownItem
+                  className="text-danger"
+                  color="danger"
+                  key="signout"
+                  onPress={() => signOutMutation.mutate()}
+                  startContent={<Icon className="text-lg" icon="material-symbols:exit-to-app" />}
+                >
+                  Sign out
+                </DropdownItem>
+              </DropdownSection>
+            </DropdownMenu>
+          </Dropdown>
+          <Tooltip
+            content="Toggle Sidebar"
+            delay={500}
+          >
             <Button
-              aria-label="User Menu"
+              aria-label="Toggle Sidebar"
+              className="p-0"
               isIconOnly
+              onPress={() => setIsSidebarHidden(p => !p)}
               radius="sm"
               size="sm"
               variant="light"
             >
-              <UserAvatar />
+              <Icon className="text-lg" icon="ph:sidebar-simple-fill" />
             </Button>
-          </DropdownTrigger>
-          <DropdownMenu aria-label="User Options">
-            <DropdownSection showDivider title={user?.email}>
-              <DropdownItem
-                key="settings"
-                startContent={<Icon className="text-lg" icon="material-symbols:settings" />}
-              >
-                Settings
-              </DropdownItem>
-            </DropdownSection>
-            <DropdownSection aria-label="Danger zone">
-              <DropdownItem
-                className="text-danger"
-                color="danger"
-                key="signout"
-                onPress={() => signOutMutation.mutate()}
-                startContent={<Icon className="text-lg" icon="material-symbols:exit-to-app" />}
-              >
-                Sign out
-              </DropdownItem>
-            </DropdownSection>
-          </DropdownMenu>
-        </Dropdown>
-        <Tooltip
-          content="Toggle Sidebar"
-          delay={500}
-        >
-          <Button
-            aria-label="Toggle Sidebar"
-            className="p-0"
-            isIconOnly
-            onPress={() => setIsSidebarHidden(p => !p)}
-            radius="sm"
-            size="sm"
-            variant="light"
-          >
-            <Icon className="text-lg" icon="ph:sidebar-simple-fill" />
-          </Button>
-        </Tooltip>
-      </div>
-      <Divider className="my-2" />
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center justify-between">
-          <p className="text-xs text-default-500">My Projects</p>
-          <CreateProjectButton />
+          </Tooltip>
         </div>
-        {isLoading && <LoadingScreen />}
-        {error && <QueryError error={error} queryName="useProjects" />}
-        {projects && projects.map(project => <ProjectBtn key={project.id} project={project} />)}
+        <Divider className="my-2" />
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-default-500">My Projects</p>
+            <CreateProjectButton />
+          </div>
+          {isLoading && <LoadingScreen />}
+          {error && <QueryError error={error} queryName="useProjects" />}
+          {projects && projects.map(project => <ProjectBtn key={project.id} project={project} />)}
+        </div>
       </div>
     </Resizable>
   );
