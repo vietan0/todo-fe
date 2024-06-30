@@ -127,7 +127,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
       <div>
         <div>
           <p>{task.name}</p>
-          {isDragging && childrenCount > 0 && <Code className="text-xs">{childrenCount}</Code> }
+          {isOverlay && childrenCount > 0 && <Code className="text-xs font-bold" color="primary">{childrenCount}</Code> }
         </div>
         {updateTaskMutation.error && (
           <MutationError

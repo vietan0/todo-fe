@@ -33,6 +33,23 @@ export default function Project() {
     setProjectState(project);
   }, [project]);
 
+  useEffect(() => {
+    // hide subtasks when a parent is being dragged
+    if (activeId) {
+      const activeTask = projectState?.tasks.find(t => t.id === activeId) as TaskT;
+      const children = activeTask.subTasks;
+
+      if (children.length > 0) {
+        setProjectState((prev) => {
+          const filteredTasks = prev!.tasks.filter(t => t.parentTaskId !== activeId);
+          prev!.tasks = filteredTasks;
+
+          return prev;
+        });
+      }
+    }
+  }, [activeId]);
+
   const {
     isOpen: isTaskModalOpen,
     onOpen: onTaskModalOpen,
