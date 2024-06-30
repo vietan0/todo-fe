@@ -1,9 +1,11 @@
 import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { useDisclosure } from '@nextui-org/react';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { Button, Tooltip, useDisclosure } from '@nextui-org/react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 
 import CreateTaskButton from '../components/CreateTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
@@ -11,15 +13,26 @@ import QueryError from '../components/QueryError';
 import SortableTask from '../components/SortableTask';
 import useUpdateTaskMutation, { optimisticUpdate } from '../mutations/useUpdateTaskMutation';
 import useProject from '../queries/useProject';
+import useUser from '../queries/useUser';
 import { calcRankAfterDragged } from '../utils/calcRankAfterDragged';
+import cn from '../utils/cn';
 import TaskModal from './TaskModal';
 
 import type { Task as TaskT } from '../types/dataSchemas';
+import type { OutletContext } from './Home';
 import type { DragEndEvent, DragMoveEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 
+const variants = {
+  enter: { y: 30, opacity: 0 },
+  center: { y: 0, opacity: 1 },
+  exit: { y: 30, opacity: 0 },
+};
+
 export default function Project() {
+  const { data: user } = useUser();
   const { projectId, taskId } = useParams<'projectId' | 'taskId'>();
   const { data: project, isLoading, error } = useProject(projectId);
+  const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [deltaX, setDeltaX] = useState(0);
   /*
@@ -49,6 +62,20 @@ export default function Project() {
       }
     }
   }, [activeId]);
+
+  const { mainRef, isSidebarHidden, setIsSidebarHidden } = useOutletContext<OutletContext>();
+
+  useEffect(() => {
+    // attach event listener to main content
+    function scrollListener(e: Event) {
+      const mainContent = e.target as HTMLDivElement;
+      setScrolled(mainContent.scrollTop > 0);
+    }
+
+    mainRef.current?.addEventListener('scroll', scrollListener);
+
+    return () => mainRef.current?.removeEventListener('scroll', scrollListener);
+  }, [mainRef, user]);
 
   const {
     isOpen: isTaskModalOpen,
@@ -104,7 +131,7 @@ export default function Project() {
 
   if (projectState) {
     return (
-      <div className="flex flex-col gap-4">
+      <>
         <Helmet>
           <title>
             {projectState.name}
@@ -112,44 +139,99 @@ export default function Project() {
             – Todo App
           </title>
         </Helmet>
-        <h1 className="text-2xl font-bold">{projectState.name}</h1>
-        <CreateTaskButton />
-        <div className="flex flex-col gap-3">
-          <DndContext
-            collisionDetection={closestCorners}
-            onDragCancel={handleDragCancel}
-            onDragEnd={handleDragEnd}
-            onDragMove={handleDragMove}
-            onDragStart={handleDragStart}
-            sensors={sensors}
-          >
-            <SortableContext
-              items={projectState!.tasks}
-              strategy={verticalListSortingStrategy}
+        <div className={cn(
+          'sticky top-0 z-50 flex items-center justify-between overflow-hidden bg-default-50 p-2',
+          scrolled && 'shadow-[0_1px_0_0] shadow-default-100',
+        )}
+        >
+          {isSidebarHidden && (
+            <Tooltip
+              content="Toggle Sidebar"
+              delay={500}
             >
-              {projectState!.tasks.map(task => (
-                <SortableTask
-                  deltaX={task.id === activeId ? deltaX : 0} // ghost indentation, only apply to task being dragged
-                  key={task.id}
-                  onTaskModalOpen={onTaskModalOpen}
-                  task={task}
-                />
-              ))}
-            </SortableContext>
-            <DragOverlay>
-              {activeId && (
-                <SortableTask
-                  deltaX={0}
-                  isOverlay={true}
-                  onTaskModalOpen={onTaskModalOpen}
-                  task={projectState.tasks.find(t => t.id === activeId) as TaskT}
-                />
-              )}
-            </DragOverlay>
-          </DndContext>
+              <Button
+                aria-label="Toggle Sidebar"
+                className="p-0"
+                isIconOnly
+                onPress={() => setIsSidebarHidden(p => !p)}
+                radius="sm"
+                size="sm"
+                variant="light"
+              >
+                <Icon className="text-xl" icon="ph:sidebar-simple-fill" />
+              </Button>
+            </Tooltip>
+          )}
+          <AnimatePresence mode="popLayout">
+            {project && scrolled
+            && (
+              <motion.p
+                animate="center"
+                className="grow text-center font-bold"
+                exit="exit"
+                initial="enter"
+                transition={{
+                  type: 'spring',
+                  duration: 0.3,
+                  bounce: 0.5,
+                }}
+                variants={variants}
+              >
+                {project.name}
+              </motion.p>
+            )}
+          </AnimatePresence>
+          <Button
+            aria-label="More"
+            className="ml-auto p-0"
+            isIconOnly
+            radius="sm"
+            size="sm"
+            variant="light"
+          >
+            <Icon className="text-xl" icon="material-symbols:more-horiz" />
+          </Button>
         </div>
-        {taskId && <TaskModal isOpen={isTaskModalOpen} onOpenChange={onTaskModalOpenChange} />}
-      </div>
+        <div className="flex flex-col gap-4 px-8 py-2">
+          <h1 className="text-2xl font-bold">{projectState.name}</h1>
+          <CreateTaskButton />
+          <div className="flex flex-col gap-3">
+            <DndContext
+              collisionDetection={closestCorners}
+              onDragCancel={handleDragCancel}
+              onDragEnd={handleDragEnd}
+              onDragMove={handleDragMove}
+              onDragStart={handleDragStart}
+              sensors={sensors}
+            >
+              <SortableContext
+                items={projectState!.tasks}
+                strategy={verticalListSortingStrategy}
+              >
+                {projectState!.tasks.map(task => (
+                  <SortableTask
+                    deltaX={task.id === activeId ? deltaX : 0} // ghost indentation, only apply to task being dragged
+                    key={task.id}
+                    onTaskModalOpen={onTaskModalOpen}
+                    task={task}
+                  />
+                ))}
+              </SortableContext>
+              <DragOverlay>
+                {activeId && (
+                  <SortableTask
+                    deltaX={0}
+                    isOverlay={true}
+                    onTaskModalOpen={onTaskModalOpen}
+                    task={projectState.tasks.find(t => t.id === activeId) as TaskT}
+                  />
+                )}
+              </DragOverlay>
+            </DndContext>
+          </div>
+          {taskId && <TaskModal isOpen={isTaskModalOpen} onOpenChange={onTaskModalOpenChange} />}
+        </div>
+      </>
     );
   }
 }

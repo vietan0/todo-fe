@@ -107,7 +107,7 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
             </Button>
           </Tooltip>
         </div>
-        <Divider className="my-2" />
+        <Divider className="my-2 bg-default-100" />
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
             <p className="text-xs text-default-500">My Projects</p>
