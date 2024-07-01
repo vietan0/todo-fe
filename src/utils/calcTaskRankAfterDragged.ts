@@ -7,7 +7,7 @@ type LevelChange = 'base-to-base' | 'base-to-sub' | 'sub-to-base' | 'sub-to-sub'
 
 export const indent = 40;
 
-export function calcRankAfterDragged(event: DragEndEvent, project: Project,
+export default function calcTaskRankAfterDragged(event: DragEndEvent, project: Project,
 ) {
   const { active, over, delta } = event;
   const activeIndex = project.tasks.findIndex(t => t.id === active.id);

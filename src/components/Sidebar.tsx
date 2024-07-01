@@ -1,16 +1,23 @@
+import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Icon } from '@iconify/react';
 import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Tooltip } from '@nextui-org/react';
 import { Resizable } from 're-resizable';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import useSignOutMutation from '../mutations/useSignOutMutation';
+import useUpdateProjectMutation, { optimisticUpdate } from '../mutations/useUpdateProjectMutation';
 import useProjects from '../queries/useProjects';
 import useUser from '../queries/useUser';
+import calcProjectRankAfterDragged from '../utils/calcProjectRankAfterDraggged';
 import CreateProjectButton from './CreateProjectButton';
 import LoadingScreen from './LoadingScreen';
-import ProjectBtn from './ProjectBtn';
 import QueryError from './QueryError';
+import SortableProjectBtn from './SortableProjectBtn';
 import UserAvatar from './UserAvatar';
+
+import type { ProjectScalar } from '../types/dataSchemas';
+import type { DragEndEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 
 export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
   isSidebarHidden: boolean;
@@ -20,6 +27,42 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
   const { data: projects, isLoading, error } = useProjects(user?.id);
   const signOutMutation = useSignOutMutation();
   const [width, setWidth] = useState(240);
+  const [projectsState, setProjectsState] = useState(projects);
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 15 } }));
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const updateProjectMutation = useUpdateProjectMutation();
+
+  function handleDragStart(event: DragStartEvent): void {
+    setActiveId(event.active.id);
+  }
+
+  function handleDragEnd(event: DragEndEvent): void {
+    setActiveId(null);
+
+    if (projects && event.over) {
+      const lexorank = calcProjectRankAfterDragged(event, projects);
+
+      if (lexorank) {
+        // update state so dndkit can update immediately
+        const updatedProjectsState = optimisticUpdate(projectsState!, { lexorank }, event.active.id as string);
+        setProjectsState(updatedProjectsState);
+
+        // send request
+        updateProjectMutation.mutate({
+          data: { lexorank },
+          projectId: event.active.id as string,
+        });
+      }
+    }
+  }
+
+  function handleDragCancel() {
+    setActiveId(null);
+  }
+
+  useEffect(() => {
+    setProjectsState(projects);
+  }, [projects]);
 
   return (
     <Resizable
@@ -115,7 +158,31 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
           </div>
           {isLoading && <LoadingScreen />}
           {error && <QueryError error={error} queryName="useProjects" />}
-          {projects && projects.map(project => <ProjectBtn key={project.id} project={project} />)}
+          {projectsState
+          && (
+            <DndContext
+              collisionDetection={closestCorners}
+              onDragCancel={handleDragCancel}
+              onDragEnd={handleDragEnd}
+              onDragStart={handleDragStart}
+              sensors={sensors}
+            >
+              <SortableContext
+                items={projectsState}
+                strategy={verticalListSortingStrategy}
+              >
+                {projectsState.map(project => <SortableProjectBtn key={project.id} project={project} />)}
+              </SortableContext>
+              <DragOverlay>
+                {activeId && (
+                  <SortableProjectBtn
+                    isOverlay={true}
+                    project={projectsState.find(t => t.id === activeId) as ProjectScalar}
+                  />
+                )}
+              </DragOverlay>
+            </DndContext>
+          )}
         </div>
       </div>
     </Resizable>

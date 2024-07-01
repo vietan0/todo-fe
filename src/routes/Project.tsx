@@ -14,7 +14,7 @@ import SortableTask from '../components/SortableTask';
 import useUpdateTaskMutation, { optimisticUpdate } from '../mutations/useUpdateTaskMutation';
 import useProject from '../queries/useProject';
 import useUser from '../queries/useUser';
-import { calcRankAfterDragged } from '../utils/calcRankAfterDragged';
+import calcTaskRankAfterDragged from '../utils/calcTaskRankAfterDragged';
 import cn from '../utils/cn';
 import TaskModal from './TaskModal';
 
@@ -98,7 +98,7 @@ export default function Project() {
     setDeltaX(0);
 
     if (project && event.over) {
-      const payload = calcRankAfterDragged(event, project);
+      const payload = calcTaskRankAfterDragged(event, project);
 
       if (payload) {
         // update state so dndkit can update immediately
@@ -195,7 +195,7 @@ export default function Project() {
         <div className="flex flex-col gap-4 px-8 py-2">
           <h1 className="text-2xl font-bold">{projectState.name}</h1>
           <CreateTaskButton />
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <DndContext
               collisionDetection={closestCorners}
               onDragCancel={handleDragCancel}

@@ -31,10 +31,10 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
     resolver: zodResolver(updateProjectZ),
   });
 
-  const renameProjectMutation = useUpdateProjectMutation(project.id);
+  const renameProjectMutation = useUpdateProjectMutation();
 
   const onSubmit: SubmitHandler<UpdateProject> = (data) => {
-    renameProjectMutation.mutate(data);
+    renameProjectMutation.mutate({ data, projectId: project.id });
   };
 
   useEffect(() => {

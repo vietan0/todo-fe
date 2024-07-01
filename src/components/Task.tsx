@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
-import { indent } from '../utils/calcRankAfterDragged';
+import { indent } from '../utils/calcTaskRankAfterDragged';
 import cn from '../utils/cn';
+import noop from '../utils/noop';
 import MutationError from './MutationError';
 import TaskForm from './TaskForm';
 
@@ -14,8 +15,6 @@ import type { Task as TaskT } from '../types/dataSchemas';
 import type { DraggableAttributes } from '@dnd-kit/core';
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import type { HTMLAttributes } from 'react';
-
-function noop() {}
 
 type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
   deltaX: number;
@@ -91,9 +90,9 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
       {...listeners}
       {...props}
       className={cn(
-        task.completed ? 'opacity-disabled' : 'hover:bg-default-100',
+        task.completed ? 'opacity-disabled' : 'hover:bg-default-100 hover:opacity-hover focus:bg-default-100 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
         'h-auto min-h-[55px] items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
-        'group relative z-0 box-border inline-flex min-w-20 select-none appearance-none gap-2 whitespace-nowrap rounded-small font-normal text-foreground no-underline subpixel-antialiased outline-none transition-opacity tap-highlight-transparent active:opacity-disabled data-[focus-visible=true]:z-10 data-[hover=true]:opacity-hover data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:outline-focus [&>svg]:max-w-[theme(spacing.8)]',
+        'group relative z-0 box-border inline-flex min-w-20 select-none appearance-none gap-2 whitespace-nowrap rounded-small font-normal text-foreground no-underline subpixel-antialiased outline-none transition-opacity tap-highlight-transparent active:opacity-disabled [&>svg]:max-w-[theme(spacing.8)]',
         isDragging && 'z-50 cursor-grabbing',
         isDragging && `before:absolute before:-left-2.5 before:-top-3 before:ml-0.5 before:size-3 before:rounded-full before:border-3 before:border-primary`,
         isDragging && `after:absolute after:-top-2 after:left-0 after:ml-0.5 after:h-0.5 after:w-full after:bg-primary`,
