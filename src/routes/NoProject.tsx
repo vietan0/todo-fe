@@ -14,7 +14,7 @@ export default function NoProject() {
       return <Navigate to={`/project/${projects[0].id}`} />;
 
     return (
-      <div className="m-auto flex size-full min-h-96 items-center">
+      <div className="m-auto flex size-full min-h-96 items-center p-8">
         <p
           className="h-full max-w-[35ch] text-2xl"
           data-testid="NoProject"

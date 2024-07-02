@@ -31,10 +31,10 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
     resolver: zodResolver(updateProjectZ),
   });
 
-  const renameProjectMutation = useUpdateProjectMutation(project.id);
+  const renameProjectMutation = useUpdateProjectMutation();
 
   const onSubmit: SubmitHandler<UpdateProject> = (data) => {
-    renameProjectMutation.mutate(data);
+    renameProjectMutation.mutate({ data, projectId: project.id });
   };
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
     <>
       <Dropdown
         classNames={{
-          content: 'min-w-36', // default: 200px
+          content: cn('min-w-36'), // default: 200px
         }}
       >
         <DropdownTrigger>
@@ -109,7 +109,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
       </Dropdown>
       <Modal
         classNames={{
-          footer: 'mt-6 flex-col',
+          footer: cn('mt-6 flex-col'),
         }}
         isOpen={isRenameProjectOpen}
         onOpenChange={onRenameProjectOpenChange}
@@ -172,7 +172,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
       </Modal>
       <Modal
         classNames={{
-          footer: 'mt-6 flex-col',
+          footer: cn('mt-6 flex-col'),
         }}
         isOpen={isDeleteProjectOpen}
         onOpenChange={onDeleteProjectOpenChange}

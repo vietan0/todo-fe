@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import useCreateProjectMutation from '../mutations/useCreateProjectMutation';
 import { createProjectZ } from '../types/dataSchemas';
+import cn from '../utils/cn';
 import MutationError from './MutationError';
 
 import type { CreateProject } from '../types/dataSchemas';
@@ -53,6 +54,7 @@ export default function CreateProjectButton() {
   return (
     <>
       <Tooltip
+        closeDelay={0}
         content="Create Project"
         delay={500}
         placement="bottom"
@@ -68,7 +70,7 @@ export default function CreateProjectButton() {
       </Tooltip>
       <Modal
         classNames={{
-          footer: 'mt-6 flex-col',
+          footer: cn('mt-6 flex-col'),
         }}
         isOpen={isOpen}
         onOpenChange={onOpenChange}

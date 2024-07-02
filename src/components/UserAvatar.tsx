@@ -1,10 +1,13 @@
 import { Avatar } from '@nextui-org/react';
 
+import cn from '../utils/cn';
+
 export default function UserAvatar() {
   return (
     <Avatar
       classNames={{
-        base: 'bg-transparent w-7 h-7 text-tiny',
+        // eslint-disable-next-line tailwindcss/enforces-shorthand
+        base: cn('h-7 w-7 bg-transparent text-tiny'),
       }}
     />
   );

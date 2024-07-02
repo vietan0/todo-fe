@@ -1,6 +1,4 @@
-import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Tooltip } from '@nextui-org/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Navigate, Outlet } from 'react-router-dom';
 
@@ -8,9 +6,16 @@ import LoadingScreen from '../components/LoadingScreen';
 import Sidebar from '../components/Sidebar';
 import useUser from '../queries/useUser';
 
+export interface OutletContext {
+  mainRef: React.RefObject<HTMLDivElement>;
+  isSidebarHidden: boolean;
+  setIsSidebarHidden: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 export default function Home() {
   const { data: user, isLoading } = useUser();
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   if (isLoading)
     return <LoadingScreen withLogo />;
@@ -26,43 +31,17 @@ export default function Home() {
         </title>
       </Helmet>
       <Sidebar isSidebarHidden={isSidebarHidden} setIsSidebarHidden={setIsSidebarHidden} />
-      <div className="grow p-2">
-        <div className="flex items-center justify-between">
-          {isSidebarHidden && (
-            <Tooltip
-              content="Toggle Sidebar"
-              delay={500}
-            >
-              <Button
-                aria-label="Toggle Sidebar"
-                className="p-0"
-                isIconOnly
-                onPress={() => setIsSidebarHidden(p => !p)}
-                radius="sm"
-                size="sm"
-                variant="light"
-              >
-                <Icon className="text-xl" icon="ph:sidebar-simple-fill" />
-              </Button>
-            </Tooltip>
-          )}
-          <Button
-            aria-label="More"
-            className="ml-auto p-0"
-            isIconOnly
-            radius="sm"
-            size="sm"
-            variant="light"
-          >
-            <Icon className="text-xl" icon="material-symbols:more-horiz" />
-          </Button>
-        </div>
+      <div
+        className="h-screen grow overflow-y-scroll" // overflow-y-scroll must be apply to this div specifically
+        id="MainContent"
+        ref={mainRef}
+      >
         <div
-          className="m-auto max-w-5xl px-8 py-4"
+          className="m-auto max-w-5xl"
           data-testid="OutletContainer"
           id="OutletContainer"
         >
-          <Outlet />
+          <Outlet context={{ mainRef, isSidebarHidden, setIsSidebarHidden }} />
         </div>
       </div>
     </div>

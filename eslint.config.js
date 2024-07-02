@@ -100,6 +100,13 @@ export default antfu(
     },
   },
   ...tailwind.configs['flat/recommended'],
+  {
+    settings: {
+      tailwindcss: {
+        callees: ['classnames', 'clsx', 'ctl', 'cva', 'tv', 'cn'],
+      },
+    },
+  },
   ...compat.config({
     overrides: [
       {

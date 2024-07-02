@@ -62,6 +62,6 @@ export const updateTaskZ = z.object({
   completed: z.boolean().optional(),
   lexorank: z.string().trim().min(1).optional(),
   projectId: z.string().uuid().optional(),
-  parentTaskId: z.string().uuid().optional(),
+  parentTaskId: z.string().uuid().nullable().optional(),
 });
 export type UpdateTask = z.infer<typeof updateTaskZ>;
