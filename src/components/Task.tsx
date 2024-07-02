@@ -7,7 +7,6 @@ import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import { indent } from '../utils/calcTaskRankAfterDragged';
 import cn from '../utils/cn';
-import noop from '../utils/noop';
 import MutationError from './MutationError';
 import TaskForm from './TaskForm';
 
@@ -91,18 +90,17 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
       {...props}
       className={cn(
         task.completed ? 'opacity-disabled' : 'hover:bg-default-100 hover:opacity-hover focus:bg-default-100 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-        'h-auto min-h-[55px] items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
+        'h-auto min-h-[55px] w-full items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
         'group relative z-0 box-border inline-flex min-w-20 select-none appearance-none gap-2 whitespace-nowrap rounded-small font-normal text-foreground no-underline subpixel-antialiased outline-none transition-opacity tap-highlight-transparent active:opacity-disabled [&>svg]:max-w-[theme(spacing.8)]',
-        isDragging && 'z-50 cursor-grabbing',
         isDragging && `before:absolute before:-left-2.5 before:-top-3 before:ml-0.5 before:size-3 before:rounded-full before:border-3 before:border-primary`,
         isDragging && `after:absolute after:-top-2 after:left-0 after:ml-0.5 after:h-0.5 after:w-full after:bg-primary`,
-        isOverlay && 'border border-primary',
+        isOverlay && 'z-50 cursor-grabbing border border-primary',
       )}
-      onBlur={isOverlay ? noop : () => setIsHover(false)}
-      onClick={isOverlay ? noop : handleClick}
-      onFocus={isOverlay ? noop : () => setIsHover(true)}
-      onMouseEnter={isOverlay ? noop : () => setIsHover(true)}
-      onMouseLeave={isOverlay ? noop : () => setIsHover(false)}
+      onBlur={isOverlay ? undefined : () => setIsHover(false)}
+      onClick={isOverlay ? undefined : handleClick}
+      onFocus={isOverlay ? undefined : () => setIsHover(true)}
+      onMouseEnter={isOverlay ? undefined : () => setIsHover(true)}
+      onMouseLeave={isOverlay ? undefined : () => setIsHover(false)}
       style={{ ...style, marginLeft: finalIndent }}
     >
       <Checkbox
@@ -148,6 +146,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
             />
           )}
           <Tooltip
+            closeDelay={0}
             content="Edit Task"
             delay={500}
           >
@@ -166,6 +165,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
             </Button>
           </Tooltip>
           <Tooltip
+            closeDelay={0}
             content="Delete Task"
             delay={500}
           >

@@ -146,6 +146,7 @@ export default function Project() {
         >
           {isSidebarHidden && (
             <Tooltip
+              closeDelay={0}
               content="Toggle Sidebar"
               delay={500}
             >

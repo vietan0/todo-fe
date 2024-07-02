@@ -134,6 +134,7 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
             </DropdownMenu>
           </Dropdown>
           <Tooltip
+            closeDelay={0}
             content="Toggle Sidebar"
             delay={500}
           >

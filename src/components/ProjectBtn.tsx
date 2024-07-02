@@ -4,7 +4,6 @@ import { forwardRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import cn from '../utils/cn';
-import noop from '../utils/noop';
 import ProjectActionBtn from './ProjectActionBtn';
 
 import type { ProjectScalar } from '../types/dataSchemas';
@@ -44,6 +43,7 @@ const ProjectBtn = forwardRef<HTMLAnchorElement, Props>(({
 
   return (
     <Tooltip
+      closeDelay={0}
       content={project.name}
       delay={1000}
       placement="right"
@@ -54,17 +54,16 @@ const ProjectBtn = forwardRef<HTMLAnchorElement, Props>(({
         {...listeners}
         {...props}
         className={cn(
-          'justify-start pl-2 pr-0 hover:bg-default-100 focus:bg-default-100 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-          isProjectSelected && 'bg-default/40',
+          'w-full justify-start pl-2 pr-0 hover:bg-default-100 focus:bg-default-100 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
           'group relative z-0 box-border inline-flex h-10 min-w-20 select-none appearance-none items-center gap-2 overflow-hidden whitespace-nowrap rounded-small text-small font-normal subpixel-antialiased outline-none tap-highlight-transparent transition-transform-colors-opacity [&>svg]:max-w-[theme(spacing.8)]',
-          isDragging && 'z-50 cursor-grabbing',
-          isOverlay && 'border border-primary',
+          isProjectSelected && 'bg-default/40',
+          isOverlay && 'z-50 cursor-grabbing border border-primary',
         )}
-        onBlur={isOverlay ? noop : () => setIsHover(false)}
-        onClick={isOverlay ? noop : handleClick}
-        onFocus={isOverlay ? noop : () => setIsHover(true)}
-        onMouseEnter={isOverlay ? noop : () => setIsHover(true)}
-        onMouseLeave={isOverlay ? noop : () => setIsHover(false)}
+        onBlur={isOverlay ? undefined : () => setIsHover(false)}
+        onClick={isOverlay ? undefined : handleClick}
+        onFocus={isOverlay ? undefined : () => setIsHover(true)}
+        onMouseEnter={isOverlay ? undefined : () => setIsHover(true)}
+        onMouseLeave={isOverlay ? undefined : () => setIsHover(false)}
         style={style}
       >
         <Icon className="shrink-0 text-lg" icon="material-symbols:category" />

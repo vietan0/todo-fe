@@ -54,6 +54,7 @@ export default function CreateProjectButton() {
   return (
     <>
       <Tooltip
+        closeDelay={0}
         content="Create Project"
         delay={500}
         placement="bottom"
