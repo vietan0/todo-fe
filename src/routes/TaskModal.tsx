@@ -3,6 +3,8 @@ import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useS
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { BreadcrumbItem, Breadcrumbs, Button, Checkbox, CircularProgress, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -21,6 +23,8 @@ import cn from '../utils/cn';
 
 import type { Project, Task } from '../types/dataSchemas';
 import type { DragEndEvent, DragMoveEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
+
+dayjs.extend(relativeTime);
 
 export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }: {
   isOpen: boolean;
@@ -421,6 +425,24 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                           )}
                         </ModalContent>
                       </Modal>
+                      <div className="mt-auto text-end">
+                        <p
+                          className="text-xs text-default-400"
+                          title={dayjs(task.updatedAt).format('D MMM · h:mm A')}
+                        >
+                          Updated
+                          {' '}
+                          {dayjs(task.updatedAt).fromNow()}
+                        </p>
+                        <p
+                          className="text-xs text-default-400"
+                          title={dayjs(task.createdAt).format('D MMM · h:mm A')}
+                        >
+                          Created
+                          {' '}
+                          {dayjs(task.createdAt).fromNow()}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </>
