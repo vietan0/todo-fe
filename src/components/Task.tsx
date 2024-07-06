@@ -1,3 +1,4 @@
+/* eslint-disable tailwindcss/enforces-shorthand */
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button, Checkbox, CircularProgress, Code, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
 import { forwardRef, useMemo, useState } from 'react';
@@ -10,14 +11,16 @@ import cn from '../utils/cn';
 import MutationError from './MutationError';
 import TaskForm from './TaskForm';
 
-import type { Task as TaskT } from '../types/dataSchemas';
+import type { TaskScalar, Task as TaskT } from '../types/dataSchemas';
 import type { DraggableAttributes } from '@dnd-kit/core';
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import type { HTMLAttributes } from 'react';
 
 type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
   deltaX: number;
-  task: TaskT;
+  task: TaskT | TaskScalar;
+  inModal: boolean;
+  isTaskModalOpen: boolean;
   onTaskModalOpen: () => void;
   isDragging: boolean;
   isOverlay: boolean;
@@ -32,6 +35,8 @@ type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
 const Task = forwardRef<HTMLAnchorElement, Props>(({
   deltaX,
   task,
+  inModal,
+  isTaskModalOpen,
   onTaskModalOpen,
   isDragging,
   isOverlay,
@@ -45,10 +50,13 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
   const nav = useNavigate();
   const [isHover, setIsHover] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const childrenCount = task.subTasks.length;
+  const childrenCount = 'subTasks' in task ? task.subTasks.length : 0;
 
   const finalIndent = useMemo(() => {
-    // based on task level, deltaX & isDragging
+    // based on task level, deltaX, inModal & isDragging
+    if (inModal)
+      return 0;
+
     if (!isDragging)
       return task.parentTaskId ? indent : 0;
 
@@ -58,7 +66,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
 
     else
       return deltaX < -indent ? 0 : indent;
-  }, [task.parentTaskId, deltaX, isDragging]);
+  }, [task.parentTaskId, deltaX, inModal, isDragging]);
 
   const {
     isOpen: isDeleteTaskOpen,
@@ -68,7 +76,9 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
 
   function handleClick() {
     nav(`task/${task.id}`);
-    onTaskModalOpen();
+    // if already open, don't call onOpen
+    if (!isTaskModalOpen)
+      onTaskModalOpen();
   }
 
   if (isFormOpen) {
@@ -91,7 +101,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
       className={cn(
         task.completed ? 'opacity-disabled' : 'hover:bg-default-100 hover:opacity-hover focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
         'h-auto min-h-[55px] items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
-        'group relative z-0 box-border inline-flex min-w-20 select-none appearance-none gap-2 whitespace-nowrap rounded-small font-normal text-foreground no-underline subpixel-antialiased transition-opacity tap-highlight-transparent active:opacity-disabled [&>svg]:max-w-[theme(spacing.8)]',
+        'group relative z-0 box-border inline-flex min-w-20 select-none appearance-none gap-2 whitespace-nowrap rounded-small font-normal text-foreground no-underline subpixel-antialiased tap-highlight-transparent active:opacity-disabled [&>svg]:max-w-[theme(spacing.8)]',
         isDragging && 'before:absolute before:-left-2.5 before:-top-3 before:ml-0.5 before:size-3 before:rounded-full before:border-3 before:border-primary',
         isDragging && 'after:absolute after:-top-2 after:left-0 after:ml-0.5 after:h-0.5 after:w-full after:bg-primary',
         isOverlay && 'z-50 cursor-grabbing border border-primary',
@@ -144,7 +154,6 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
               aria-label="Loading"
               classNames={{
                 base: cn('ml-auto self-center'),
-                // eslint-disable-next-line tailwindcss/enforces-shorthand
                 svg: cn('h-5 w-5'),
               }}
             />
@@ -156,7 +165,6 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
           >
             <Button
               aria-label="Edit Task"
-            // eslint-disable-next-line tailwindcss/enforces-shorthand
               className="h-7 w-7 min-w-0 data-[hover=true]:bg-default/60"
               disableAnimation
               isIconOnly
@@ -175,7 +183,6 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
           >
             <Button
               aria-label="Delete Task"
-            // eslint-disable-next-line tailwindcss/enforces-shorthand
               className="h-7 w-7 min-w-0 data-[hover=true]:bg-default/60"
               disableAnimation
               isIconOnly

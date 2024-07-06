@@ -11,10 +11,11 @@ import { createTaskZ, updateTaskZ } from '../types/dataSchemas';
 import cn from '../utils/cn';
 import MutationError from './MutationError';
 
-import type { CreateTask, Task } from '../types/dataSchemas';
+import type { CreateTask, Task, TaskScalar } from '../types/dataSchemas';
 import type { SubmitHandler } from 'react-hook-form';
 
 interface CommonProps {
+  inModal?: boolean;
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -26,13 +27,13 @@ type CreateProps = CommonProps & {
 
 type UpdateProps = CommonProps & {
   mode: 'update';
-  task: Task;
+  task: Task | TaskScalar;
   parentTaskId: undefined;
 };
 
 type Props = CreateProps | UpdateProps;
 
-export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Props) {
+export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, parentTaskId }: Props) {
   const {
     handleSubmit,
     control,
@@ -75,7 +76,7 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
   return (
     <Card
       classNames={{
-        base: cn('outline outline-1 outline-default-500'),
+        base: cn('grow outline outline-1 outline-default-500'),
         body: cn('gap-0'),
         footer: cn('flex-col items-end gap-2'),
       }}
@@ -93,9 +94,12 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
               <Input
                 {...field}
                 autoFocus
+                classNames={{
+                  input: cn(inModal && 'text-medium font-semibold'),
+                }}
                 errorMessage={formState.errors.name?.message}
                 isInvalid={Boolean(formState.errors.name)}
-                label="Task name"
+                label={inModal ? undefined : 'Task name'}
                 type="text"
                 variant="underlined"
               />
@@ -111,6 +115,7 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
                 resetForm();
               }}
               radius="sm"
+              size="sm"
               variant="ghost"
             >
               Cancel
@@ -120,6 +125,7 @@ export default function TaskForm({ setIsFormOpen, mode, task, parentTaskId }: Pr
               isDisabled={!formState.isDirty}
               isLoading={mode === 'create' ? createTaskMutation.isPending : updateTaskMutation.isPending}
               radius="sm"
+              size="sm"
               type="submit"
             >
               {mode === 'create' ? 'Create Task' : 'Update Task'}

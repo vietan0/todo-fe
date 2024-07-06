@@ -212,6 +212,7 @@ export default function Project() {
                 {projectState!.tasks.map(task => (
                   <SortableTask
                     deltaX={task.id === activeId ? deltaX : 0} // ghost indentation, only apply to task being dragged
+                    isTaskModalOpen={isTaskModalOpen}
                     key={task.id}
                     onTaskModalOpen={onTaskModalOpen}
                     task={task}
@@ -223,6 +224,7 @@ export default function Project() {
                   <SortableTask
                     deltaX={0}
                     isOverlay={true}
+                    isTaskModalOpen={isTaskModalOpen}
                     onTaskModalOpen={onTaskModalOpen}
                     task={projectState.tasks.find(t => t.id === activeId) as TaskT}
                   />
@@ -230,7 +232,14 @@ export default function Project() {
               </DragOverlay>
             </DndContext>
           </div>
-          {taskId && <TaskModal isOpen={isTaskModalOpen} onOpenChange={onTaskModalOpenChange} />}
+          {taskId && (
+            <TaskModal
+              isOpen={isTaskModalOpen}
+              onOpen={onTaskModalOpen}
+              onOpenChange={onTaskModalOpenChange}
+              projectState={projectState}
+            />
+          )}
         </div>
       </>
     );

@@ -3,18 +3,22 @@ import { CSS } from '@dnd-kit/utilities';
 
 import Task from './Task';
 
-import type { Task as TaskT } from '../types/dataSchemas';
+import type { TaskScalar, Task as TaskT } from '../types/dataSchemas';
 
 export default function SortableTask({
   deltaX,
+  inModal = false,
   isOverlay = false,
+  isTaskModalOpen,
   onTaskModalOpen,
   task,
 }: {
   deltaX: number;
+  inModal?: boolean;
   isOverlay?: boolean;
+  isTaskModalOpen: boolean;
   onTaskModalOpen: () => void;
-  task: TaskT;
+  task: TaskT | TaskScalar;
 }) {
   const {
     attributes,
@@ -34,8 +38,10 @@ export default function SortableTask({
     <Task
       attributes={attributes}
       deltaX={deltaX}
+      inModal={inModal}
       isDragging={isDragging}
       isOverlay={isOverlay}
+      isTaskModalOpen={isTaskModalOpen}
       listeners={listeners}
       onTaskModalOpen={onTaskModalOpen}
       ref={setNodeRef}

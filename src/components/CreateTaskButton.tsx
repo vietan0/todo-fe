@@ -20,14 +20,14 @@ export default function CreateTaskButton({ parentTaskId }: { parentTaskId?: stri
   else {
     return (
       <Button
-        className="self-start"
+        className="shrink-0 self-start"
         color="primary"
         onPress={() => setIsFormOpen(true)}
         radius="sm"
         startContent={<Icon className="shrink-0 text-lg" icon="material-symbols:add" />}
         variant="ghost"
       >
-        Create Task
+        { parentTaskId ? 'Create Subtask' : 'Create Task' }
       </Button>
     );
   }
