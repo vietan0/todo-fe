@@ -1,15 +1,15 @@
 /* eslint-disable tailwindcss/enforces-shorthand */
-import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Checkbox, CircularProgress, Code, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
+import { Checkbox, CircularProgress, Code } from '@nextui-org/react';
 import { forwardRef, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import { indent } from '../utils/calcTaskRankAfterDragged';
 import cn from '../utils/cn';
+import DeleteTaskButton from './DeleteTaskButton';
 import MutationError from './MutationError';
 import TaskForm from './TaskForm';
+import UpdateTaskButton from './UpdateTaskButton';
 
 import type { TaskScalar, Task as TaskT } from '../types/dataSchemas';
 import type { DraggableAttributes } from '@dnd-kit/core';
@@ -46,7 +46,6 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
   ...props
 }, ref) => {
   const updateTaskMutation = useUpdateTaskMutation();
-  const deleteTaskMutation = useDeleteTaskMutation(task.id);
   const nav = useNavigate();
   const [isHover, setIsHover] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -67,12 +66,6 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
     else
       return deltaX < -indent ? 0 : indent;
   }, [task.parentTaskId, deltaX, inModal, isDragging]);
-
-  const {
-    isOpen: isDeleteTaskOpen,
-    onOpen: onDeleteTaskOpen,
-    onOpenChange: onDeleteTaskOpenChange,
-  } = useDisclosure();
 
   function handleClick() {
     nav(`task/${task.id}`);
@@ -158,90 +151,8 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
               }}
             />
           )}
-          <Tooltip
-            closeDelay={0}
-            content="Edit Task"
-            delay={500}
-          >
-            <Button
-              aria-label="Edit Task"
-              className="h-7 w-7 min-w-0 data-[hover=true]:bg-default/60"
-              disableAnimation
-              isIconOnly
-              onPress={() => setIsFormOpen(true)}
-              radius="sm"
-              size="sm"
-              variant="light"
-            >
-              <Icon className="text-xl text-default-700" icon="material-symbols:edit" />
-            </Button>
-          </Tooltip>
-          <Tooltip
-            closeDelay={0}
-            content="Delete Task"
-            delay={500}
-          >
-            <Button
-              aria-label="Delete Task"
-              className="h-7 w-7 min-w-0 data-[hover=true]:bg-default/60"
-              disableAnimation
-              isIconOnly
-              onPress={onDeleteTaskOpen}
-              radius="sm"
-              size="sm"
-              variant="light"
-            >
-              <Icon className="text-xl text-default-700" icon="material-symbols:delete" />
-            </Button>
-          </Tooltip>
-          <Modal
-            classNames={{
-              footer: cn('mt-6 flex-col'),
-            }}
-            isOpen={isDeleteTaskOpen}
-            onOpenChange={onDeleteTaskOpenChange}
-          >
-            <ModalContent>
-              {onClose => (
-                <>
-                  <ModalHeader className="flex flex-col gap-1">
-                    Are you sure you want to delete task "
-                    {task.name}
-                    "? This can't be reversed.
-                  </ModalHeader>
-                  <ModalBody>
-                  </ModalBody>
-                  <ModalFooter>
-                    <div className="flex justify-end gap-2">
-                      <Button
-                        color="default"
-                        onPress={onClose}
-                        variant="light"
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        color="danger"
-                        isLoading={deleteTaskMutation.isPending}
-                        onPress={() => {
-                          deleteTaskMutation.mutate();
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                    {deleteTaskMutation.error
-                    && (
-                      <MutationError
-                        error={deleteTaskMutation.error}
-                        mutationName="deleteTask"
-                      />
-                    )}
-                  </ModalFooter>
-                </>
-              )}
-            </ModalContent>
-          </Modal>
+          <UpdateTaskButton isIconOnly setIsFormOpen={setIsFormOpen} />
+          <DeleteTaskButton isIconOnly task={task} />
         </div>
       )}
     </a>

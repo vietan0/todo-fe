@@ -2,7 +2,7 @@
 import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { BreadcrumbItem, Breadcrumbs, Button, Checkbox, CircularProgress, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
+import { BreadcrumbItem, Breadcrumbs, Button, Checkbox, CircularProgress, Modal, ModalBody, ModalContent, ModalHeader, Tooltip } from '@nextui-org/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useEffect, useMemo, useState } from 'react';
@@ -10,12 +10,12 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import CreateTaskButton from '../components/CreateTaskButton';
+import DeleteTaskButton from '../components/DeleteTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
-import MutationError from '../components/MutationError';
 import QueryError from '../components/QueryError';
 import SortableTask from '../components/SortableTask';
 import TaskForm from '../components/TaskForm';
-import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
+import UpdateTaskButton from '../components/UpdateTaskButton';
 import useUpdateTaskMutation, { optimisticUpdateSubTask } from '../mutations/useUpdateTaskMutation';
 import useTask from '../queries/useTask';
 import calcSubTaskRankAfterDragged from '../utils/calcSubTaskRankAfterDragged';
@@ -40,14 +40,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
   const [taskState, setTaskState] = useState(task);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 15 } }));
   const updateTaskMutation = useUpdateTaskMutation();
-  const deleteTaskMutation = useDeleteTaskMutation(taskId!);
   const [isFormOpen, setIsFormOpen] = useState(false);
-
-  const {
-    isOpen: isDeleteTaskOpen,
-    onOpen: onDeleteTaskOpen,
-    onOpenChange: onDeleteTaskOpenChange,
-  } = useDisclosure();
 
   const [completedSubCount, subCount] = useMemo(() => {
     const subCount = taskState?.subTasks.length || 0;
@@ -351,80 +344,8 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                           <p className="text-sm font-semibold">{projectState.name}</p>
                         </div>
                       </div>
-                      <Button
-                        aria-label="Edit Task"
-                        className="min-w-0 justify-start data-[hover=true]:bg-default/60"
-                        disableAnimation
-                        onPress={() => setIsFormOpen(true)}
-                        radius="sm"
-                        size="sm"
-
-                        startContent={<Icon className="h-5 w-5 text-xl text-default-700" icon="material-symbols:edit" />}
-                        variant="ghost"
-                      >
-                        Edit Task
-                      </Button>
-                      <Button
-                        aria-label="Delete Task"
-                        className="min-w-0 justify-start data-[hover=true]:bg-default/60"
-                        disableAnimation
-                        onPress={onDeleteTaskOpen}
-                        radius="sm"
-                        size="sm"
-
-                        startContent={<Icon className="h-5 w-5 text-xl text-default-700" icon="material-symbols:delete" />}
-                        variant="ghost"
-                      >
-                        Delete Task
-                      </Button>
-                      <Modal
-                        classNames={{
-                          footer: cn('mt-6 flex-col'),
-                        }}
-                        isOpen={isDeleteTaskOpen}
-                        onOpenChange={onDeleteTaskOpenChange}
-                      >
-                        <ModalContent>
-                          {onClose => (
-                            <>
-                              <ModalHeader className="flex flex-col gap-1">
-                                Are you sure you want to delete task "
-                                {task.name}
-                                "? This can't be reversed.
-                              </ModalHeader>
-                              <ModalBody>
-                              </ModalBody>
-                              <ModalFooter>
-                                <div className="flex justify-end gap-2">
-                                  <Button
-                                    color="default"
-                                    onPress={onClose}
-                                    variant="light"
-                                  >
-                                    Cancel
-                                  </Button>
-                                  <Button
-                                    color="danger"
-                                    isLoading={deleteTaskMutation.isPending}
-                                    onPress={() => {
-                                      deleteTaskMutation.mutate();
-                                    }}
-                                  >
-                                    Delete
-                                  </Button>
-                                </div>
-                                {deleteTaskMutation.error
-                                && (
-                                  <MutationError
-                                    error={deleteTaskMutation.error}
-                                    mutationName="deleteTask"
-                                  />
-                                )}
-                              </ModalFooter>
-                            </>
-                          )}
-                        </ModalContent>
-                      </Modal>
+                      <UpdateTaskButton setIsFormOpen={setIsFormOpen} />
+                      <DeleteTaskButton task={task} />
                       <div className="mt-auto text-end">
                         <p
                           className="text-xs text-default-400"
