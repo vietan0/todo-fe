@@ -9,7 +9,7 @@ import useSignOutMutation from '../mutations/useSignOutMutation';
 import useUpdateProjectMutation, { optimisticUpdate } from '../mutations/useUpdateProjectMutation';
 import useProjects from '../queries/useProjects';
 import useUser from '../queries/useUser';
-import calcProjectRankAfterDragged from '../utils/calcProjectRankAfterDraggged';
+import { calcRank } from '../utils/calcRank';
 import CreateProjectButton from './CreateProjectButton';
 import LoadingScreen from './LoadingScreen';
 import QueryError from './QueryError';
@@ -40,7 +40,7 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
     setActiveId(null);
 
     if (projects && event.over) {
-      const lexorank = calcProjectRankAfterDragged(event, projects);
+      const lexorank = calcRank(event, projects);
 
       if (lexorank) {
         // update state so dndkit can update immediately

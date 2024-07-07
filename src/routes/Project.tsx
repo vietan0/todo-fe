@@ -14,7 +14,7 @@ import SortableTask from '../components/SortableTask';
 import useUpdateTaskMutation, { optimisticUpdate } from '../mutations/useUpdateTaskMutation';
 import useProject from '../queries/useProject';
 import useUser from '../queries/useUser';
-import calcTaskRankAfterDragged from '../utils/calcTaskRankAfterDragged';
+import { calcNestedRank } from '../utils/calcRank';
 import cn from '../utils/cn';
 import TaskModal from './TaskModal';
 
@@ -98,7 +98,7 @@ export default function Project() {
     setDeltaX(0);
 
     if (project && event.over) {
-      const payload = calcTaskRankAfterDragged(event, project);
+      const payload = calcNestedRank(event, project.tasks);
 
       if (payload) {
         // update state so dndkit can update immediately

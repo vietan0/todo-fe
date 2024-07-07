@@ -1,17 +1,18 @@
 import { LexoRank } from 'lexorank';
 
-import type { Project } from '../types/dataSchemas';
+import type { ProjectScalar, Task, TaskScalar } from '../types/dataSchemas';
 import type { DragEndEvent } from '@dnd-kit/core';
-
-type LevelChange = 'base-to-base' | 'base-to-sub' | 'sub-to-base' | 'sub-to-sub';
 
 export const indent = 40;
 
-export default function calcTaskRankAfterDragged(event: DragEndEvent, project: Project,
-) {
+/**
+ * Use in `Project.tsx` for all tasks (handle nesting)
+ */
+export function calcNestedRank(event: DragEndEvent, tasks: Task[]) {
+  type LevelChange = 'base-to-base' | 'base-to-sub' | 'sub-to-base' | 'sub-to-sub';
   const { active, over, delta } = event;
-  const activeIndex = project.tasks.findIndex(t => t.id === active.id);
-  const activeTask = project.tasks[activeIndex];
+  const activeIndex = tasks.findIndex(t => t.id === active.id);
+  const activeTask = tasks[activeIndex];
   const activeIsBase = activeTask.parentTaskId === null;
   let newRank = LexoRank.parse(activeTask.lexorank);
   let parentTaskId = activeTask.parentTaskId;
@@ -25,7 +26,7 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
       if (activeIndex === 0)
         return;
 
-      const prevTask = project.tasks[activeIndex - 1];
+      const prevTask = tasks[activeIndex - 1];
       const prevTaskIsBase = prevTask.parentTaskId === null;
 
       if (prevTaskIsBase) {
@@ -42,19 +43,19 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
     else if (dragSubToLeft) {
       // sub is guaranteed to not be first index in this block
 
-      if (activeIndex === project.tasks.length - 1) {
+      if (activeIndex === tasks.length - 1) {
         // sub is last task of the whole array
-        const parent = project.tasks.find(t => t.id === activeTask.parentTaskId);
+        const parent = tasks.find(t => t.id === activeTask.parentTaskId);
         newRank = LexoRank.parse(parent!.lexorank).genNext();
         parentTaskId = null;
       }
 
       else {
-        const nextTask = project.tasks[activeIndex + 1];
+        const nextTask = tasks[activeIndex + 1];
 
         if (nextTask.parentTaskId === null) {
           // sub is last child of a group
-          const parent = project.tasks.find(t => t.id === activeTask.parentTaskId);
+          const parent = tasks.find(t => t.id === activeTask.parentTaskId);
           const parentRank = LexoRank.parse(parent!.lexorank);
           const nextRank = LexoRank.parse(nextTask.lexorank);
           newRank = parentRank.between(nextRank);
@@ -83,8 +84,8 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
       return;
     }
 
-    const overIndex = project.tasks.findIndex(t => t.id === over!.id);
-    const overTask = project.tasks[overIndex];
+    const overIndex = tasks.findIndex(t => t.id === over!.id);
+    const overTask = tasks[overIndex];
     const overIsBase = overTask.parentTaskId === null;
 
     if (overIndex === 0) {
@@ -96,7 +97,7 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
       parentTaskId = null;
     }
 
-    else if (overIndex === project.tasks.length - 1) {
+    else if (overIndex === tasks.length - 1) {
       // drag to last
       // over can be base or sub, active can be base or sub
       if (overIsBase) {
@@ -116,7 +117,7 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
         // 2. over is sub
         if (levelChange.endsWith('to-base')) {
           // a. active: base --> find over's parent, call genNext() on its rank, set active's `parentTaskId` to null
-          const overParent = project.tasks.find(t => t.id === overTask.parentTaskId);
+          const overParent = tasks.find(t => t.id === overTask.parentTaskId);
           const overParentRank = LexoRank.parse(overParent!.lexorank);
           newRank = overParentRank.genNext();
           parentTaskId = null;
@@ -135,7 +136,7 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
       const dragDirection = delta.y > 0 ? 'down' : 'up';
 
       if (dragDirection === 'down') {
-        const nextTask = project.tasks[overIndex + 1];
+        const nextTask = tasks[overIndex + 1];
         const nextIsBase = nextTask.parentTaskId === null;
 
         if (overIsBase) {
@@ -169,7 +170,7 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
             // a. next: base
             if (levelChange.endsWith('to-base')) {
               // a1: active: base --> active will be between over's parent and next
-              const overParent = project.tasks.find(t => t.id === overTask.parentTaskId);
+              const overParent = tasks.find(t => t.id === overTask.parentTaskId);
               const overParentRank = LexoRank.parse(overParent!.lexorank);
               const nextTaskRank = LexoRank.parse(nextTask.lexorank);
               newRank = overParentRank.between(nextTaskRank);
@@ -177,7 +178,7 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
             }
             else {
               // a2: active: sub --> active will be last child of over's parent (previously next is the last child)
-              const overParent = project.tasks.find(t => t.id === overTask.parentTaskId);
+              const overParent = tasks.find(t => t.id === overTask.parentTaskId);
               newRank = LexoRank.parse(overTask.lexorank).genNext();
               parentTaskId = overParent!.id;
             }
@@ -194,7 +195,7 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
       }
       else {
         // dragging up
-        const prevTask = project.tasks[overIndex - 1];
+        const prevTask = tasks[overIndex - 1];
         const prevIsBase = prevTask.parentTaskId === null;
 
         if (prevIsBase) {
@@ -229,7 +230,7 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
             if (levelChange.endsWith('to-base')) {
               // a1. active: base
               // active is between prev's parent and over
-              const prevParent = project.tasks.find(t => t.id === prevTask.parentTaskId);
+              const prevParent = tasks.find(t => t.id === prevTask.parentTaskId);
               const prevParentRank = LexoRank.parse(prevParent!.lexorank);
               const overRank = LexoRank.parse(overTask.lexorank);
               newRank = prevParentRank.between(overRank);
@@ -260,4 +261,46 @@ export default function calcTaskRankAfterDragged(event: DragEndEvent, project: P
     lexorank: newRank.toString(),
     parentTaskId,
   };
+}
+
+/**
+ * Use in `Sidebar.tsx` for projects, or in `TaskModal.tsx` for subtasks only (no nesting)
+ */
+export function calcRank(event: DragEndEvent, items: ProjectScalar[] | TaskScalar[]) {
+  const { active, over, delta } = event;
+  const overIndex = items.findIndex(p => p.id === over!.id);
+  const overProject = items[overIndex];
+  const overRank = LexoRank.parse(overProject.lexorank);
+  let newRank;
+
+  if (active.id !== over!.id) {
+    // drag to first
+    if (overIndex === 0) {
+      newRank = overRank.genPrev();
+    }
+    else if (overIndex === items.length - 1) {
+      // drag to last
+      newRank = LexoRank.parse(overProject.lexorank).genNext();
+    }
+    else {
+      // drag to middle
+      const dragDirection = delta.y > 0 ? 'down' : 'up';
+
+      if (dragDirection === 'down') {
+        // active is between over and next
+        const nextProject = items[overIndex + 1];
+        const nextRank = LexoRank.parse(nextProject.lexorank);
+        newRank = overRank.between(nextRank);
+      }
+      else {
+        // drag up
+        // active is between prev and over
+        const prevProject = items[overIndex - 1];
+        const prevRank = LexoRank.parse(prevProject.lexorank);
+        newRank = prevRank.between(overRank);
+      }
+    }
+  }
+
+  return newRank?.toString();
 }

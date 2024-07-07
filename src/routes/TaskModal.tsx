@@ -18,7 +18,7 @@ import TaskForm from '../components/TaskForm';
 import UpdateTaskButton from '../components/UpdateTaskButton';
 import useUpdateTaskMutation, { optimisticUpdateSubTask } from '../mutations/useUpdateTaskMutation';
 import useTask from '../queries/useTask';
-import calcSubTaskRankAfterDragged from '../utils/calcSubTaskRankAfterDragged';
+import { calcRank } from '../utils/calcRank';
 import cn from '../utils/cn';
 
 import type { Project, Task } from '../types/dataSchemas';
@@ -71,7 +71,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
     setDeltaX(0);
 
     if (event.over) {
-      const lexorank = calcSubTaskRankAfterDragged(event, task!.subTasks);
+      const lexorank = calcRank(event, task!.subTasks);
       // update state so dndkit can update immediately
       const updatedTaskState = optimisticUpdateSubTask(taskState!, { lexorank }, event.active.id as string);
       setTaskState(updatedTaskState);

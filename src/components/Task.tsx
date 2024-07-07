@@ -4,7 +4,7 @@ import { forwardRef, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
-import { indent } from '../utils/calcTaskRankAfterDragged';
+import { indent } from '../utils/calcRank';
 import cn from '../utils/cn';
 import DeleteTaskButton from './DeleteTaskButton';
 import MutationError from './MutationError';
