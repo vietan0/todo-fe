@@ -1,6 +1,6 @@
 # Todo App
 
-A simple todo app that persists your custom order.
+A simple todo app that persists your custom sort order.
 Check it out [here](https://todo-fe-vietan0.netlify.app)!
 
 ## Screenshot
