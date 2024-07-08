@@ -1,30 +1,23 @@
-# React + TypeScript + Vite
+# Todo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple todo app that persists your custom order.
+Check it out [here](https://todo-fe-vietan0.netlify.app)!
 
-Currently, two official plugins are available:
+## Screenshot
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![](./screenshot.jpg)
 
-## Expanding the ESLint configuration
+## Built with
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- [React](https://reactjs.org/)
+- [Tanstack Query](https://tanstack.com/query/latest) - Async State Management
+- [DndKit](https://dndkit.com/) - Drag-and-Drop Library
+- [NextUI](https://nextui.org/) - Component Library
+- [Framer Motion](https://www.framer.com/motion/) - Animation
+- [React Router](https://reactrouter.com/en/main) - Routing
+- [Zod](https://zod.dev/) - Schema Validation
+- [Vitest](https://vitest.dev/) & [RTL](https://testing-library.com/docs/react-testing-library/intro/) - Testing
 
-- Configure the top-level `parserOptions` property like this:
+---
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-};
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Made by [Việt An](https://github.com/vietan0).
