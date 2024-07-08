@@ -146,7 +146,7 @@ export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, p
             />
           )}
         </CardFooter>
-        <DevTool control={control} />
+        {import.meta.env.PROD || <DevTool control={control} />}
       </form>
     </Card>
   );

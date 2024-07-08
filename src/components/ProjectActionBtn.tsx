@@ -166,7 +166,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
                   />
                 )}
               </ModalFooter>
-              <DevTool control={control} />
+              {import.meta.env.PROD || <DevTool control={control} />}
             </form>
           )}
         </ModalContent>

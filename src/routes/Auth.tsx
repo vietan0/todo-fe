@@ -114,7 +114,7 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
             )}
           </CardFooter>
         </form>
-        <DevTool control={control} />
+        {import.meta.env.PROD || <DevTool control={control} />}
       </Card>
     </div>
   );

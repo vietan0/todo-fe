@@ -123,7 +123,7 @@ export default function CreateProjectButton() {
                   />
                 )}
               </ModalFooter>
-              <DevTool control={control} />
+              {import.meta.env.PROD || <DevTool control={control} />}
             </form>
           )}
         </ModalContent>
