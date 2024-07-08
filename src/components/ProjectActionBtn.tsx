@@ -79,6 +79,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
       >
         <DropdownTrigger>
           <Button
+            aria-label="Project Actions"
             className={cn('data-[focus-visible]:-outline-offset-2', isHover ? 'opacity-100' : 'opacity-0')}
             isIconOnly
             variant="light"

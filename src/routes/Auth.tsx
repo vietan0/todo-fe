@@ -59,7 +59,7 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardHeader className="mb-8 flex-col items-start">
-            <p className="text-3xl font-bold">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</p>
+            <h1 className="text-3xl font-bold">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</h1>
           </CardHeader>
           <CardBody className="flex flex-col gap-2">
             <Controller

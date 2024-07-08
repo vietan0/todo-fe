@@ -31,19 +31,17 @@ export default function Home() {
         </title>
       </Helmet>
       <Sidebar isSidebarHidden={isSidebarHidden} setIsSidebarHidden={setIsSidebarHidden} />
-      <div
+      <main
         className="h-screen grow overflow-y-scroll" // overflow-y-scroll must be apply to this div specifically
-        id="MainContent"
         ref={mainRef}
       >
         <div
           className="m-auto max-w-5xl"
-          data-testid="OutletContainer"
           id="OutletContainer"
         >
           <Outlet context={{ mainRef, isSidebarHidden, setIsSidebarHidden }} />
         </div>
-      </div>
+      </main>
     </div>
   );
 }
