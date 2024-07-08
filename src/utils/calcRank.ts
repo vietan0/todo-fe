@@ -23,7 +23,9 @@ export function calcNestedRank(event: DragEndEvent, tasks: Task[]) {
     const dragSubToLeft = !activeIsBase && delta.x < -indent;
 
     if (dragBaseToRight) {
-      if (activeIndex === 0)
+      if (activeIndex === 0 || activeTask.subTasks.length > 0)
+        // disallow first task to be sub
+        // disallow active to be sub if active has children
         return;
 
       const prevTask = tasks[activeIndex - 1];
@@ -62,6 +64,10 @@ export function calcNestedRank(event: DragEndEvent, tasks: Task[]) {
           parentTaskId = null;
         }
       }
+    }
+    else {
+      // delta.x isn't big enough (bigger than indent) to change level
+      return;
     }
   }
   else {

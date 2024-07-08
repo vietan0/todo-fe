@@ -55,11 +55,16 @@ export default function Project() {
       if (children.length > 0) {
         setProjectState((prev) => {
           const filteredTasks = prev!.tasks.filter(t => t.parentTaskId !== activeId);
-          prev!.tasks = filteredTasks;
 
-          return prev;
+          return {
+            ...prev!,
+            tasks: filteredTasks,
+          };
         });
       }
+    }
+    else {
+      setProjectState(project);
     }
   }, [activeId]);
 
@@ -164,7 +169,7 @@ export default function Project() {
             </Tooltip>
           )}
           <AnimatePresence mode="popLayout">
-            {project && scrolled
+            {projectState && scrolled
             && (
               <motion.p
                 animate="center"
@@ -178,7 +183,7 @@ export default function Project() {
                 }}
                 variants={variants}
               >
-                {project.name}
+                {projectState.name}
               </motion.p>
             )}
           </AnimatePresence>
