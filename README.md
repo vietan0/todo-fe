@@ -5,7 +5,8 @@ Check it out [here](https://todo-fe-vietan0.netlify.app)!
 
 ## Screenshot
 
-![](./screenshot.jpg)
+![](./public/screenshots/1.jpg)
+![](./public/screenshots/2.jpg)
 
 ## Built with
 
