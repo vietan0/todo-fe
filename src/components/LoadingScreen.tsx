@@ -1,4 +1,4 @@
-import { CircularProgress } from '@nextui-org/react';
+import { CircularProgress } from '@heroui/react';
 import { Helmet } from 'react-helmet-async';
 
 import viteLogo from '../assets/vite.svg';

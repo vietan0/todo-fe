@@ -1,8 +1,8 @@
 /* eslint-disable tailwindcss/enforces-shorthand */
 import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { BreadcrumbItem, Breadcrumbs, Button, Checkbox, CircularProgress, Modal, ModalBody, ModalContent, ModalHeader, Tooltip } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { BreadcrumbItem, Breadcrumbs, Button, Checkbox, CircularProgress, Modal, ModalBody, ModalContent, ModalHeader, Tooltip } from '@nextui-org/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useEffect, useMemo, useState } from 'react';

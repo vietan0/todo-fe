@@ -1,6 +1,6 @@
+import { Button, Card, CardBody, CardFooter, CardHeader, Input } from '@heroui/react';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Card, CardBody, CardFooter, CardHeader, Input } from '@nextui-org/react';
 import { Helmet } from 'react-helmet-async';
 import { Controller, useForm } from 'react-hook-form';
 import { Navigate } from 'react-router-dom';

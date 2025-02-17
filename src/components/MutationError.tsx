@@ -1,4 +1,4 @@
-import { Code } from '@nextui-org/react';
+import { Code } from '@heroui/react';
 
 export default function MutationError({
   error,

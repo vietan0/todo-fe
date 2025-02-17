@@ -1,7 +1,7 @@
 import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { Button, Tooltip, useDisclosure } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Tooltip, useDisclosure } from '@nextui-org/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';

@@ -1,5 +1,5 @@
 /* eslint-disable tailwindcss/enforces-shorthand */
-import { Checkbox, CircularProgress, Code } from '@nextui-org/react';
+import { Checkbox, CircularProgress, Code } from '@heroui/react';
 import { forwardRef, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
