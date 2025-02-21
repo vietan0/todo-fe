@@ -128,9 +128,10 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
         }
         radius="full"
       />
-      <div>
+      <div className="truncate">
         <div>
           <p>{task.name}</p>
+          {task.body && <p className="truncate text-xs text-foreground-500">{task.body}</p>}
           {isOverlay && childrenCount > 0 && <Code className="text-xs font-bold" color="primary">{childrenCount}</Code> }
         </div>
         {updateTaskMutation.error && (
