@@ -90,7 +90,7 @@ export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, p
       shadow="none"
     >
       <form
-        className="rounded-lg outline outline-1 outline-default"
+        className="rounded-lg font-mono outline outline-1 outline-default"
         onSubmit={handleSubmit(onSubmit)}
       >
         <CardBody>
@@ -102,7 +102,7 @@ export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, p
                 {...field}
                 autoFocus
                 classNames={{
-                  input: 'text-xl font-semibold',
+                  input: 'text-large font-semibold',
                 }}
                 errorMessage={formState.errors.name?.message}
                 isInvalid={Boolean(formState.errors.name)}
@@ -118,7 +118,9 @@ export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, p
             render={({ field }) => (
               <Textarea
                 {...field}
-                className="text-small"
+                classNames={{
+                  input: 'text-[0.8rem]',
+                }}
                 errorMessage={formState.errors.body?.message}
                 isInvalid={Boolean(formState.errors.body)}
                 label={inModal ? undefined : 'Body'}

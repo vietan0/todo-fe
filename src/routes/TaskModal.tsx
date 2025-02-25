@@ -10,6 +10,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import CreateTaskButton from '../components/CreateTaskButton';
+import CustomMarkdown from '../components/CustomMarkdown';
 import DeleteTaskButton from '../components/DeleteTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
 import QueryError from '../components/QueryError';
@@ -227,7 +228,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                     </title>
                   </Helmet>
                   <div className="flex size-full">
-                    <div className="flex grow flex-col gap-3 overflow-y-scroll p-4">
+                    <div className="flex grow flex-col gap-3 overflow-y-scroll p-4 pb-10">
                       {task && (
                         <div className="flex items-start gap-3">
                           <Checkbox
@@ -253,21 +254,14 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                               />
                               )
                             : (
-                              <div className="flex flex-col gap-2">
-                                <p
-                                  className="flex items-center text-xl font-semibold"
-                                  onClick={() => setIsFormOpen(true)}
-                                >
+                              <div
+                                className="flex flex-col gap-2 text-small"
+                                onClick={() => setIsFormOpen(true)}
+                              >
+                                <p className="flex items-center text-large font-semibold">
                                   {task.name}
                                 </p>
-                                {task.body && (
-                                  <p
-                                    className="text-small"
-                                    onClick={() => setIsFormOpen(true)}
-                                  >
-                                    {task.body}
-                                  </p>
-                                ) }
+                                {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
                               </div>
                               )}
                           {updateTaskMutation.isPending && (
