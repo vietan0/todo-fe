@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import { indent } from '../utils/calcRank';
 import cn from '../utils/cn';
+import CustomMarkdown from './CustomMarkdown';
 import DeleteTaskButton from './DeleteTaskButton';
 import MutationError from './MutationError';
 import TaskForm from './TaskForm';
@@ -131,7 +132,11 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
       <div className="truncate">
         <div>
           <p>{task.name}</p>
-          {task.body && <p className="truncate text-xs text-foreground-500">{task.body}</p>}
+          {task.body && (
+            <div className="task-body-truncated flex items-center gap-1">
+              <CustomMarkdown isTruncated>{task.body}</CustomMarkdown>
+            </div>
+          )}
           {isOverlay && childrenCount > 0 && <Code className="text-xs font-bold" color="primary">{childrenCount}</Code> }
         </div>
         {updateTaskMutation.error && (

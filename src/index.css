@@ -3,10 +3,22 @@
 @tailwind components;
 @tailwind utilities;
 
-.shiki {
-  @apply min-w-0 py-1 px-4 rounded-lg overflow-scroll;
-}
-
 .shiki > code {
   @apply text-tiny;
+}
+
+.task-body-truncated * {
+  @apply inline-block text-xs font-normal text-foreground-500;
+}
+
+.task-body-truncated code {
+  @apply px-1 py-0.5 overflow-hidden;
+  /* 1 step smaller than text-tiny */
+  font-size: 0.65rem;
+  line-height: 0.8rem;
+}
+
+/* .shiki elements that are not children of .task-body-truncated */
+.shiki:not(.task-body-truncated *) {
+  @apply min-w-0 py-1 px-4 rounded-lg overflow-scroll;
 }
