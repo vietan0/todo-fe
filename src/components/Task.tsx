@@ -131,7 +131,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
       />
       <div className="truncate">
         <div>
-          <p>{task.name}</p>
+          <CustomMarkdown isTruncated>{task.name}</CustomMarkdown>
           {task.body && (
             <div className="task-body-truncated flex items-center gap-1">
               <CustomMarkdown isTruncated>{task.body}</CustomMarkdown>

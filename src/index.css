@@ -22,3 +22,7 @@
 .shiki:not(.task-body-truncated *) {
   @apply min-w-0 py-1 px-4 rounded-lg overflow-scroll;
 }
+
+.task-modal-name * {
+  @apply text-large font-semibold;
+}

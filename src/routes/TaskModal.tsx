@@ -5,6 +5,7 @@ import { BreadcrumbItem, Breadcrumbs, Button, Checkbox, CircularProgress, Modal,
 import { Icon } from '@iconify/react/dist/iconify.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import removeMarkdown from 'markdown-to-text';
 import { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -156,7 +157,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                       key={taskId}
                       onPress={() => nav(`task/${taskId}`)}
                     >
-                      {task.name}
+                      {removeMarkdown(task.name)}
                     </BreadcrumbItem>
                   </Breadcrumbs>
                 )}
@@ -222,7 +223,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                 <>
                   <Helmet>
                     <title>
-                      {task.name}
+                      {removeMarkdown(task.name)}
                       {' '}
                       – Todo App
                     </title>
@@ -258,9 +259,9 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                                 className="flex min-w-0 flex-col gap-2 text-small"
                                 onClick={() => setIsFormOpen(true)}
                               >
-                                <p className="flex items-center text-large font-semibold">
-                                  {task.name}
-                                </p>
+                                <div className="task-modal-name flex items-center">
+                                  <CustomMarkdown>{task.name}</CustomMarkdown>
+                                </div>
                                 {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
                               </div>
                               )}
