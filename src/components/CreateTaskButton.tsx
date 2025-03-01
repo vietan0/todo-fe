@@ -1,5 +1,5 @@
+import { Button } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button } from '@nextui-org/react';
 import { useState } from 'react';
 
 import TaskForm from './TaskForm';

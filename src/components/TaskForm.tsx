@@ -1,6 +1,6 @@
+import { Button, Card, CardBody, CardFooter, Input, Textarea } from '@heroui/react';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Card, CardBody, CardFooter, Input } from '@nextui-org/react';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -39,8 +39,11 @@ export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, p
     control,
     formState,
     reset: resetForm,
-  } = useForm<{ name: string }>({
-    defaultValues: { name: mode === 'create' ? '' : task.name },
+  } = useForm<{ name: string; body: string }>({
+    defaultValues: {
+      name: mode === 'create' ? '' : task.name,
+      body: mode === 'create' ? '' : task.body || '',
+    },
     resolver: zodResolver(mode === 'create' ? createTaskZ : updateTaskZ),
   });
 
@@ -52,12 +55,16 @@ export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, p
     if (mode === 'create') {
       createTaskMutation.mutate({
         name: data.name,
+        body: data.body,
         parentTaskId,
       });
     }
     else {
       updateTaskMutation.mutate({
-        data: { name: data.name },
+        data: {
+          name: data.name,
+          body: data.body,
+        },
         taskId: task.id,
       });
     }
@@ -77,13 +84,13 @@ export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, p
     <Card
       classNames={{
         base: cn('grow outline outline-1 outline-default-500'),
-        body: cn('gap-0'),
+        body: cn('gap-2'),
         footer: cn('flex-col items-end gap-2'),
       }}
       shadow="none"
     >
       <form
-        className="rounded-lg outline outline-1 outline-default"
+        className="rounded-lg font-mono outline outline-1 outline-default"
         onSubmit={handleSubmit(onSubmit)}
       >
         <CardBody>
@@ -95,13 +102,30 @@ export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, p
                 {...field}
                 autoFocus
                 classNames={{
-                  input: cn(inModal && 'text-medium font-semibold'),
+                  input: 'text-large font-semibold',
                 }}
                 errorMessage={formState.errors.name?.message}
                 isInvalid={Boolean(formState.errors.name)}
                 label={inModal ? undefined : 'Task name'}
+                radius="sm"
                 type="text"
-                variant="underlined"
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="body"
+            render={({ field }) => (
+              <Textarea
+                {...field}
+                classNames={{
+                  input: 'text-[0.8rem]',
+                }}
+                errorMessage={formState.errors.body?.message}
+                isInvalid={Boolean(formState.errors.body)}
+                label={inModal ? undefined : 'Body'}
+                maxRows={15}
+                radius="sm"
               />
             )}
           />
@@ -151,5 +175,3 @@ export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, p
     </Card>
   );
 }
-
-;

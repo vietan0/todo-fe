@@ -1,5 +1,5 @@
+import { Tooltip } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Tooltip } from '@nextui-org/react';
 import { forwardRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 

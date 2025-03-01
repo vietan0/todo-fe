@@ -17,6 +17,7 @@ export type User = z.infer<typeof userZ>;
 const taskScalarZ = z.object({
   id: z.string().uuid(),
   name: z.string().trim().min(1).max(255),
+  body: z.string().nullable(),
   completed: z.boolean(),
   lexorank: z.string().trim().min(1),
   createdAt: z.string().datetime(),
@@ -54,11 +55,13 @@ export const updateProjectZ = z.object({
 export type UpdateProject = z.infer<typeof updateProjectZ>;
 export const createTaskZ = z.object({
   name: z.string().trim().min(1).max(255),
+  body: z.string().optional(),
   parentTaskId: z.string().uuid().optional(),
 });
 export type CreateTask = z.infer<typeof createTaskZ>;
 export const updateTaskZ = z.object({
   name: z.string().trim().min(1).max(255).optional(),
+  body: z.string().optional(),
   completed: z.boolean().optional(),
   lexorank: z.string().trim().min(1).optional(),
   projectId: z.string().uuid().optional(),

@@ -1,15 +1,17 @@
 /* eslint-disable tailwindcss/enforces-shorthand */
 import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { BreadcrumbItem, Breadcrumbs, Button, Checkbox, CircularProgress, Modal, ModalBody, ModalContent, ModalHeader, Tooltip } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { BreadcrumbItem, Breadcrumbs, Button, Checkbox, CircularProgress, Modal, ModalBody, ModalContent, ModalHeader, Tooltip } from '@nextui-org/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import removeMarkdown from 'markdown-to-text';
 import { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import CreateTaskButton from '../components/CreateTaskButton';
+import CustomMarkdown from '../components/CustomMarkdown';
 import DeleteTaskButton from '../components/DeleteTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
 import QueryError from '../components/QueryError';
@@ -119,7 +121,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
     <Modal
       classNames={{
         base: cn('h-[560px] overflow-hidden'),
-        header: cn('flex justify-between gap-1 border-b-1 border-default-100 px-3 py-3 pl-5 text-medium'),
+        header: cn('flex justify-between gap-1 border-b-1 border-default-100 px-3 py-2 text-medium'),
         body: cn('p-0'),
         footer: cn('px-5 py-3'),
       }}
@@ -133,57 +135,31 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
         {onClose => (
           <>
             <ModalHeader>
-              <div className="flex grow gap-2" id="left">
-                {task
-                && (
-                  <>
-                    {isFormOpen
-                      ? (
-                        <TaskForm
-                          inModal
-                          mode="update"
-                          parentTaskId={undefined}
-                          setIsFormOpen={setIsFormOpen}
-                          task={task}
-                        />
-                        )
-                      : (
-                        <div className="flex gap-2">
-                          <Checkbox
-                            classNames={{
-                              icon: cn('flex items-center'),
-                              base: cn('outline-1 outline-red-400'),
-                              wrapper: cn('mr-0'),
-                            }}
-                            id={task.id}
-                            isSelected={task.completed}
-                            onValueChange={
-                            (isSelected: boolean) => {
-                              updateTaskMutation.mutate({
-                                data: { completed: isSelected },
-                                taskId: task.id,
-                              });
-                            }
-                          }
-                            radius="full"
-                          />
-                          <p
-                            className="flex items-center"
-                            onClick={() => setIsFormOpen(true)}
-                          >
-                            {task.name}
-                          </p>
-                          {updateTaskMutation.isPending && (
-                            <CircularProgress
-                              aria-label="Loading"
-                              classNames={{
-                                svg: cn('h-5 w-5'),
-                              }}
-                            />
-                          )}
-                        </div>
-                        )}
-                  </>
+              <div className="flex grow items-center gap-2" id="left">
+                {task && (
+                  <Breadcrumbs size="sm" variant="solid">
+                    <BreadcrumbItem
+                      onPress={() => nav(`/project/${projectId}`)}
+                      startContent={<Icon className="shrink-0" icon="material-symbols:category" />}
+                    >
+                      {projectState.name}
+                    </BreadcrumbItem>
+                    {task.parentTaskId && (
+                      <BreadcrumbItem
+                        key={task.parentTaskId}
+                        onPress={() => nav(`task/${task.parentTaskId}`)}
+                      >
+                        {projectState.tasks.find(t => t.id === task.parentTaskId)!.name}
+                      </BreadcrumbItem>
+                    )}
+                    <BreadcrumbItem
+                      isCurrent
+                      key={taskId}
+                      onPress={() => nav(`task/${taskId}`)}
+                    >
+                      {removeMarkdown(task.name)}
+                    </BreadcrumbItem>
+                  </Breadcrumbs>
                 )}
                 {isLoading && 'Loading...'}
                 {error && 'Error'}
@@ -247,36 +223,59 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                 <>
                   <Helmet>
                     <title>
-                      {task.name}
+                      {removeMarkdown(task.name)}
                       {' '}
                       – Todo App
                     </title>
                   </Helmet>
                   <div className="flex size-full">
-                    <div className="flex grow flex-col gap-2 overflow-y-scroll p-4">
-                      <Breadcrumbs size="sm" variant="solid">
-                        <BreadcrumbItem
-                          onPress={() => nav(`/project/${projectId}`)}
-                          startContent={<Icon className="shrink-0" icon="material-symbols:category" />}
-                        >
-                          {projectState.name}
-                        </BreadcrumbItem>
-                        {task.parentTaskId && (
-                          <BreadcrumbItem
-                            key={task.parentTaskId}
-                            onPress={() => nav(`task/${task.parentTaskId}`)}
-                          >
-                            {projectState.tasks.find(t => t.id === task.parentTaskId)!.name}
-                          </BreadcrumbItem>
-                        )}
-                        <BreadcrumbItem
-                          isCurrent
-                          key={taskId}
-                          onPress={() => nav(`task/${taskId}`)}
-                        >
-                          {task.name}
-                        </BreadcrumbItem>
-                      </Breadcrumbs>
+                    <div className="flex grow flex-col gap-3 overflow-y-scroll p-4 pb-10">
+                      {task && (
+                        <div className="flex items-start gap-3">
+                          <Checkbox
+                            classNames={{ wrapper: cn('mr-0 mt-1.5') }}
+                            id={task.id}
+                            isSelected={task.completed}
+                            onValueChange={(isSelected: boolean) => {
+                              updateTaskMutation.mutate({
+                                data: { completed: isSelected },
+                                taskId: task.id,
+                              });
+                            }}
+                            radius="full"
+                          />
+                          {isFormOpen
+                            ? (
+                              <TaskForm
+                                inModal
+                                mode="update"
+                                parentTaskId={undefined}
+                                setIsFormOpen={setIsFormOpen}
+                                task={task}
+                              />
+                              )
+                            : (
+                              <div
+                                className="flex min-w-0 flex-col gap-2 text-small"
+                                onClick={() => setIsFormOpen(true)}
+                              >
+                                <div className="task-modal-name flex items-center">
+                                  <CustomMarkdown>{task.name}</CustomMarkdown>
+                                </div>
+                                {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
+                              </div>
+                              )}
+                          {updateTaskMutation.isPending && (
+                            <CircularProgress
+                              aria-label="Loading"
+                              classNames={{
+                                base: 'ml-auto',
+                                svg: cn('h-5 w-5'),
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
                       {task.parentTaskId === null && <CreateTaskButton parentTaskId={task.id} />}
                       {task.subTasks.length > 0 && (
                         <div className="flex items-center gap-2">
@@ -299,7 +298,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                             {subCount}
                           </span>
                         </div>
-                      ) }
+                      )}
                       <DndContext
                         collisionDetection={closestCorners}
                         onDragCancel={handleDragCancel}
@@ -336,7 +335,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                         </DragOverlay>
                       </DndContext>
                     </div>
-                    <div className="flex w-60 flex-col gap-2 bg-default-100/75 p-4">
+                    <div className="flex min-w-60 flex-col gap-2 bg-default-100/75 p-4">
                       <div>
                         <p className="text-xs text-default-500">Project</p>
                         <div className="flex items-center gap-1">

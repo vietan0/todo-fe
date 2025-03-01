@@ -1,5 +1,5 @@
+import { Button } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button } from '@nextui-org/react';
 import { Navigate } from 'react-router-dom';
 
 import useProjects from '../queries/useProjects';

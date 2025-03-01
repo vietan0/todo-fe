@@ -16,6 +16,7 @@ export function subTaskFactory(parentTaskId: string): Task {
   return {
     id: faker.string.uuid(),
     name: `${faker.word.adjective()} ${faker.word.noun()}`,
+    body: faker.lorem.sentence(10),
     completed: faker.datatype.boolean(),
     lexorank: `${faker.string.numeric()}|${faker.string.fromCharacters('ihz', 6)}:`,
     createdAt: faker.date.past().toISOString(),
@@ -32,6 +33,7 @@ export function baseTaskFactory(subTasks = 0): Task {
   return {
     id: taskId,
     name: `${faker.word.adjective()} ${faker.word.noun()}`,
+    body: faker.lorem.sentence(10),
     completed: faker.datatype.boolean(),
     lexorank: `${faker.string.numeric()}|${faker.string.fromCharacters('ihz', 6)}:`,
     createdAt: faker.date.past().toISOString(),

@@ -1,5 +1,5 @@
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@nextui-org/react';
 
 import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
 import cn from '../utils/cn';

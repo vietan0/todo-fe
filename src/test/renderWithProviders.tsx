@@ -1,4 +1,4 @@
-import { NextUIProvider } from '@nextui-org/react';
+import { HeroUIProvider } from '@heroui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 import { HelmetProvider } from 'react-helmet-async';
@@ -21,9 +21,9 @@ export async function renderWithProviders() {
     return (
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
-          <NextUIProvider>
+          <HeroUIProvider>
             <RouterProvider router={testRouter} />
-          </NextUIProvider>
+          </HeroUIProvider>
         </QueryClientProvider>
       </HelmetProvider>
     );

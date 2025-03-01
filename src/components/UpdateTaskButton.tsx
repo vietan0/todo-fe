@@ -1,5 +1,5 @@
+import { Button, Tooltip } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Tooltip } from '@nextui-org/react';
 
 import cn from '../utils/cn';
 
