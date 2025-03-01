@@ -55,7 +55,7 @@ const ProjectBtn = forwardRef<HTMLAnchorElement, Props>(({
         {...props}
         className={cn(
           'w-full justify-start pl-2 pr-0 hover:bg-default-100 focus:bg-default-100 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-          'group relative z-0 box-border inline-flex h-10 min-w-20 select-none appearance-none items-center gap-2 overflow-hidden whitespace-nowrap rounded-small text-small font-normal subpixel-antialiased outline-none tap-highlight-transparent transition-transform-colors-opacity [&>svg]:max-w-[theme(spacing.8)]',
+          'group relative z-0 box-border inline-flex h-10 min-w-20 select-none appearance-none items-center gap-2 overflow-hidden whitespace-nowrap rounded-lg text-sm font-normal subpixel-antialiased outline-none tap-highlight-transparent transition-transform-colors-opacity [&>svg]:max-w-[theme(spacing.8)]',
           isProjectSelected && 'bg-default/40',
           isOverlay && 'z-50 cursor-grabbing border border-primary',
         )}

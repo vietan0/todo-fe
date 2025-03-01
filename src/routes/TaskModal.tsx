@@ -121,7 +121,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
     <Modal
       classNames={{
         base: cn('h-[560px] overflow-hidden'),
-        header: cn('flex justify-between gap-1 border-b-1 border-default-100 px-3 py-2 text-medium'),
+        header: cn('flex justify-between gap-1 border-b-1 border-default-100 px-3 py-2 text-base'),
         body: cn('p-0'),
         footer: cn('px-5 py-3'),
       }}
@@ -256,7 +256,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                               )
                             : (
                               <div
-                                className="flex min-w-0 flex-col gap-2 text-small"
+                                className="flex min-w-0 flex-col gap-2 text-sm"
                                 onClick={() => setIsFormOpen(true)}
                               >
                                 <div className="task-modal-name flex items-center">

@@ -7,7 +7,7 @@ export default function UserAvatar() {
     <Avatar
       classNames={{
         // eslint-disable-next-line tailwindcss/enforces-shorthand
-        base: cn('h-7 w-7 bg-transparent text-tiny'),
+        base: cn('h-7 w-7 bg-transparent text-xs'),
       }}
     />
   );

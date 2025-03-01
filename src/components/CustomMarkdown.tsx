@@ -11,11 +11,11 @@ export default function CustomMarkdown({ children, isTruncated = false }: { chil
   return (
     <Markdown
       components={{
-        h1: ({ node, ...props }) => <h1 {...props} className="text-large font-semibold" />,
-        h2: ({ node, ...props }) => <h2 {...props} className="text-medium font-semibold" />,
+        h1: ({ node, ...props }) => <h1 {...props} className="text-lg font-semibold" />,
+        h2: ({ node, ...props }) => <h2 {...props} className="text-base font-semibold" />,
         h3: ({ node, ...props }) => <h3 {...props} className="font-medium" />,
         code: ({ children }) => (
-          <Code className={cn('text-tiny', isTruncated || 'whitespace-pre-wrap')}>
+          <Code className={cn('text-xs', isTruncated || 'whitespace-pre-wrap')}>
             {children}
           </Code>
         ),
