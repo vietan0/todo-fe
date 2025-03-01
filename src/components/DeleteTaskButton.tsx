@@ -1,5 +1,6 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import removeMarkdown from 'markdown-to-text';
 
 import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
 import cn from '../utils/cn';
@@ -60,7 +61,7 @@ export default function DeleteTaskButton({
             <>
               <ModalHeader className="flex flex-col gap-1">
                 Are you sure you want to delete task "
-                {task.name}
+                {removeMarkdown(task.name)}
                 "? This can't be reversed.
               </ModalHeader>
               <ModalBody>
