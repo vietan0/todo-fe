@@ -120,7 +120,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
   return (
     <Modal
       classNames={{
-        base: cn('h-[560px] overflow-hidden'),
+        base: cn('h-[620px] overflow-hidden'),
         header: cn('flex justify-between gap-1 border-b-1 border-default-100 px-3 py-2 text-base'),
         body: cn('p-0'),
         footer: cn('px-5 py-3'),
@@ -229,54 +229,57 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                     </title>
                   </Helmet>
                   <div className="flex size-full">
-                    <div className="flex grow flex-col gap-3 overflow-y-scroll p-4 pb-10">
-                      {task && (
-                        <div className="flex items-start gap-3">
-                          <Checkbox
-                            classNames={{ wrapper: cn('mr-0 mt-1.5') }}
-                            id={task.id}
-                            isSelected={task.completed}
-                            onValueChange={(isSelected: boolean) => {
-                              updateTaskMutation.mutate({
-                                data: { completed: isSelected },
-                                taskId: task.id,
-                              });
-                            }}
-                            radius="full"
-                          />
-                          {isFormOpen
-                            ? (
-                              <TaskForm
-                                inModal
-                                mode="update"
-                                parentTaskId={undefined}
-                                setIsFormOpen={setIsFormOpen}
-                                task={task}
-                              />
-                              )
-                            : (
-                              <div
-                                className="flex min-w-0 flex-col gap-2 text-sm"
-                                onClick={() => setIsFormOpen(true)}
-                              >
-                                <div className="task-modal-name flex items-center">
-                                  <CustomMarkdown>{task.name}</CustomMarkdown>
-                                </div>
-                                {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
-                              </div>
-                              )}
-                          {updateTaskMutation.isPending && (
-                            <CircularProgress
-                              aria-label="Loading"
-                              classNames={{
-                                base: 'ml-auto',
-                                svg: cn('h-5 w-5'),
+                    <div className="flex grow flex-col gap-2 overflow-y-scroll p-4 pb-10">
+                      <div className="flex flex-col gap-2">
+                        {task && (
+                          <div className="flex items-start gap-3">
+                            <Checkbox
+                              classNames={{ wrapper: cn('mr-0 mt-1.5') }}
+                              id={task.id}
+                              isSelected={task.completed}
+                              onValueChange={(isSelected: boolean) => {
+                                updateTaskMutation.mutate({
+                                  data: { completed: isSelected },
+                                  taskId: task.id,
+                                });
                               }}
+                              radius="full"
                             />
-                          )}
-                        </div>
-                      )}
-                      {task.parentTaskId === null && <CreateTaskButton parentTaskId={task.id} />}
+                            {isFormOpen
+                              ? (
+                                <TaskForm
+                                  finalIndent={0}
+                                  inModal
+                                  mode="update"
+                                  parentTaskId={undefined}
+                                  setIsFormOpen={setIsFormOpen}
+                                  task={task}
+                                />
+                                )
+                              : (
+                                <div
+                                  className="flex min-w-0 flex-col gap-2 text-sm"
+                                  onClick={() => setIsFormOpen(true)}
+                                >
+                                  <div className="task-modal-name flex items-center">
+                                    <CustomMarkdown>{task.name}</CustomMarkdown>
+                                  </div>
+                                  {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
+                                </div>
+                                )}
+                            {updateTaskMutation.isPending && (
+                              <CircularProgress
+                                aria-label="Loading"
+                                classNames={{
+                                  base: 'ml-auto',
+                                  svg: cn('h-5 w-5'),
+                                }}
+                              />
+                            )}
+                          </div>
+                        )}
+                        {task.parentTaskId === null && <CreateTaskButton parentTaskId={task.id} />}
+                      </div>
                       {task.subTasks.length > 0 && (
                         <div className="flex items-center gap-2">
                           <CircularProgress

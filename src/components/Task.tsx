@@ -78,6 +78,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
   if (isFormOpen) {
     return (
       <TaskForm
+        finalIndent={finalIndent}
         mode="update"
         parentTaskId={undefined}
         setIsFormOpen={setIsFormOpen}
@@ -94,7 +95,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
       {...props}
       className={cn(
         task.completed ? 'opacity-disabled' : 'hover:bg-default-100 hover:opacity-hover focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-        'h-auto min-h-[55px] items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
+        'h-auto min-h-[55px] shrink-0 items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
         'group relative z-0 box-border inline-flex min-w-20 select-none appearance-none gap-2 whitespace-nowrap rounded-lg font-normal text-foreground no-underline subpixel-antialiased tap-highlight-transparent active:opacity-disabled [&>svg]:max-w-[theme(spacing.8)]',
         isDragging && 'before:absolute before:-left-2.5 before:-top-3 before:ml-0.5 before:size-3 before:rounded-full before:border-3 before:border-primary',
         isDragging && 'after:absolute after:-top-2 after:left-0 after:ml-0.5 after:h-0.5 after:w-full after:bg-primary',

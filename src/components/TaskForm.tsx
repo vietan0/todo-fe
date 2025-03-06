@@ -15,6 +15,7 @@ import type { CreateTask, Task, TaskScalar } from '../types/dataSchemas';
 import type { SubmitHandler } from 'react-hook-form';
 
 interface CommonProps {
+  finalIndent: 0 | 40;
   inModal?: boolean;
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -33,7 +34,7 @@ type UpdateProps = CommonProps & {
 
 type Props = CreateProps | UpdateProps;
 
-export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, parentTaskId }: Props) {
+export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, mode, task, parentTaskId }: Props) {
   const {
     handleSubmit,
     control,
@@ -83,11 +84,13 @@ export default function TaskForm({ inModal = false, setIsFormOpen, mode, task, p
   return (
     <Card
       classNames={{
-        base: cn('grow outline outline-1 outline-default-500'),
-        body: cn('gap-2'),
-        footer: cn('flex-col items-end gap-2'),
+        base: cn('shrink-0 grow overflow-scroll outline outline-1 outline-default-400'),
+        body: cn('gap-2 overflow-scroll p-2'),
+        footer: cn('sticky bottom-0 flex-col items-end gap-2 overflow-hidden bg-content1 p-2'),
       }}
+      id="TaskForm"
       shadow="none"
+      style={{ marginLeft: parentTaskId ? 0 : finalIndent }}
     >
       <form
         className="rounded-lg font-mono outline outline-1 outline-default"

@@ -10,6 +10,7 @@ export default function CreateTaskButton({ parentTaskId }: { parentTaskId?: stri
   if (isFormOpen) {
     return (
       <TaskForm
+        finalIndent={0}
         mode="create"
         parentTaskId={parentTaskId}
         setIsFormOpen={setIsFormOpen}
@@ -24,7 +25,8 @@ export default function CreateTaskButton({ parentTaskId }: { parentTaskId?: stri
         color="primary"
         onPress={() => setIsFormOpen(true)}
         radius="sm"
-        startContent={<Icon className="shrink-0 text-lg" icon="material-symbols:add" />}
+        size={parentTaskId ? 'sm' : 'md'}
+        startContent={<Icon className="shrink-0 text-base" icon="material-symbols:add" />}
         variant="ghost"
       >
         { parentTaskId ? 'Create Subtask' : 'Create Task' }
