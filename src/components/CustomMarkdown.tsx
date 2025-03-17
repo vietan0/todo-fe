@@ -23,9 +23,11 @@ export default function CustomMarkdown({ children, isTruncated = false }: { chil
           ? 'pre'
           : ({ children }) => {
               const typedChildren = children as ReactElement<any, string | JSXElementConstructor<any>>;
-              const code = typedChildren.props.children;
+              const { className, children: code } = typedChildren.props;
+              const langRegex = /(?<=language-)[\w-]+/g;
+              const [lang] = className.match(langRegex);
 
-              return <ShikiHighlighter code={code} />;
+              return <ShikiHighlighter code={code} lang={lang} />;
             },
         ul: ({ node, ...props }) => <ul {...props} className="list-inside list-disc" />,
         ol: ({ node, ...props }) => <ol {...props} className="list-inside list-decimal" />,

@@ -258,7 +258,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                                 )
                               : (
                                 <div
-                                  className="flex min-w-0 flex-col gap-2 text-sm"
+                                  className="flex min-w-0 grow flex-col gap-2 text-sm"
                                   onClick={() => setIsFormOpen(true)}
                                 >
                                   <div className="task-modal-name flex items-center">

@@ -1,16 +1,18 @@
 import parse from 'html-react-parser';
-import { createHighlighter } from 'shiki';
-
-const highlighter = await createHighlighter({
-  themes: ['dark-plus'],
-  langs: ['javascript'],
-});
+import { useEffect, useState } from 'react';
+import { codeToHtml } from 'shiki';
 
 export default function ShikiHighlighter({ code, lang }: { code: string; lang?: string }) {
-  const html = highlighter.codeToHtml(code, {
-    lang: lang || 'text',
-    theme: 'dark-plus',
-  });
+  const [html, setHtml] = useState('<p class="text-sm">Rendering codeblock...</p>');
+
+  useEffect(() => {
+    codeToHtml (code, {
+      lang: lang || 'text',
+      theme: 'dark-plus',
+    }).then((val) => {
+      setHtml(val);
+    });
+  }, [code, lang]);
 
   const reactElem = parse(html);
 
