@@ -198,7 +198,7 @@ export default function Project() {
             <Icon className="text-xl" icon="material-symbols:more-horiz" />
           </Button>
         </div>
-        <div className="flex flex-col gap-4 px-8 py-2">
+        <div className="flex flex-col gap-4 px-4 py-2 xs:px-8">
           <h1 className="text-2xl font-bold">{projectState.name}</h1>
           <CreateTaskButton />
           <div className="flex flex-col gap-2">

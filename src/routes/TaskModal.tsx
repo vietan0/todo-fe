@@ -8,6 +8,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import removeMarkdown from 'markdown-to-text';
 import { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useMediaQuery } from 'react-responsive';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import CreateTaskButton from '../components/CreateTaskButton';
@@ -43,6 +44,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 15 } }));
   const updateTaskMutation = useUpdateTaskMutation();
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const isXs = useMediaQuery({ query: '(min-width: 400px)' });
 
   const [completedSubCount, subCount] = useMemo(() => {
     const subCount = taskState?.subTasks.length || 0;
@@ -137,7 +139,13 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
             <ModalHeader>
               <div className="flex grow items-center gap-2" id="left">
                 {task && (
-                  <Breadcrumbs size="sm" variant="solid">
+                  <Breadcrumbs
+                    itemClasses={{
+                      item: 'max-w-[60px] xs:max-w-none overflow-hidden text-ellipsis',
+                    }}
+                    size="sm"
+                    variant={isXs ? 'solid' : 'light'}
+                  >
                     <BreadcrumbItem
                       onPress={() => nav(`/project/${projectId}`)}
                       startContent={<Icon className="shrink-0" icon="material-symbols:category" />}
@@ -149,7 +157,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                         key={task.parentTaskId}
                         onPress={() => nav(`task/${task.parentTaskId}`)}
                       >
-                        {projectState.tasks.find(t => t.id === task.parentTaskId)!.name}
+                        {removeMarkdown(projectState.tasks.find(t => t.id === task.parentTaskId)!.name)}
                       </BreadcrumbItem>
                     )}
                     <BreadcrumbItem
@@ -164,7 +172,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                 {isLoading && 'Loading...'}
                 {error && 'Error'}
               </div>
-              <div className="flex gap-1" id="right">
+              <div className="flex items-center gap-1" id="right">
                 <Tooltip
                   closeDelay={0}
                   content="Previous task"
@@ -228,11 +236,11 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                       – Todo App
                     </title>
                   </Helmet>
-                  <div className="flex size-full">
-                    <div className="flex grow flex-col gap-2 overflow-y-scroll p-4 pb-10">
+                  <div className="flex size-full flex-col sm:flex-row">
+                    <div className="flex grow flex-col gap-2 overflow-y-scroll p-2 pb-5 xs:p-4 xs:pb-10">
                       <div className="flex flex-col gap-2">
                         {task && (
-                          <div className="flex items-start gap-3">
+                          <div className="flex items-start gap-1.5 xs:gap-3">
                             <Checkbox
                               classNames={{ wrapper: cn('mr-0 mt-1.5') }}
                               id={task.id}
@@ -244,6 +252,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                                 });
                               }}
                               radius="full"
+                              size={isXs ? 'md' : 'sm'}
                             />
                             {isFormOpen
                               ? (
@@ -346,8 +355,10 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                           <p className="text-sm font-semibold">{projectState.name}</p>
                         </div>
                       </div>
-                      <UpdateTaskButton setIsFormOpen={setIsFormOpen} />
-                      <DeleteTaskButton task={task} />
+                      <div className="flex flex-col gap-2 xs:flex-row sm:flex-col">
+                        <UpdateTaskButton setIsFormOpen={setIsFormOpen} />
+                        <DeleteTaskButton task={task} />
+                      </div>
                       <div className="mt-auto text-end">
                         <p
                           className="text-xs text-default-400"

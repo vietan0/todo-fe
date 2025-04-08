@@ -105,7 +105,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
                 {...field}
                 autoFocus
                 classNames={{
-                  input: 'text-lg font-semibold',
+                  input: 'text-base xs:text-lg font-semibold',
                 }}
                 errorMessage={formState.errors.name?.message}
                 isInvalid={Boolean(formState.errors.name)}

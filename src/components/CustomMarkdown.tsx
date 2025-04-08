@@ -11,9 +11,24 @@ export default function CustomMarkdown({ children, isTruncated = false }: { chil
   return (
     <Markdown
       components={{
-        h1: ({ node, ...props }) => <h1 {...props} className="text-lg font-semibold" />,
-        h2: ({ node, ...props }) => <h2 {...props} className="text-base font-semibold" />,
-        h3: ({ node, ...props }) => <h3 {...props} className="font-medium" />,
+        h1: ({ node, ...props }) => (
+          <h1
+            {...props}
+            className={cn('font-semibold', isTruncated || 'text-base xs:text-lg')}
+          />
+        ),
+        h2: ({ node, ...props }) => (
+          <h2
+            {...props}
+            className={cn('font-semibold', isTruncated || 'text-sm xs:text-base')}
+          />
+        ),
+        h3: ({ node, ...props }) => (
+          <h3
+            {...props}
+            className={cn('font-normal', isTruncated || 'text-base xs:font-medium')}
+          />
+        ),
         code: ({ children }) => (
           <Code className={cn('text-xs', isTruncated || 'whitespace-pre-wrap')}>
             {children}
