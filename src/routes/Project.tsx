@@ -145,7 +145,7 @@ export default function Project() {
           </title>
         </Helmet>
         <div className={cn(
-          'sticky top-0 z-50 flex items-center justify-between overflow-hidden bg-default-50 p-2',
+          'sticky top-0 z-10 flex items-center justify-between overflow-hidden bg-default-50 p-2',
           scrolled && 'shadow-[0_1px_0_0] shadow-default-100',
         )}
         >

@@ -4,6 +4,7 @@ import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection,
 import { Icon } from '@iconify/react';
 import { Resizable } from 're-resizable';
 import { useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 import useSignOutMutation from '../mutations/useSignOutMutation';
 import useUpdateProjectMutation, { optimisticUpdate } from '../mutations/useUpdateProjectMutation';
@@ -31,6 +32,8 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 15 } }));
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const updateProjectMutation = useUpdateProjectMutation();
+  const isXs = useMediaQuery({ query: '(min-width: 400px)' });
+  const isMd = useMediaQuery({ query: '(min-width: 768px)' });
 
   function handleDragStart(event: DragStartEvent): void {
     setActiveId(event.active.id);
@@ -67,12 +70,12 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
   return (
     <Resizable
       as="nav"
-      className="flex duration-75"
+      className="z-20 flex bg-default-50 duration-75"
       defaultSize={{ width: 240 }}
       enable={{
         // only allow dragging from the right
         top: false,
-        right: !isSidebarHidden,
+        right: !isSidebarHidden && isXs,
         bottom: false,
         left: false,
         topRight: false,
@@ -83,6 +86,7 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
       handleClasses={{ right: 'bg-default-100 hover:bg-default-300 focus:bg-default-300' }}
       handleStyles={{
         right: {
+          position: 'relative',
           width: 4,
           right: 0,
         },
@@ -90,11 +94,13 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
       maxWidth={400}
       minWidth={200}
       onResizeStop={(e, direction, ref, d) => setWidth(width + d.width)}
-      size={{ width, height: '100vh' }}
+      size={{ width: isXs ? width : '90vw', height: '100vh' }}
       style={{
         marginLeft: isSidebarHidden ? -width : 0,
         visibility: isSidebarHidden ? 'hidden' : 'visible',
         opacity: isSidebarHidden ? 0 : 1,
+        position: isMd ? 'static' : 'fixed',
+        left: isMd ? 'auto' : 0,
       }}
     >
       <div className="flex h-screen w-full flex-col overflow-y-scroll p-2" id="NavContent">

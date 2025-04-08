@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useMediaQuery } from 'react-responsive';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import LoadingScreen from '../components/LoadingScreen';
@@ -14,8 +15,13 @@ export interface OutletContext {
 
 export default function Home() {
   const { data: user, isLoading } = useUser();
-  const [isSidebarHidden, setIsSidebarHidden] = useState(false);
+  const isMd = useMediaQuery({ query: '(min-width: 768px)' });
+  const [isSidebarHidden, setIsSidebarHidden] = useState(!isMd);
   const mainRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsSidebarHidden(!isMd);
+  }, [isMd]);
 
   if (isLoading)
     return <LoadingScreen withLogo />;
@@ -24,7 +30,7 @@ export default function Home() {
     return <Navigate to="/signin" />;
 
   return (
-    <div className="flex min-h-screen" data-testid="Home" id="Home">
+    <div className="relative flex min-h-screen" data-testid="Home" id="Home">
       <Helmet>
         <title>
           Home – Todo App
@@ -35,6 +41,8 @@ export default function Home() {
         className="h-screen grow overflow-y-scroll" // overflow-y-scroll must be apply to this div specifically
         ref={mainRef}
       >
+        {!isMd && !isSidebarHidden && <div className="fixed inset-0 z-[15] bg-black/50" id="SidebarOverlay" onClick={() => setIsSidebarHidden(true)} />}
+
         <div
           className="m-auto max-w-5xl"
           id="OutletContainer"
