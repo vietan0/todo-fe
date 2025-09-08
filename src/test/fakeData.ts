@@ -1,6 +1,6 @@
-import { faker } from '@faker-js/faker';
-
 import type { Project, ProjectScalar, Task, User } from '../types/dataSchemas';
+
+import { faker } from '@faker-js/faker';
 
 export function userFactory(user?: Partial<User>): User {
   return {

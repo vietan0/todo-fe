@@ -1,14 +1,14 @@
+import { Helmet } from '@dr.pogodin/react-helmet';
 import { useEffect, useRef, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useMediaQuery } from 'react-responsive';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router';
 
 import LoadingScreen from '../components/LoadingScreen';
 import Sidebar from '../components/Sidebar';
 import useUser from '../queries/useUser';
 
 export interface OutletContext {
-  mainRef: React.RefObject<HTMLDivElement>;
+  mainRef: React.RefObject<HTMLDivElement | null>;
   isSidebarHidden: boolean;
   setIsSidebarHidden: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -41,7 +41,13 @@ export default function Home() {
         className="h-screen grow overflow-y-scroll" // overflow-y-scroll must be apply to this div specifically
         ref={mainRef}
       >
-        {!isMd && !isSidebarHidden && <div className="fixed inset-0 z-[15] bg-black/50" id="SidebarOverlay" onClick={() => setIsSidebarHidden(true)} />}
+        {!isMd && !isSidebarHidden && (
+          <div
+            className="fixed inset-0 z-[15] bg-black/50"
+            id="SidebarOverlay"
+            onClick={() => setIsSidebarHidden(true)}
+          />
+        )}
 
         <div
           className="m-auto max-w-5xl"

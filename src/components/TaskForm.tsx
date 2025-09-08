@@ -1,18 +1,18 @@
+import type { SubmitHandler } from 'react-hook-form';
+import type { CreateTask, Task, TaskScalar } from '../types/dataSchemas';
 import { Button, Card, CardBody, CardFooter, Input, Textarea } from '@heroui/react';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
 
+import { Controller, useForm } from 'react-hook-form';
+import { useParams } from 'react-router';
 import useCreateTaskMutation from '../mutations/useCreateTaskMutation';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import { createTaskZ, updateTaskZ } from '../types/dataSchemas';
+
 import cn from '../utils/cn';
 import MutationError from './MutationError';
-
-import type { CreateTask, Task, TaskScalar } from '../types/dataSchemas';
-import type { SubmitHandler } from 'react-hook-form';
 
 interface CommonProps {
   finalIndent: 0 | 40;
@@ -84,7 +84,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
   return (
     <Card
       classNames={{
-        base: cn('shrink-0 grow overflow-scroll outline outline-1 outline-default-400'),
+        base: cn('shrink-0 grow overflow-scroll outline-1 outline-default-400 outline-solid'),
         body: cn('gap-2 overflow-scroll p-2'),
         footer: cn('sticky bottom-0 flex-col items-end gap-2 overflow-hidden bg-content1 p-2'),
       }}
@@ -93,7 +93,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
       style={{ marginLeft: parentTaskId ? 0 : finalIndent }}
     >
       <form
-        className="rounded-lg font-mono outline outline-1 outline-default"
+        className="rounded-lg font-mono outline-1 outline-default outline-solid"
         onSubmit={handleSubmit(onSubmit)}
       >
         <CardBody>
@@ -159,19 +159,19 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
             </Button>
           </div>
           {createTaskMutation.error
-          && (
-            <MutationError
-              error={createTaskMutation.error}
-              mutationName="createTask"
-            />
-          )}
+            && (
+              <MutationError
+                error={createTaskMutation.error}
+                mutationName="createTask"
+              />
+            )}
           {updateTaskMutation.error
-          && (
-            <MutationError
-              error={updateTaskMutation.error}
-              mutationName="updateTask"
-            />
-          )}
+            && (
+              <MutationError
+                error={updateTaskMutation.error}
+                mutationName="updateTask"
+              />
+            )}
         </CardFooter>
         {import.meta.env.PROD || <DevTool control={control} />}
       </form>

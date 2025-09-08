@@ -1,11 +1,11 @@
+import type { JSXElementConstructor, ReactElement } from 'react';
 import { Code } from '@heroui/react';
 import Markdown from 'react-markdown';
+
 import remarkGfm from 'remark-gfm';
-
 import cn from '../utils/cn';
-import ShikiHighlighter from './ShikiHighlighter';
 
-import type { JSXElementConstructor, ReactElement } from 'react';
+import ShikiHighlighter from './ShikiHighlighter';
 
 export default function CustomMarkdown({ children, isTruncated = false }: { children: string | null | undefined; isTruncated?: boolean }) {
   return (
@@ -44,24 +44,40 @@ export default function CustomMarkdown({ children, isTruncated = false }: { chil
 
               return <ShikiHighlighter code={code} lang={lang} />;
             },
-        ul: ({ node, ...props }) => <ul {...props} className="list-inside list-disc" />,
-        ol: ({ node, ...props }) => <ol {...props} className="list-inside list-decimal" />,
+        ul: ({ node, ...props }) => (
+          <ul
+            {...props}
+            className="list-inside list-disc"
+          />
+        ),
+        ol: ({ node, ...props }) => (
+          <ol
+            {...props}
+            className="list-inside list-decimal"
+          />
+        ),
         a: ({ node, ...props }) => (
           <a
             {...props}
-            className="underline hover:text-primary-500"
+            className={`
+              underline
+              hover:text-primary-500
+            `}
             onClick={e => e.stopPropagation()}
             target="_blank"
           />
         ),
         img: isTruncated
           ? ({ node, alt, ...props }) => (
-            <span
-              {...props}
-              className="underline hover:text-primary-500"
-            >
-              {alt || 'Image'}
-            </span>
+              <span
+                {...props}
+                className={`
+                  underline
+                  hover:text-primary-500
+                `}
+              >
+                {alt || 'Image'}
+              </span>
             )
           : 'img',
       }}

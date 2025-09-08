@@ -1,7 +1,7 @@
-import { resDeleteTaskZ } from '../../types/resSchemas';
-import { server } from '../../utils/serverUrl';
-
 import type { Task } from '../../types/dataSchemas';
+import { resDeleteTaskZ } from '../../types/resSchemas';
+
+import { server } from '../../utils/serverUrl';
 
 export default async function deleteTask(taskId: Task['id']): Promise<Task | null> {
   const res = await fetch(

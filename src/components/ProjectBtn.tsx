@@ -1,21 +1,22 @@
-import { Tooltip } from '@heroui/react';
-import { Icon } from '@iconify/react/dist/iconify.js';
-import { forwardRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
-import cn from '../utils/cn';
-import ProjectActionBtn from './ProjectActionBtn';
-
-import type { ProjectScalar } from '../types/dataSchemas';
 import type { DraggableAttributes } from '@dnd-kit/core';
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import type { HTMLAttributes } from 'react';
+import type { ProjectScalar } from '../types/dataSchemas';
+
+import { Tooltip } from '@heroui/react';
+import { Icon } from '@iconify/react/dist/iconify.js';
+
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import cn from '../utils/cn';
+import ProjectActionBtn from './ProjectActionBtn';
 
 type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
   attributes: DraggableAttributes;
   isDragging: boolean;
   isOverlay: boolean;
   listeners: SyntheticListenerMap | undefined;
+  ref: React.Ref<HTMLAnchorElement>;
   style: {
     transform: string | undefined;
     transition: string | undefined;
@@ -23,7 +24,7 @@ type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
   project: ProjectScalar;
 };
 
-const ProjectBtn = forwardRef<HTMLAnchorElement, Props>(({
+export default function ProjectBtn({
   attributes,
   isDragging,
   isOverlay,
@@ -31,7 +32,7 @@ const ProjectBtn = forwardRef<HTMLAnchorElement, Props>(({
   style,
   project,
   ...props
-}: Props, ref) => {
+}: Props) {
   const nav = useNavigate();
   const params = useParams<'projectId' | 'taskId'>();
   const isProjectSelected = params.projectId === project.id;
@@ -49,13 +50,12 @@ const ProjectBtn = forwardRef<HTMLAnchorElement, Props>(({
       placement="right"
     >
       <a
-        ref={ref}
         {...attributes}
         {...listeners}
         {...props}
         className={cn(
-          'w-full justify-start pl-2 pr-0 hover:bg-default-100 focus:bg-default-100 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-          'group relative z-0 box-border inline-flex h-10 min-w-20 select-none appearance-none items-center gap-2 overflow-hidden whitespace-nowrap rounded-lg text-sm font-normal subpixel-antialiased outline-none tap-highlight-transparent transition-transform-colors-opacity [&>svg]:max-w-[theme(spacing.8)]',
+          'w-full cursor-pointer justify-start pr-0 pl-2 hover:bg-default-100 focus:bg-default-100 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
+          'group relative z-0 box-border inline-flex h-10 min-w-20 appearance-none items-center gap-2 overflow-hidden rounded-lg text-sm font-normal whitespace-nowrap subpixel-antialiased outline-hidden transition-transform-colors-opacity select-none tap-highlight-transparent [&>svg]:max-w-8',
           isProjectSelected && 'bg-default/40',
           isOverlay && 'z-50 cursor-grabbing border border-primary',
         )}
@@ -67,12 +67,9 @@ const ProjectBtn = forwardRef<HTMLAnchorElement, Props>(({
         style={style}
       >
         <Icon className="shrink-0 text-lg" icon="material-symbols:category" />
-        <p className="w-full overflow-hidden text-ellipsis text-left">{project.name}</p>
+        <p className="w-full overflow-hidden text-left text-ellipsis">{project.name}</p>
         <ProjectActionBtn isHover={isHover} project={project} />
       </a>
     </Tooltip>
   );
-},
-);
-
-export default ProjectBtn;
+}

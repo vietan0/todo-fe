@@ -1,9 +1,9 @@
+import type { Task } from '../types/dataSchemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+
+import { useNavigate, useParams } from 'react-router';
 
 import deleteTask from './mutationFns/deleteTask';
-
-import type { Task } from '../types/dataSchemas';
 
 export default function useDeleteTaskMutation(taskId: Task['id']) {
   const nav = useNavigate();

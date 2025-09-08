@@ -1,8 +1,8 @@
+import type { ProjectScalar } from '../../types/dataSchemas';
 import { resGetProjectsZ } from '../../types/resSchemas';
 import { sortByRank } from '../../utils/lexorank';
-import { server } from '../../utils/serverUrl';
 
-import type { ProjectScalar } from '../../types/dataSchemas';
+import { server } from '../../utils/serverUrl';
 
 export default async function getProjects(): Promise<ProjectScalar[]> {
   const res = await fetch(

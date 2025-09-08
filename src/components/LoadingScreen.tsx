@@ -1,5 +1,5 @@
+import { Helmet } from '@dr.pogodin/react-helmet';
 import { CircularProgress } from '@heroui/react';
-import { Helmet } from 'react-helmet-async';
 
 import viteLogo from '../assets/vite.svg';
 

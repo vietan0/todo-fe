@@ -1,7 +1,7 @@
-import { resDeleteProjectZ } from '../../types/resSchemas';
-import { server } from '../../utils/serverUrl';
-
 import type { Project } from '../../types/dataSchemas';
+import { resDeleteProjectZ } from '../../types/resSchemas';
+
+import { server } from '../../utils/serverUrl';
 
 export default async function deleteProject(projectId: Project['id']): Promise<Project | null> {
   const res = await fetch(

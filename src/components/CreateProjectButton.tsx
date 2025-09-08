@@ -1,17 +1,17 @@
+import type { SubmitHandler } from 'react-hook-form';
+import type { CreateProject } from '../types/dataSchemas';
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@heroui/react';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react/dist/iconify.js';
+
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-
 import useCreateProjectMutation from '../mutations/useCreateProjectMutation';
 import { createProjectZ } from '../types/dataSchemas';
+
 import cn from '../utils/cn';
 import MutationError from './MutationError';
-
-import type { CreateProject } from '../types/dataSchemas';
-import type { SubmitHandler } from 'react-hook-form';
 
 export default function CreateProjectButton() {
   const {

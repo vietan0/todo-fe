@@ -1,21 +1,20 @@
-/* eslint-disable tailwindcss/enforces-shorthand */
-import { Checkbox, CircularProgress, Code } from '@heroui/react';
-import { forwardRef, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import type { DraggableAttributes } from '@dnd-kit/core';
+import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
+import type { HTMLAttributes } from 'react';
 
+import type { TaskScalar, Task as TaskT } from '../types/dataSchemas';
+import { Checkbox, CircularProgress, Code } from '@heroui/react';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import { indent } from '../utils/calcRank';
 import cn from '../utils/cn';
 import CustomMarkdown from './CustomMarkdown';
+
 import DeleteTaskButton from './DeleteTaskButton';
 import MutationError from './MutationError';
 import TaskForm from './TaskForm';
 import UpdateTaskButton from './UpdateTaskButton';
-
-import type { TaskScalar, Task as TaskT } from '../types/dataSchemas';
-import type { DraggableAttributes } from '@dnd-kit/core';
-import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
-import type { HTMLAttributes } from 'react';
 
 type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
   deltaX: number;
@@ -25,15 +24,16 @@ type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
   onTaskModalOpen: () => void;
   isDragging: boolean;
   isOverlay: boolean;
-  attributes: DraggableAttributes ;
-  listeners: SyntheticListenerMap | undefined ;
+  attributes: DraggableAttributes;
+  listeners: SyntheticListenerMap | undefined;
+  ref: React.Ref<HTMLAnchorElement>;
   style: {
     transform: string | undefined;
     transition: string | undefined;
   };
 };
 
-const Task = forwardRef<HTMLAnchorElement, Props>(({
+export default function Task({
   deltaX,
   task,
   inModal,
@@ -45,7 +45,7 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
   listeners,
   style,
   ...props
-}, ref) => {
+}: Props) {
   const updateTaskMutation = useUpdateTaskMutation();
   const nav = useNavigate();
   const [isHover, setIsHover] = useState(false);
@@ -89,14 +89,13 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
 
   return (
     <a
-      ref={ref}
       {...attributes}
       {...listeners}
       {...props}
       className={cn(
         task.completed ? 'opacity-disabled' : 'hover:bg-default-100 hover:opacity-hover focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-        'h-auto min-h-[55px] shrink-0 items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
-        'group relative z-0 box-border inline-flex min-w-20 select-none appearance-none gap-2 whitespace-nowrap rounded-lg font-normal text-foreground no-underline subpixel-antialiased tap-highlight-transparent active:opacity-disabled [&>svg]:max-w-[theme(spacing.8)]',
+        'h-auto min-h-[55px] shrink-0 cursor-pointer items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
+        'group relative z-0 box-border inline-flex min-w-20 appearance-none gap-2 rounded-lg font-normal whitespace-nowrap text-foreground no-underline subpixel-antialiased select-none tap-highlight-transparent active:opacity-disabled [&>svg]:max-w-8',
         isDragging && 'before:absolute before:-left-2.5 before:-top-3 before:ml-0.5 before:size-3 before:rounded-full before:border-3 before:border-primary',
         isDragging && 'after:absolute after:-top-2 after:left-0 after:ml-0.5 after:h-0.5 after:w-full after:bg-primary',
         isOverlay && 'z-50 cursor-grabbing border border-primary',
@@ -115,7 +114,6 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
       <Checkbox
         classNames={{
           icon: cn('flex items-center'),
-          base: cn('outline-1 outline-red-400'),
           wrapper: cn('mr-0'),
         }}
         id={task.id}
@@ -164,6 +162,4 @@ const Task = forwardRef<HTMLAnchorElement, Props>(({
       )}
     </a>
   );
-});
-
-export default Task;
+}

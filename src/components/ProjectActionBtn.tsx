@@ -1,17 +1,18 @@
+import type { SubmitHandler } from 'react-hook-form';
+import type { ProjectScalar, UpdateProject } from '../types/dataSchemas';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@heroui/react';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react/dist/iconify.js';
+
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-
 import useDeleteProjectMutation from '../mutations/useDeleteProjectMutation';
 import useUpdateProjectMutation from '../mutations/useUpdateProjectMutation';
-import { type ProjectScalar, type UpdateProject, updateProjectZ } from '../types/dataSchemas';
+import { updateProjectZ } from '../types/dataSchemas';
+
 import cn from '../utils/cn';
 import MutationError from './MutationError';
-
-import type { SubmitHandler } from 'react-hook-form';
 
 export default function ProjectActionBtn({ project, isHover }: { project: ProjectScalar; isHover: boolean }) {
   const {
@@ -80,7 +81,7 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
         <DropdownTrigger>
           <Button
             aria-label="Project Actions"
-            className={cn('data-[focus-visible]:-outline-offset-2', isHover ? 'opacity-100' : 'opacity-0')}
+            className={cn('data-focus-visible:-outline-offset-2', isHover ? 'opacity-100' : 'opacity-0')}
             isIconOnly
             variant="light"
           >

@@ -1,12 +1,15 @@
-import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
+import type { DragEndEvent, DragMoveEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
+import type { Task as TaskT } from '../types/dataSchemas';
+import type { OutletContext } from './Home';
+import { closestCorners, DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { Helmet } from '@dr.pogodin/react-helmet';
 import { Button, Tooltip, useDisclosure } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
+
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { useOutletContext, useParams } from 'react-router-dom';
-
+import { useOutletContext, useParams } from 'react-router';
 import CreateTaskButton from '../components/CreateTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
 import QueryError from '../components/QueryError';
@@ -14,13 +17,10 @@ import SortableTask from '../components/SortableTask';
 import useUpdateTaskMutation, { optimisticUpdate } from '../mutations/useUpdateTaskMutation';
 import useProject from '../queries/useProject';
 import useUser from '../queries/useUser';
+
 import { calcNestedRank } from '../utils/calcRank';
 import cn from '../utils/cn';
 import TaskModal from './TaskModal';
-
-import type { Task as TaskT } from '../types/dataSchemas';
-import type { OutletContext } from './Home';
-import type { DragEndEvent, DragMoveEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 
 const variants = {
   enter: { y: 30, opacity: 0 },
@@ -170,22 +170,22 @@ export default function Project() {
           )}
           <AnimatePresence mode="popLayout">
             {projectState && scrolled
-            && (
-              <motion.p
-                animate="center"
-                className="grow text-center font-bold"
-                exit="exit"
-                initial="enter"
-                transition={{
-                  type: 'spring',
-                  duration: 0.3,
-                  bounce: 0.5,
-                }}
-                variants={variants}
-              >
-                {projectState.name}
-              </motion.p>
-            )}
+              && (
+                <motion.p
+                  animate="center"
+                  className="grow text-center font-bold"
+                  exit="exit"
+                  initial="enter"
+                  transition={{
+                    type: 'spring',
+                    duration: 0.3,
+                    bounce: 0.5,
+                  }}
+                  variants={variants}
+                >
+                  {projectState.name}
+                </motion.p>
+              )}
           </AnimatePresence>
           <Button
             aria-label="More"
@@ -198,7 +198,11 @@ export default function Project() {
             <Icon className="text-xl" icon="material-symbols:more-horiz" />
           </Button>
         </div>
-        <div className="flex flex-col gap-4 px-4 py-2 xs:px-8">
+        <div className={`
+          flex flex-col gap-4 px-4 py-2
+          xs:px-8
+        `}
+        >
           <h1 className="text-2xl font-bold">{projectState.name}</h1>
           <CreateTaskButton />
           <div className="flex flex-col gap-2">

@@ -1,7 +1,7 @@
-import { LexoRank } from 'lexorank';
+import type { DragEndEvent } from '@dnd-kit/core';
 
 import type { ProjectScalar, Task, TaskScalar } from '../types/dataSchemas';
-import type { DragEndEvent } from '@dnd-kit/core';
+import { LexoRank } from 'lexorank';
 
 export const indent = 40;
 

@@ -1,11 +1,13 @@
-import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
+import type { DragEndEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
+import type { ProjectScalar } from '../types/dataSchemas';
+import { closestCorners, DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Tooltip } from '@heroui/react';
 import { Icon } from '@iconify/react';
 import { Resizable } from 're-resizable';
+
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-
 import useSignOutMutation from '../mutations/useSignOutMutation';
 import useUpdateProjectMutation, { optimisticUpdate } from '../mutations/useUpdateProjectMutation';
 import useProjects from '../queries/useProjects';
@@ -14,11 +16,9 @@ import { calcRank } from '../utils/calcRank';
 import CreateProjectButton from './CreateProjectButton';
 import LoadingScreen from './LoadingScreen';
 import QueryError from './QueryError';
+
 import SortableProjectBtn from './SortableProjectBtn';
 import UserAvatar from './UserAvatar';
-
-import type { ProjectScalar } from '../types/dataSchemas';
-import type { DragEndEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 
 export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
   isSidebarHidden: boolean;
@@ -166,30 +166,30 @@ export default function Sidebar({ isSidebarHidden, setIsSidebarHidden }: {
           {isLoading && <LoadingScreen />}
           {error && <QueryError error={error} queryName="useProjects" />}
           {projectsState
-          && (
-            <DndContext
-              collisionDetection={closestCorners}
-              onDragCancel={handleDragCancel}
-              onDragEnd={handleDragEnd}
-              onDragStart={handleDragStart}
-              sensors={sensors}
-            >
-              <SortableContext
-                items={projectsState}
-                strategy={verticalListSortingStrategy}
+            && (
+              <DndContext
+                collisionDetection={closestCorners}
+                onDragCancel={handleDragCancel}
+                onDragEnd={handleDragEnd}
+                onDragStart={handleDragStart}
+                sensors={sensors}
               >
-                {projectsState.map(project => <SortableProjectBtn key={project.id} project={project} />)}
-              </SortableContext>
-              <DragOverlay>
-                {activeId && (
-                  <SortableProjectBtn
-                    isOverlay={true}
-                    project={projectsState.find(t => t.id === activeId) as ProjectScalar}
-                  />
-                )}
-              </DragOverlay>
-            </DndContext>
-          )}
+                <SortableContext
+                  items={projectsState}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {projectsState.map(project => <SortableProjectBtn key={project.id} project={project} />)}
+                </SortableContext>
+                <DragOverlay>
+                  {activeId && (
+                    <SortableProjectBtn
+                      isOverlay={true}
+                      project={projectsState.find(t => t.id === activeId) as ProjectScalar}
+                    />
+                  )}
+                </DragOverlay>
+              </DndContext>
+            )}
         </div>
       </div>
     </Resizable>

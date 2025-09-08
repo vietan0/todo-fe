@@ -1,8 +1,8 @@
+import type { ZodType } from 'zod';
+
 import { z } from 'zod';
 
 import { projectScalarZ, projectZ, taskZ, userZ } from './dataSchemas';
-
-import type { ZodType } from 'zod';
 
 export function resSuccessZ<T>(dataZ: ZodType<T>) {
   return z.object({

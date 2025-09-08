@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-import { sortByRank, sortTasks } from '../utils/lexorank';
-import updateTask from './mutationFns/updateTask';
-
 import type { Project, Task, TaskScalar, UpdateTask } from '../types/dataSchemas';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { sortByRank, sortTasks } from '../utils/lexorank';
+
+import updateTask from './mutationFns/updateTask';
 
 export default function useUpdateTaskMutation() {
   const queryClient = useQueryClient();

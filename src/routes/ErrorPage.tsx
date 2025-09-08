@@ -1,6 +1,6 @@
 import { Button } from '@heroui/react';
 import { motion } from 'framer-motion';
-import { Link, useRouteError } from 'react-router-dom';
+import { Link, useRouteError } from 'react-router';
 
 interface RouteError {
   data: string;
@@ -17,7 +17,11 @@ export default function ErrorPage() {
   return (
     <motion.div
       animate={{ scale: 1, opacity: 1 }}
-      className="flex min-h-screen justify-stretch px-8 py-16 xs:items-center xs:px-14 sm:px-20"
+      className={`
+        flex min-h-screen justify-stretch px-8 py-16
+        xs:items-center xs:px-14
+        sm:px-20
+      `}
       data-testid="ErrorPage"
       initial={{ scale: 0.85, opacity: 0 }}
       transition={{ type: 'spring', duration: 0.5 }}

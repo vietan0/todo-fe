@@ -9,8 +9,7 @@ export default function UpdateTaskButton({
 }: {
   isIconOnly?: boolean;
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
-},
-) {
+}) {
   return (
     <Tooltip
       closeDelay={0}
@@ -19,7 +18,6 @@ export default function UpdateTaskButton({
     >
       <Button
         aria-label="Edit Task"
-        // eslint-disable-next-line tailwindcss/enforces-shorthand
         className={cn(
           'min-w-0 data-[hover=true]:bg-default/60',
           isIconOnly ? 'h-7 w-7' : 'justify-start',

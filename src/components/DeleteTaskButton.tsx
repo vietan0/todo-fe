@@ -1,12 +1,12 @@
+import type { Task, TaskScalar } from '../types/dataSchemas';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import removeMarkdown from 'markdown-to-text';
 
+import removeMarkdown from 'markdown-to-text';
 import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
 import cn from '../utils/cn';
-import MutationError from './MutationError';
 
-import type { Task, TaskScalar } from '../types/dataSchemas';
+import MutationError from './MutationError';
 
 export default function DeleteTaskButton({
   isIconOnly = false,
@@ -14,8 +14,7 @@ export default function DeleteTaskButton({
 }: {
   isIconOnly?: boolean;
   task: Task | TaskScalar;
-},
-) {
+}) {
   const deleteTaskMutation = useDeleteTaskMutation(task.id);
 
   const {
@@ -33,7 +32,6 @@ export default function DeleteTaskButton({
       >
         <Button
           aria-label="Delete Task"
-          // eslint-disable-next-line tailwindcss/enforces-shorthand
           className={cn(
             'min-w-0 data-[hover=true]:bg-default/60',
             isIconOnly ? 'h-7 w-7' : 'justify-start',
@@ -86,12 +84,12 @@ export default function DeleteTaskButton({
                   </Button>
                 </div>
                 {deleteTaskMutation.error
-                && (
-                  <MutationError
-                    error={deleteTaskMutation.error}
-                    mutationName="deleteTask"
-                  />
-                )}
+                  && (
+                    <MutationError
+                      error={deleteTaskMutation.error}
+                      mutationName="deleteTask"
+                    />
+                  )}
               </ModalFooter>
             </>
           )}

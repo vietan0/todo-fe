@@ -1,18 +1,18 @@
+import type { AuthPayload } from '../types/dataSchemas';
+import { Helmet } from '@dr.pogodin/react-helmet';
 import { Button, Card, CardBody, CardFooter, CardHeader, Input } from '@heroui/react';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Helmet } from 'react-helmet-async';
 import { Controller, useForm } from 'react-hook-form';
-import { Navigate } from 'react-router-dom';
 
+import { Navigate } from 'react-router';
 import LoadingScreen from '../components/LoadingScreen';
 import MutationError from '../components/MutationError';
 import useAuthMutation from '../mutations/useAuthMutation';
 import useUser from '../queries/useUser';
 import { authPayloadZ } from '../types/dataSchemas';
-import cn from '../utils/cn';
 
-import type { AuthPayload } from '../types/dataSchemas';
+import cn from '../utils/cn';
 
 export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
   const { data: user, isLoading } = useUser();
@@ -53,7 +53,7 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
         </title>
       </Helmet>
       <Card classNames={{
-        base: cn('m-auto max-w-screen-xs grow p-4'),
+        base: cn('m-auto max-w-(--breakpoint-xs) grow p-4'),
         footer: cn('flex-col items-stretch gap-2'),
       }}
       >
@@ -106,12 +106,12 @@ export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {
               </Button>
             </div>
             {authMutation.error
-            && (
-              <MutationError
-                error={authMutation.error}
-                mutationName="auth"
-              />
-            )}
+              && (
+                <MutationError
+                  error={authMutation.error}
+                  mutationName="auth"
+                />
+              )}
           </CardFooter>
         </form>
         {import.meta.env.PROD || <DevTool control={control} />}

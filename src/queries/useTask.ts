@@ -1,8 +1,8 @@
+import type { Task } from '../types/dataSchemas';
+
 import { useQuery } from '@tanstack/react-query';
 
 import getTask from './queryFns/getTask';
-
-import type { Task } from '../types/dataSchemas';
 
 export default function useTask(taskId: Task['id'] | undefined) {
   return useQuery({

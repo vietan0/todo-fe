@@ -1,10 +1,9 @@
 import antfu from '@antfu/eslint-config';
-import { FlatCompat } from '@eslint/eslintrc';
+import pluginQuery from '@tanstack/eslint-plugin-query';
+import eslintPluginBetterTailwindcss from 'eslint-plugin-better-tailwindcss';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import tailwind from 'eslint-plugin-tailwindcss';
-
-const compat = new FlatCompat();
+import testingLibrary from 'eslint-plugin-testing-library';
 
 export default antfu(
   {
@@ -62,34 +61,8 @@ export default antfu(
           next: ['singleline-const', 'singleline-let', 'singleline-var'],
         },
       ],
-      'import/order': 'off',
       'perfectionist/sort-jsx-props': 'error',
-      'perfectionist/sort-imports': [
-        'error',
-        {
-          groups: [
-            'builtin',
-            ['external', 'internal'],
-            ['parent', 'sibling', 'index'],
-            [
-              'internal-type',
-              'type',
-              'parent-type',
-              'sibling-type',
-              'index-type',
-            ],
-            ['side-effect', 'side-effect-style'],
-          ],
-        },
-      ],
       'test/consistent-test-it': ['error', { fn: 'test' }],
-      'jsonc/sort-keys': [
-        'error',
-        {
-          pathPattern: '^(scripts|(d|(devD))ependencies)$',
-          order: { type: 'asc' },
-        },
-      ],
       'react-hooks/rules-of-hooks': 'error',
       'react-refresh/only-export-components': 'warn',
     },
@@ -99,28 +72,35 @@ export default antfu(
       markdown: true,
     },
   },
-  ...tailwind.configs['flat/recommended'],
   {
+    plugins: {
+      'better-tailwindcss': eslintPluginBetterTailwindcss,
+    },
+    rules: {
+      ...eslintPluginBetterTailwindcss.configs['recommended-warn'].rules,
+      'better-tailwindcss/enforce-consistent-class-order': ['warn', {
+        callees: ['cc', 'clb', 'clsx', 'cn', 'cnb', 'ctl', 'cva', 'cx', 'dcnb', 'objstr', 'tv', 'twJoin', 'twMerge'],
+      }],
+      'better-tailwindcss/no-unregistered-classes': ['warn', {
+        ignore: ['task-body-truncated', 'task-modal-name'],
+      }],
+    },
     settings: {
-      tailwindcss: {
-        callees: ['classnames', 'clsx', 'ctl', 'cva', 'tv', 'cn'],
+      'better-tailwindcss': {
+        callees: ['classnames', 'clsx', 'ctl', 'cva', 'tv'],
+        entryPoint: 'src/index.css',
       },
     },
   },
-  ...compat.config({
-    overrides: [
-      {
-        files: ['**/?(*.)+(spec|test).[jt]s?(x)'],
-        extends: ['plugin:testing-library/react'],
-        rules: {
-          'testing-library/no-debugging-utils': 'off',
-          'testing-library/no-manual-cleanup': 'off',
-          'testing-library/no-render-in-lifecycle': 'off',
-        },
-      },
-    ],
-  }),
-  ...compat.config({
-    extends: ['plugin:@tanstack/eslint-plugin-query/recommended'],
-  }),
+  {
+    files: ['**/?(*.)+(spec|test).[jt]s?(x)'],
+    ...testingLibrary.configs['flat/react'],
+    rules: {
+      ...testingLibrary.configs['flat/react'].rules,
+      'testing-library/no-debugging-utils': 'off',
+      'testing-library/no-manual-cleanup': 'off',
+      'testing-library/no-render-in-lifecycle': 'off',
+    },
+  },
+  ...pluginQuery.configs['flat/recommended'],
 );

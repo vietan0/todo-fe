@@ -1,6 +1,6 @@
-import { LexoRank } from 'lexorank';
-
 import type { ProjectScalar, Task, TaskScalar } from '../types/dataSchemas';
+
+import { LexoRank } from 'lexorank';
 
 /**
  * A function that goes into a `sort()` call

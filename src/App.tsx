@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 export default function App({ error }: { error?: React.ReactNode }) {
   useEffect(() => {
@@ -9,7 +9,7 @@ export default function App({ error }: { error?: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="m-auto w-screen max-w-screen-2xl" id="App">
+    <div className="m-auto w-screen max-w-(--breakpoint-2xl)" id="App">
       {error ?? <Outlet />}
     </div>
   );

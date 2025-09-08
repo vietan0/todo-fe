@@ -13,9 +13,9 @@ export default function MutationError({
     <p className="text-sm text-danger" data-testid="MutationError">
       There's been an error with mutation
       {' '}
-      <Code className="whitespace-normal text-xs" color="danger">{mutationName}</Code>
+      <Code className="text-xs whitespace-normal" color="danger">{mutationName}</Code>
       :
-      <Code className="whitespace-normal text-xs" color="danger">{JSON.stringify(error.message, null, 2)}</Code>
+      <Code className="text-xs whitespace-normal" color="danger">{JSON.stringify(error.message, null, 2)}</Code>
     </p>
   );
 }

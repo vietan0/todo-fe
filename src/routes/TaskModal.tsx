@@ -1,16 +1,17 @@
-/* eslint-disable tailwindcss/enforces-shorthand */
-import { DndContext, DragOverlay, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
+import type { DragEndEvent, DragMoveEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
+import type { Project, Task } from '../types/dataSchemas';
+import { closestCorners, DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { Helmet } from '@dr.pogodin/react-helmet';
 import { BreadcrumbItem, Breadcrumbs, Button, Checkbox, CircularProgress, Modal, ModalBody, ModalContent, ModalHeader, Tooltip } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import removeMarkdown from 'markdown-to-text';
 import { useEffect, useMemo, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { useMediaQuery } from 'react-responsive';
-import { useNavigate, useParams } from 'react-router-dom';
 
+import { useMediaQuery } from 'react-responsive';
+import { useNavigate, useParams } from 'react-router';
 import CreateTaskButton from '../components/CreateTaskButton';
 import CustomMarkdown from '../components/CustomMarkdown';
 import DeleteTaskButton from '../components/DeleteTaskButton';
@@ -21,11 +22,9 @@ import TaskForm from '../components/TaskForm';
 import UpdateTaskButton from '../components/UpdateTaskButton';
 import useUpdateTaskMutation, { optimisticUpdateSubTask } from '../mutations/useUpdateTaskMutation';
 import useTask from '../queries/useTask';
+
 import { calcRank } from '../utils/calcRank';
 import cn from '../utils/cn';
-
-import type { Project, Task } from '../types/dataSchemas';
-import type { DragEndEvent, DragMoveEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 
 dayjs.extend(relativeTime);
 
@@ -236,13 +235,25 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                       – Todo App
                     </title>
                   </Helmet>
-                  <div className="flex size-full flex-col sm:flex-row">
-                    <div className="flex grow flex-col gap-2 overflow-y-scroll p-2 pb-5 xs:p-4 xs:pb-10">
+                  <div className={`
+                    flex size-full flex-col
+                    sm:flex-row
+                  `}
+                  >
+                    <div className={`
+                      flex grow flex-col gap-2 overflow-y-scroll p-2 pb-5
+                      xs:p-4 xs:pb-10
+                    `}
+                    >
                       <div className="flex flex-col gap-2">
                         {task && (
-                          <div className="flex items-start gap-1.5 xs:gap-3">
+                          <div className={`
+                            flex items-start gap-1.5
+                            xs:gap-3
+                          `}
+                          >
                             <Checkbox
-                              classNames={{ wrapper: cn('mr-0 mt-1.5') }}
+                              classNames={{ wrapper: cn('mt-1.5 mr-0') }}
                               id={task.id}
                               isSelected={task.completed}
                               onValueChange={(isSelected: boolean) => {
@@ -256,25 +267,30 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                             />
                             {isFormOpen
                               ? (
-                                <TaskForm
-                                  finalIndent={0}
-                                  inModal
-                                  mode="update"
-                                  parentTaskId={undefined}
-                                  setIsFormOpen={setIsFormOpen}
-                                  task={task}
-                                />
+                                  <TaskForm
+                                    finalIndent={0}
+                                    inModal
+                                    mode="update"
+                                    parentTaskId={undefined}
+                                    setIsFormOpen={setIsFormOpen}
+                                    task={task}
+                                  />
                                 )
                               : (
-                                <div
-                                  className="flex min-w-0 grow flex-col gap-2 text-sm"
-                                  onClick={() => setIsFormOpen(true)}
-                                >
-                                  <div className="task-modal-name flex items-center">
-                                    <CustomMarkdown>{task.name}</CustomMarkdown>
+                                  <div
+                                    className={`
+                                      flex min-w-0 grow flex-col gap-2 text-sm
+                                    `}
+                                    onClick={() => setIsFormOpen(true)}
+                                  >
+                                    <div className={`
+                                      task-modal-name flex items-center
+                                    `}
+                                    >
+                                      <CustomMarkdown>{task.name}</CustomMarkdown>
+                                    </div>
+                                    {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
                                   </div>
-                                  {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
-                                </div>
                                 )}
                             {updateTaskMutation.isPending && (
                               <CircularProgress
@@ -347,7 +363,10 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                         </DragOverlay>
                       </DndContext>
                     </div>
-                    <div className="flex min-w-60 flex-col gap-2 bg-default-100/75 p-4">
+                    <div className={`
+                      flex min-w-60 flex-col gap-2 bg-default-100/75 p-4
+                    `}
+                    >
                       <div>
                         <p className="text-xs text-default-500">Project</p>
                         <div className="flex items-center gap-1">
@@ -355,7 +374,12 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
                           <p className="text-sm font-semibold">{projectState.name}</p>
                         </div>
                       </div>
-                      <div className="flex flex-col gap-2 xs:flex-row sm:flex-col">
+                      <div className={`
+                        flex flex-col gap-2
+                        xs:flex-row
+                        sm:flex-col
+                      `}
+                      >
                         <UpdateTaskButton setIsFormOpen={setIsFormOpen} />
                         <DeleteTaskButton task={task} />
                       </div>
