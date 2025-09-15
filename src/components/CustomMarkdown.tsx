@@ -39,8 +39,12 @@ export default function CustomMarkdown({ children, isTruncated = false }: { chil
           : ({ children }) => {
               const typedChildren = children as ReactElement<any, string | JSXElementConstructor<any>>;
               const { className, children: code } = typedChildren.props;
-              const langRegex = /(?<=language-)[\w-]+/g;
-              const [lang] = className.match(langRegex);
+              let lang: string | undefined;
+
+              if (className !== undefined) {
+                const langRegex = /(?<=language-)[\w-]+/g;
+                lang = className.match(langRegex)[0];
+              }
 
               return <ShikiHighlighter code={code} lang={lang} />;
             },
