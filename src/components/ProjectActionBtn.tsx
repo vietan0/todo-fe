@@ -39,16 +39,21 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
   };
 
   useEffect(() => {
-    if (renameProjectMutation.isSuccess) {
+    if (renameProjectMutation.isSuccess)
       onRenameProjectClose();
-      resetForm();
-    }
   }, [renameProjectMutation.isSuccess]);
 
   useEffect(() => {
+    /*
+      The modal closes in 2 cases:
+        1. click X/Cancel/Esc
+        2. rename successful -> onRenameProjectClose() is called
+      Only reset form if it's the first case.
+    */
     if (!isRenameProjectOpen) {
-      resetForm();
       renameProjectMutation.reset();
+      if (renameProjectMutation.status === 'idle')
+        resetForm();
     }
   }, [isRenameProjectOpen]);
 
