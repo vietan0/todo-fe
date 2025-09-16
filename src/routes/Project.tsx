@@ -86,6 +86,7 @@ export default function Project() {
     isOpen: isTaskModalOpen,
     onOpen: onTaskModalOpen,
     onOpenChange: onTaskModalOpenChange,
+    onClose: onTaskModalClose,
   } = useDisclosure({ defaultOpen: Boolean(taskId) });
 
   const updateTaskMutation = useUpdateTaskMutation();
@@ -244,6 +245,7 @@ export default function Project() {
           {taskId && (
             <TaskModal
               isOpen={isTaskModalOpen}
+              onClose={onTaskModalClose}
               onOpen={onTaskModalOpen}
               onOpenChange={onTaskModalOpenChange}
               projectState={projectState}

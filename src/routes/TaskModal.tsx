@@ -28,10 +28,11 @@ import cn from '../utils/cn';
 
 dayjs.extend(relativeTime);
 
-export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }: {
+export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, projectState }: {
   isOpen: boolean;
   onOpen: () => void;
   onOpenChange: () => void;
+  onClose: () => void;
   projectState: Project;
 }) {
   const { projectId, taskId } = useParams<'projectId' | 'taskId'>();
@@ -133,282 +134,278 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, projectState }
       size="4xl"
     >
       <ModalContent>
-        {onClose => (
-          <>
-            <ModalHeader>
-              <div className="flex grow items-center gap-2" id="left">
-                {task && (
-                  <Breadcrumbs
-                    itemClasses={{
-                      item: 'max-w-[60px] xs:max-w-none overflow-hidden text-ellipsis',
-                    }}
-                    size="sm"
-                    variant={isXs ? 'solid' : 'light'}
+        <ModalHeader>
+          <div className="flex grow items-center gap-2" id="left">
+            {task && (
+              <Breadcrumbs
+                itemClasses={{
+                  item: 'max-w-[60px] xs:max-w-none overflow-hidden text-ellipsis',
+                }}
+                size="sm"
+                variant={isXs ? 'solid' : 'light'}
+              >
+                <BreadcrumbItem
+                  onPress={() => nav(`/project/${projectId}`)}
+                  startContent={<Icon className="shrink-0" icon="material-symbols:category" />}
+                >
+                  {projectState.name}
+                </BreadcrumbItem>
+                {task.parentTaskId && (
+                  <BreadcrumbItem
+                    key={task.parentTaskId}
+                    onPress={() => nav(`task/${task.parentTaskId}`)}
                   >
-                    <BreadcrumbItem
-                      onPress={() => nav(`/project/${projectId}`)}
-                      startContent={<Icon className="shrink-0" icon="material-symbols:category" />}
-                    >
-                      {projectState.name}
-                    </BreadcrumbItem>
-                    {task.parentTaskId && (
-                      <BreadcrumbItem
-                        key={task.parentTaskId}
-                        onPress={() => nav(`task/${task.parentTaskId}`)}
-                      >
-                        {removeMarkdown(projectState.tasks.find(t => t.id === task.parentTaskId)!.name)}
-                      </BreadcrumbItem>
-                    )}
-                    <BreadcrumbItem
-                      isCurrent
-                      key={taskId}
-                      onPress={() => nav(`task/${taskId}`)}
-                    >
-                      {removeMarkdown(task.name)}
-                    </BreadcrumbItem>
-                  </Breadcrumbs>
+                    {removeMarkdown(projectState.tasks.find(t => t.id === task.parentTaskId)!.name)}
+                  </BreadcrumbItem>
                 )}
-                {isLoading && 'Loading...'}
-                {error && 'Error'}
-              </div>
-              <div className="flex items-center gap-1" id="right">
-                <Tooltip
-                  closeDelay={0}
-                  content="Previous task"
-                  delay={500}
+                <BreadcrumbItem
+                  isCurrent
+                  key={taskId}
+                  onPress={() => nav(`task/${taskId}`)}
                 >
-                  <Button
-                    aria-label="Previous Task"
-                    className="ml-auto"
-                    isIconOnly
-                    onPress={prevId ? () => nav(`task/${prevId}`) : undefined}
-                    radius="full"
-                    size="sm"
-                    variant="light"
-                  >
-                    <Icon className="h-5 w-5 text-xl text-default-700" icon="material-symbols:keyboard-arrow-up" />
-                  </Button>
-                </Tooltip>
-                <Tooltip
-                  closeDelay={0}
-                  content="Next task"
-                  delay={500}
+                  {removeMarkdown(task.name)}
+                </BreadcrumbItem>
+              </Breadcrumbs>
+            )}
+            {isLoading && 'Loading...'}
+            {error && 'Error'}
+          </div>
+          <div className="flex items-center gap-1" id="right">
+            <Tooltip
+              closeDelay={0}
+              content="Previous task"
+              delay={500}
+            >
+              <Button
+                aria-label="Previous Task"
+                className="ml-auto"
+                isIconOnly
+                onPress={prevId ? () => nav(`task/${prevId}`) : undefined}
+                radius="full"
+                size="sm"
+                variant="light"
+              >
+                <Icon className="h-5 w-5 text-xl text-default-700" icon="material-symbols:keyboard-arrow-up" />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              closeDelay={0}
+              content="Next task"
+              delay={500}
+            >
+              <Button
+                aria-label="Next Task"
+                className="ml-auto"
+                isIconOnly
+                onPress={nextId ? () => nav(`task/${nextId}`) : undefined}
+                radius="full"
+                size="sm"
+                variant="light"
+              >
+                <Icon className="h-5 w-5 text-xl text-default-700" icon="material-symbols:keyboard-arrow-down" />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              closeDelay={0}
+              content="Close"
+              delay={500}
+            >
+              <Button
+                aria-label="Close modal"
+                isIconOnly
+                onPress={onClose}
+                radius="full"
+                size="sm"
+                variant="light"
+              >
+                <Icon className="h-4 w-4 text-xl text-default-700" icon="material-symbols:close" />
+              </Button>
+            </Tooltip>
+          </div>
+        </ModalHeader>
+        <ModalBody>
+          {isLoading && <LoadingScreen />}
+          {task && (
+            <>
+              <Helmet>
+                <title>
+                  {removeMarkdown(task.name)}
+                  {' '}
+                  – Todo App
+                </title>
+              </Helmet>
+              <div className={`
+                flex size-full flex-col
+                sm:flex-row
+              `}
+              >
+                <div className={`
+                  flex grow flex-col gap-2 overflow-y-scroll p-2 pb-5
+                  xs:p-4 xs:pb-10
+                `}
                 >
-                  <Button
-                    aria-label="Next Task"
-                    className="ml-auto"
-                    isIconOnly
-                    onPress={nextId ? () => nav(`task/${nextId}`) : undefined}
-                    radius="full"
-                    size="sm"
-                    variant="light"
-                  >
-                    <Icon className="h-5 w-5 text-xl text-default-700" icon="material-symbols:keyboard-arrow-down" />
-                  </Button>
-                </Tooltip>
-                <Tooltip
-                  closeDelay={0}
-                  content="Close"
-                  delay={500}
-                >
-                  <Button
-                    aria-label="Close modal"
-                    isIconOnly
-                    onPress={onClose}
-                    radius="full"
-                    size="sm"
-                    variant="light"
-                  >
-                    <Icon className="h-4 w-4 text-xl text-default-700" icon="material-symbols:close" />
-                  </Button>
-                </Tooltip>
-              </div>
-            </ModalHeader>
-            <ModalBody>
-              {isLoading && <LoadingScreen />}
-              {task && (
-                <>
-                  <Helmet>
-                    <title>
-                      {removeMarkdown(task.name)}
-                      {' '}
-                      – Todo App
-                    </title>
-                  </Helmet>
-                  <div className={`
-                    flex size-full flex-col
-                    sm:flex-row
-                  `}
-                  >
-                    <div className={`
-                      flex grow flex-col gap-2 overflow-y-scroll p-2 pb-5
-                      xs:p-4 xs:pb-10
-                    `}
-                    >
-                      <div className="flex flex-col gap-2">
-                        {task && (
-                          <div className={`
-                            flex items-start gap-1.5
-                            xs:gap-3
-                          `}
-                          >
-                            <Checkbox
-                              classNames={{ wrapper: cn('mt-1.5 mr-0') }}
-                              id={task.id}
-                              isSelected={task.completed}
-                              onValueChange={(isSelected: boolean) => {
-                                updateTaskMutation.mutate({
-                                  data: { completed: isSelected },
-                                  taskId: task.id,
-                                });
-                              }}
-                              radius="full"
-                              size={isXs ? 'md' : 'sm'}
-                            />
-                            {isFormOpen
-                              ? (
-                                  <TaskForm
-                                    finalIndent={0}
-                                    inModal
-                                    mode="update"
-                                    parentTaskId={undefined}
-                                    setIsFormOpen={setIsFormOpen}
-                                    task={task}
-                                  />
-                                )
-                              : (
-                                  <div
-                                    className={`
-                                      flex min-w-0 grow flex-col gap-2 text-sm
-                                    `}
-                                    onClick={() => setIsFormOpen(true)}
-                                  >
-                                    <div className={`
-                                      task-modal-name flex items-center
-                                    `}
-                                    >
-                                      <CustomMarkdown>{task.name}</CustomMarkdown>
-                                    </div>
-                                    {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
-                                  </div>
-                                )}
-                            {updateTaskMutation.isPending && (
-                              <CircularProgress
-                                aria-label="Loading"
-                                classNames={{
-                                  base: 'ml-auto',
-                                  svg: cn('h-5 w-5'),
-                                }}
-                              />
-                            )}
-                          </div>
-                        )}
-                        {task.parentTaskId === null && <CreateTaskButton parentTaskId={task.id} />}
-                      </div>
-                      {task.subTasks.length > 0 && (
-                        <div className="flex items-center gap-2">
-                          <CircularProgress
-                            aria-label="Completion Count"
-                            classNames={{
-                              svg: 'w-6 h-6',
-                              indicator: 'stroke-primary',
-                              track: 'stroke-white/10',
-                            }}
-                            size="sm"
-                            strokeWidth={4}
-                            value={(completedSubCount / subCount) * 100}
-                          />
-                          <span className="text-xs">
-                            {completedSubCount}
-                            {' '}
-                            /
-                            {' '}
-                            {subCount}
-                          </span>
-                        </div>
-                      )}
-                      <DndContext
-                        collisionDetection={closestCorners}
-                        onDragCancel={handleDragCancel}
-                        onDragEnd={handleDragEnd}
-                        onDragMove={handleDragMove}
-                        onDragStart={handleDragStart}
-                        sensors={sensors}
-                      >
-                        <SortableContext
-                          items={task.subTasks}
-                          strategy={verticalListSortingStrategy}
-                        >
-                          {task.subTasks.map(subTask => (
-                            <SortableTask
-                              deltaX={subTask.id === activeId ? deltaX : 0} // ghost indentation, only apply to task being dragged
-                              inModal
-                              isTaskModalOpen={isOpen}
-                              key={subTask.id}
-                              onTaskModalOpen={onOpen}
-                              task={subTask}
-                            />
-                          ))}
-                        </SortableContext>
-                        <DragOverlay>
-                          {activeId && (
-                            <SortableTask
-                              deltaX={0}
-                              isOverlay={true}
-                              isTaskModalOpen={isOpen}
-                              onTaskModalOpen={onOpen}
-                              task={task.subTasks.find(t => t.id === activeId) as Task}
-                            />
-                          )}
-                        </DragOverlay>
-                      </DndContext>
-                    </div>
-                    <div className={`
-                      flex min-w-60 flex-col gap-2 bg-default-100/75 p-4
-                    `}
-                    >
-                      <div>
-                        <p className="text-xs text-default-500">Project</p>
-                        <div className="flex items-center gap-1">
-                          <Icon className="shrink-0" icon="material-symbols:category" />
-                          <p className="text-sm font-semibold">{projectState.name}</p>
-                        </div>
-                      </div>
+                  <div className="flex flex-col gap-2">
+                    {task && (
                       <div className={`
-                        flex flex-col gap-2
-                        xs:flex-row
-                        sm:flex-col
+                        flex items-start gap-1.5
+                        xs:gap-3
                       `}
                       >
-                        <UpdateTaskButton setIsFormOpen={setIsFormOpen} />
-                        <DeleteTaskButton task={task} />
+                        <Checkbox
+                          classNames={{ wrapper: cn('mt-1.5 mr-0') }}
+                          id={task.id}
+                          isSelected={task.completed}
+                          onValueChange={(isSelected: boolean) => {
+                            updateTaskMutation.mutate({
+                              data: { completed: isSelected },
+                              taskId: task.id,
+                            });
+                          }}
+                          radius="full"
+                          size={isXs ? 'md' : 'sm'}
+                        />
+                        {isFormOpen
+                          ? (
+                              <TaskForm
+                                finalIndent={0}
+                                inModal
+                                mode="update"
+                                parentTaskId={undefined}
+                                setIsFormOpen={setIsFormOpen}
+                                task={task}
+                              />
+                            )
+                          : (
+                              <div
+                                className={`
+                                  flex min-w-0 grow flex-col gap-2 text-sm
+                                `}
+                                onClick={() => setIsFormOpen(true)}
+                              >
+                                <div className={`
+                                  task-modal-name flex items-center
+                                `}
+                                >
+                                  <CustomMarkdown>{task.name}</CustomMarkdown>
+                                </div>
+                                {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
+                              </div>
+                            )}
+                        {updateTaskMutation.isPending && (
+                          <CircularProgress
+                            aria-label="Loading"
+                            classNames={{
+                              base: 'ml-auto',
+                              svg: cn('h-5 w-5'),
+                            }}
+                          />
+                        )}
                       </div>
-                      <div className="mt-auto text-end">
-                        <p
-                          className="text-xs text-default-400"
-                          title={dayjs(task.updatedAt).format('D MMM · h:mm A')}
-                        >
-                          Updated
-                          {' '}
-                          {dayjs(task.updatedAt).fromNow()}
-                        </p>
-                        <p
-                          className="text-xs text-default-400"
-                          title={dayjs(task.createdAt).format('D MMM · h:mm A')}
-                        >
-                          Created
-                          {' '}
-                          {dayjs(task.createdAt).fromNow()}
-                        </p>
-                      </div>
+                    )}
+                    {task.parentTaskId === null && <CreateTaskButton parentTaskId={task.id} />}
+                  </div>
+                  {task.subTasks.length > 0 && (
+                    <div className="flex items-center gap-2">
+                      <CircularProgress
+                        aria-label="Completion Count"
+                        classNames={{
+                          svg: 'w-6 h-6',
+                          indicator: 'stroke-primary',
+                          track: 'stroke-white/10',
+                        }}
+                        size="sm"
+                        strokeWidth={4}
+                        value={(completedSubCount / subCount) * 100}
+                      />
+                      <span className="text-xs">
+                        {completedSubCount}
+                        {' '}
+                        /
+                        {' '}
+                        {subCount}
+                      </span>
+                    </div>
+                  )}
+                  <DndContext
+                    collisionDetection={closestCorners}
+                    onDragCancel={handleDragCancel}
+                    onDragEnd={handleDragEnd}
+                    onDragMove={handleDragMove}
+                    onDragStart={handleDragStart}
+                    sensors={sensors}
+                  >
+                    <SortableContext
+                      items={task.subTasks}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      {task.subTasks.map(subTask => (
+                        <SortableTask
+                          deltaX={subTask.id === activeId ? deltaX : 0} // ghost indentation, only apply to task being dragged
+                          inModal
+                          isTaskModalOpen={isOpen}
+                          key={subTask.id}
+                          onTaskModalOpen={onOpen}
+                          task={subTask}
+                        />
+                      ))}
+                    </SortableContext>
+                    <DragOverlay>
+                      {activeId && (
+                        <SortableTask
+                          deltaX={0}
+                          isOverlay={true}
+                          isTaskModalOpen={isOpen}
+                          onTaskModalOpen={onOpen}
+                          task={task.subTasks.find(t => t.id === activeId) as Task}
+                        />
+                      )}
+                    </DragOverlay>
+                  </DndContext>
+                </div>
+                <div className={`
+                  flex min-w-60 flex-col gap-2 bg-default-100/75 p-4
+                `}
+                >
+                  <div>
+                    <p className="text-xs text-default-500">Project</p>
+                    <div className="flex items-center gap-1">
+                      <Icon className="shrink-0" icon="material-symbols:category" />
+                      <p className="text-sm font-semibold">{projectState.name}</p>
                     </div>
                   </div>
-                </>
-              )}
-              {error && <QueryError error={error} queryName="useTask" />}
-            </ModalBody>
-          </>
-        )}
+                  <div className={`
+                    flex flex-col gap-2
+                    xs:flex-row
+                    sm:flex-col
+                  `}
+                  >
+                    <UpdateTaskButton setIsFormOpen={setIsFormOpen} />
+                    <DeleteTaskButton task={task} />
+                  </div>
+                  <div className="mt-auto text-end">
+                    <p
+                      className="text-xs text-default-400"
+                      title={dayjs(task.updatedAt).format('D MMM · h:mm A')}
+                    >
+                      Updated
+                      {' '}
+                      {dayjs(task.updatedAt).fromNow()}
+                    </p>
+                    <p
+                      className="text-xs text-default-400"
+                      title={dayjs(task.createdAt).format('D MMM · h:mm A')}
+                    >
+                      Created
+                      {' '}
+                      {dayjs(task.createdAt).fromNow()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+          {error && <QueryError error={error} queryName="useTask" />}
+        </ModalBody>
       </ModalContent>
     </Modal>
   );
