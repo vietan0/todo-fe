@@ -52,7 +52,9 @@ export default function DeleteTaskButton({
           footer: cn('mt-6 flex-col'),
         }}
         isOpen={isDeleteTaskOpen}
+        onClick={e => e.stopPropagation()}
         onOpenChange={onDeleteTaskOpenChange}
+        onPointerDown={e => e.stopPropagation()}
       >
         <ModalContent>
           {onClose => (

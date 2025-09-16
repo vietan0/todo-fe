@@ -119,7 +119,9 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
           footer: cn('mt-6 flex-col'),
         }}
         isOpen={isRenameProjectOpen}
+        onClick={e => e.stopPropagation()}
         onOpenChange={onRenameProjectOpenChange}
+        onPointerDown={e => e.stopPropagation()}
       >
         <ModalContent>
           {onClose => (
@@ -182,7 +184,9 @@ export default function ProjectActionBtn({ project, isHover }: { project: Projec
           footer: cn('mt-6 flex-col'),
         }}
         isOpen={isDeleteProjectOpen}
+        onClick={e => e.stopPropagation()}
         onOpenChange={onDeleteProjectOpenChange}
+        onPointerDown={e => e.stopPropagation()}
       >
         <ModalContent>
           {onClose => (

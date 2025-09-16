@@ -130,7 +130,9 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
       }}
       hideCloseButton
       isOpen={isOpen}
+      onClick={e => e.stopPropagation()}
       onOpenChange={onOpenChange}
+      onPointerDown={e => e.stopPropagation()}
       scrollBehavior="inside"
       size="4xl"
     >

@@ -73,7 +73,9 @@ export default function CreateProjectButton() {
           footer: cn('mt-6 flex-col'),
         }}
         isOpen={isOpen}
+        onClick={e => e.stopPropagation()}
         onOpenChange={onOpenChange}
+        onPointerDown={e => e.stopPropagation()}
       >
         <ModalContent>
           {onClose => (
