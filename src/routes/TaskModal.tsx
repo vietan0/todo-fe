@@ -76,11 +76,12 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
 
     if (event.over) {
       const lexorank = calcRank(event, task!.subTasks);
-      // update state so dndkit can update immediately
-      const updatedTaskState = optimisticUpdateSubTask(taskState!, { lexorank }, event.active.id as string);
-      setTaskState(updatedTaskState);
 
+      // update state so dndkit can update immediately
       if (lexorank) {
+        const updatedTaskState = optimisticUpdateSubTask(taskState!, { lexorank }, event.active.id as string);
+        setTaskState(updatedTaskState);
+
         updateTaskMutation.mutate({
           data: { lexorank },
           taskId: event.active.id as string,
