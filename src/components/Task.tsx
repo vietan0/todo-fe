@@ -16,7 +16,7 @@ import MutationError from './MutationError';
 import TaskForm from './TaskForm';
 import UpdateTaskButton from './UpdateTaskButton';
 
-type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
+type Props = Omit<HTMLAttributes<HTMLDivElement>, 'id'> & {
   deltaX: number;
   task: TaskT | TaskScalar;
   inModal: boolean;
@@ -26,7 +26,7 @@ type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
   isOverlay: boolean;
   attributes: DraggableAttributes;
   listeners: SyntheticListenerMap | undefined;
-  ref: React.Ref<HTMLAnchorElement>;
+  ref: React.Ref<HTMLDivElement>;
   style: {
     transform: string | undefined;
     transition: string | undefined;
@@ -88,7 +88,7 @@ export default function Task({
   }
 
   return (
-    <a
+    <div
       {...attributes}
       {...listeners}
       {...props}
@@ -160,6 +160,6 @@ export default function Task({
           <DeleteTaskButton isIconOnly task={task} />
         </div>
       )}
-    </a>
+    </div>
   );
 }

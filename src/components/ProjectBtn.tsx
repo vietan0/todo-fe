@@ -11,12 +11,12 @@ import { useNavigate, useParams } from 'react-router';
 import cn from '../utils/cn';
 import ProjectActionBtn from './ProjectActionBtn';
 
-type Props = Omit<HTMLAttributes<HTMLAnchorElement>, 'id'> & {
+type Props = Omit<HTMLAttributes<HTMLDivElement>, 'id'> & {
   attributes: DraggableAttributes;
   isDragging: boolean;
   isOverlay: boolean;
   listeners: SyntheticListenerMap | undefined;
-  ref: React.Ref<HTMLAnchorElement>;
+  ref: React.Ref<HTMLDivElement>;
   style: {
     transform: string | undefined;
     transition: string | undefined;
@@ -49,7 +49,7 @@ export default function ProjectBtn({
       delay={1000}
       placement="right"
     >
-      <a
+      <div
         {...attributes}
         {...listeners}
         {...props}
@@ -69,7 +69,7 @@ export default function ProjectBtn({
         <Icon className="shrink-0 text-lg" icon="material-symbols:category" />
         <p className="w-full overflow-hidden text-left text-ellipsis">{project.name}</p>
         <ProjectActionBtn isHover={isHover} project={project} />
-      </a>
+      </div>
     </Tooltip>
   );
 }
