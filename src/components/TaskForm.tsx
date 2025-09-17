@@ -40,6 +40,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
     control,
     formState,
     reset: resetForm,
+    watch,
   } = useForm<{ name: string; body: string }>({
     defaultValues: {
       name: mode === 'create' ? '' : task.name,
@@ -48,6 +49,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
     resolver: zodResolver(mode === 'create' ? createTaskZ : updateTaskZ),
   });
 
+  const name = watch('name');
   const params = useParams<'projectId' | 'taskId'>();
   const createTaskMutation = useCreateTaskMutation(params.projectId || '');
   const updateTaskMutation = useUpdateTaskMutation();
@@ -90,7 +92,12 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
   return (
     <Card
       classNames={{
-        base: cn('shrink-0 grow overflow-scroll outline-1 outline-default-400 outline-solid'),
+        base: cn(
+          'shrink-0 overflow-scroll outline-1 outline-default-400 outline-solid',
+          inModal && 'grow',
+          // grow only if is **main task in modal**, since flex container is horizontal
+          // that means subtask's form in modal won't count, because inModal is still false in that case
+        ),
         body: cn('gap-2 overflow-scroll p-2'),
         footer: cn('sticky bottom-0 flex-col items-end gap-2 overflow-hidden bg-content1 p-2'),
       }}
@@ -99,7 +106,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
       style={{ marginLeft: parentTaskId ? 0 : finalIndent }}
     >
       <form
-        className="rounded-lg font-mono outline-1 outline-default outline-solid"
+        className="font-mono"
         onSubmit={handleSubmit(onSubmit)}
       >
         <CardBody>
@@ -115,7 +122,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
                 }}
                 errorMessage={formState.errors.name?.message}
                 isInvalid={Boolean(formState.errors.name)}
-                label={inModal ? undefined : 'Task name'}
+                label="Task name"
                 onKeyDown={closeFormOnEsc}
                 radius="sm"
                 type="text"
@@ -133,7 +140,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
                 }}
                 errorMessage={formState.errors.body?.message}
                 isInvalid={Boolean(formState.errors.body)}
-                label={inModal ? undefined : 'Body'}
+                label="Body"
                 maxRows={15}
                 onKeyDown={closeFormOnEsc}
                 radius="sm"
@@ -157,7 +164,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
             </Button>
             <Button
               color="primary"
-              isDisabled={!formState.isDirty}
+              isDisabled={!formState.isDirty || name === ''}
               isLoading={mode === 'create' ? createTaskMutation.isPending : updateTaskMutation.isPending}
               radius="sm"
               size="sm"
