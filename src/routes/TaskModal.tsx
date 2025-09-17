@@ -182,6 +182,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
               <Button
                 aria-label="Previous Task"
                 className="ml-auto"
+                isDisabled={!prevId}
                 isIconOnly
                 onPress={prevId ? () => nav(`task/${prevId}`) : undefined}
                 radius="full"
@@ -199,6 +200,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
               <Button
                 aria-label="Next Task"
                 className="ml-auto"
+                isDisabled={!nextId}
                 isIconOnly
                 onPress={nextId ? () => nav(`task/${nextId}`) : undefined}
                 radius="full"
