@@ -4,7 +4,7 @@ import type { HTMLAttributes } from 'react';
 
 import type { TaskScalar, Task as TaskT } from '../types/dataSchemas';
 import { Checkbox, CircularProgress, Code } from '@heroui/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import { indent } from '../utils/calcRank';
@@ -75,6 +75,11 @@ export default function Task({
       onTaskModalOpen();
   }
 
+  useEffect(() => {
+    if (!isFormOpen)
+      setIsHover(false);
+  }, [isFormOpen]);
+
   if (isFormOpen) {
     return (
       <TaskForm
@@ -93,8 +98,8 @@ export default function Task({
       {...listeners}
       {...props}
       className={cn(
-        task.completed ? 'opacity-disabled' : 'hover:bg-default-100 hover:opacity-hover focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-        'h-auto min-h-[55px] shrink-0 cursor-pointer items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
+        task.completed ? 'opacity-disabled' : 'hover:opacity-hover focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
+        'h-auto shrink-0 cursor-pointer items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
         'group relative z-0 box-border inline-flex min-w-20 appearance-none gap-2 rounded-lg font-normal whitespace-nowrap text-foreground no-underline subpixel-antialiased select-none tap-highlight-transparent active:opacity-disabled [&>svg]:max-w-8',
         isDragging && 'before:absolute before:-left-2.5 before:-top-3 before:ml-0.5 before:size-3 before:rounded-full before:border-3 before:border-primary',
         isDragging && 'after:absolute after:-top-2 after:left-0 after:ml-0.5 after:h-0.5 after:w-full after:bg-primary',
@@ -146,7 +151,8 @@ export default function Task({
         )}
       </div>
       <div className={cn(
-        'ml-auto flex gap-1.5',
+        'absolute top-1/2 right-1.5 ml-auto flex -translate-y-1/2 gap-1.5 pl-3',
+        'bg-gradient-to-l from-default-50 from-80% to-transparent',
         isHover ? 'opacity-100' : 'opacity-0',
       )}
       >
