@@ -145,21 +145,23 @@ export default function Task({
           />
         )}
       </div>
-      {isHover && (
-        <div className="ml-auto flex gap-1.5">
-          {updateTaskMutation.isPending && (
-            <CircularProgress
-              aria-label="Loading"
-              classNames={{
-                base: cn('ml-auto self-center'),
-                svg: cn('h-5 w-5'),
-              }}
-            />
-          )}
-          <UpdateTaskButton isIconOnly setIsFormOpen={setIsFormOpen} />
-          <DeleteTaskButton isIconOnly task={task} />
-        </div>
+      <div className={cn(
+        'ml-auto flex gap-1.5',
+        isHover ? 'opacity-100' : 'opacity-0',
       )}
+      >
+        {updateTaskMutation.isPending && (
+          <CircularProgress
+            aria-label="Loading"
+            classNames={{
+              base: cn('ml-auto self-center'),
+              svg: cn('h-5 w-5'),
+            }}
+          />
+        )}
+        <UpdateTaskButton isIconOnly setIsFormOpen={setIsFormOpen} />
+        <DeleteTaskButton isIconOnly task={task} />
+      </div>
     </div>
   );
 }
