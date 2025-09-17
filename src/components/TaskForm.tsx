@@ -71,6 +71,12 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
     }
   };
 
+  const closeFormOnEsc = (e: React.KeyboardEvent<HTMLInputElement> | KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setIsFormOpen(false);
+    }
+  };
+
   useEffect(() => {
     if (createTaskMutation.isSuccess)
       setIsFormOpen(false);
@@ -110,6 +116,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
                 errorMessage={formState.errors.name?.message}
                 isInvalid={Boolean(formState.errors.name)}
                 label={inModal ? undefined : 'Task name'}
+                onKeyDown={closeFormOnEsc}
                 radius="sm"
                 type="text"
               />
@@ -128,6 +135,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
                 isInvalid={Boolean(formState.errors.body)}
                 label={inModal ? undefined : 'Body'}
                 maxRows={15}
+                onKeyDown={closeFormOnEsc}
                 radius="sm"
               />
             )}
