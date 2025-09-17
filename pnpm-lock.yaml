@@ -21,7 +21,7 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3(react@19.1.1)
       '@heroui/react':
-        specifier: 2.8.3
+        specifier: ^2.8.3
         version: 2.8.3(@types/react@19.1.12)(framer-motion@12.23.12(@emotion/is-prop-valid@1.4.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(tailwindcss@4.1.13)
       '@hookform/resolvers':
         specifier: ^3.10.0
