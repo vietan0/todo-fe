@@ -137,7 +137,12 @@ export default function Task({
         <div>
           <CustomMarkdown isTruncated>{task.name}</CustomMarkdown>
           {task.body && (
-            <div className="task-body-truncated flex items-center gap-1">
+            <div className={`
+              task-body-truncated items-center gap-1 text-xs font-normal
+              text-foreground-500
+              *:inline-block
+            `}
+            >
               <CustomMarkdown isTruncated>{task.body}</CustomMarkdown>
             </div>
           )}
