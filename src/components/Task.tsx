@@ -159,7 +159,7 @@ export default function Task({
               <CustomMarkdown isTruncated>{task.body}</CustomMarkdown>
             </div>
           )}
-          {isOverlay && childrenCount > 0 && <Code className="text-xs font-bold" color="primary">{childrenCount}</Code> }
+          {isOverlay && childrenCount > 0 && <Code className="text-xs font-bold" color="primary">{childrenCount}</Code>}
         </div>
         {updateTaskMutation.error && (
           <MutationError

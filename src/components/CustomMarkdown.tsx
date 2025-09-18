@@ -40,9 +40,12 @@ export default function CustomMarkdown({ children, isTruncated = false }: { chil
           />
         ),
         code: ({ children }) => (
-          <Code className={cn('text-xs', isTruncated || 'whitespace-pre-wrap')}>
+          <Code className={cn('rounded-md text-xs', isTruncated || 'whitespace-pre-wrap')}>
             {children}
           </Code>
+        ),
+        li: ({ node, ...props }) => (
+          <li {...props} className={cn(isTruncated && 'inline')} />
         ),
         pre: isTruncated
           ? 'pre'
@@ -59,16 +62,10 @@ export default function CustomMarkdown({ children, isTruncated = false }: { chil
               return <ShikiHighlighter code={code} lang={lang} />;
             },
         ul: ({ node, ...props }) => (
-          <ul
-            {...props}
-            className="list-inside list-disc"
-          />
+          <ul {...props} className="list-inside list-disc" />
         ),
         ol: ({ node, ...props }) => (
-          <ol
-            {...props}
-            className="list-inside list-decimal"
-          />
+          <ol {...props} className="list-inside list-decimal" />
         ),
         a: ({ node, ...props }) => (
           <a

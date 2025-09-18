@@ -6,7 +6,7 @@ const codeCache = new Map();
 
 export default function ShikiHighlighter({ code, lang }: { code: string; lang?: string }) {
   const cacheKey = `${code}-${lang}`;
-  const [html, setHtml] = useState(codeCache.has(cacheKey) ? codeCache.get(cacheKey) : '<p class="text-sm">Rendering codeblock...</p>');
+  const [html, setHtml] = useState(codeCache.has(cacheKey) ? codeCache.get(cacheKey) : '<p class="text-sm text-foreground-500">Rendering codeblock...</p>');
   const shikiApprovedLang = typeof lang === 'string' && lang in bundledLanguages ? lang : 'text';
 
   useEffect(() => {

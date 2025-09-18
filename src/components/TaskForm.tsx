@@ -1,6 +1,6 @@
 import type { SubmitHandler } from 'react-hook-form';
 import type { CreateTask, Task, TaskScalar } from '../types/dataSchemas';
-import { Button, Card, CardBody, CardFooter, Input, Textarea } from '@heroui/react';
+import { Button, Card, CardBody, CardFooter, Textarea } from '@heroui/react';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
@@ -100,11 +100,11 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
         footer: cn('sticky bottom-0 flex-col items-end gap-2 overflow-hidden bg-content1 p-2'),
       }}
       id="TaskForm"
+      radius="sm"
       shadow="none"
       style={{ marginLeft: parentTaskId ? 0 : finalIndent }}
     >
       <form
-        className="font-mono"
         onSubmit={handleSubmit(onSubmit)}
       >
         <CardBody>
@@ -112,18 +112,22 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
             control={control}
             name="name"
             render={({ field }) => (
-              <Input
+              <Textarea
                 {...field}
                 autoFocus
                 classNames={{
-                  input: 'text-base xs:text-lg font-semibold',
+                  input: cn('font-medium', inModal && `
+                    text-base
+                    xs:text-lg
+                  `),
                 }}
                 errorMessage={formState.errors.name?.message}
                 isInvalid={Boolean(formState.errors.name)}
-                label="Task name"
+                maxRows={3}
+                minRows={1}
                 onKeyDown={closeFormOnEsc}
+                placeholder="Task name"
                 radius="sm"
-                type="text"
               />
             )}
           />
@@ -138,9 +142,10 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
                 }}
                 errorMessage={formState.errors.body?.message}
                 isInvalid={Boolean(formState.errors.body)}
-                label="Body"
                 maxRows={15}
+                minRows={1}
                 onKeyDown={closeFormOnEsc}
+                placeholder="Body"
                 radius="sm"
               />
             )}

@@ -22,12 +22,11 @@ export default function UpdateTaskButton({
             min-w-0
             data-[hover=true]:bg-default/60
           `,
-          isIconOnly ? 'h-7 w-7' : 'justify-start',
+          isIconOnly ? 'h-7 w-7 rounded-sm' : 'justify-start rounded-md',
         )}
         disableAnimation
         isIconOnly={isIconOnly}
         onPress={() => setIsFormOpen(true)}
-        radius="sm"
         size="sm"
         variant={isIconOnly ? 'light' : 'ghost'}
       >

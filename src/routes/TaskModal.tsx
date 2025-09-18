@@ -136,11 +136,12 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
     >
       <ModalContent>
         <ModalHeader>
-          <div className="flex grow items-center gap-2" id="left">
+          <div className="flex grow items-center gap-2 truncate" id="left">
             {task && (
               <Breadcrumbs
+                classNames={{ list: 'flex-nowrap' }}
                 itemClasses={{
-                  item: 'max-w-[60px] xs:max-w-none overflow-hidden text-ellipsis',
+                  item: 'max-w-[60px] xs:max-w-none',
                 }}
                 size="sm"
                 variant={isXs ? 'solid' : 'light'}
@@ -250,7 +251,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
                   <div className="flex flex-col gap-2">
                     {task && (
                       <div className={`
-                        flex items-start gap-1.5
+                        relative flex items-start gap-1.5
                         xs:gap-3
                       `}
                       >
@@ -293,7 +294,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
                           <CircularProgress
                             aria-label="Loading"
                             classNames={{
-                              base: 'ml-auto',
+                              base: cn('absolute top-1 right-0 bg-content1 p-1'),
                               svg: cn('h-5 w-5'),
                             }}
                           />
