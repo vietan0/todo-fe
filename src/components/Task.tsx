@@ -1,7 +1,6 @@
 import type { DraggableAttributes } from '@dnd-kit/core';
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import type { HTMLAttributes } from 'react';
-
 import type { TaskScalar, Task as TaskT } from '../types/dataSchemas';
 import { Checkbox, CircularProgress, Code } from '@heroui/react';
 import { useEffect, useMemo, useState } from 'react';
@@ -10,7 +9,6 @@ import useUpdateTaskMutation from '../mutations/useUpdateTaskMutation';
 import { indent } from '../utils/calcRank';
 import cn from '../utils/cn';
 import CustomMarkdown from './CustomMarkdown';
-
 import DeleteTaskButton from './DeleteTaskButton';
 import MutationError from './MutationError';
 import TaskForm from './TaskForm';
@@ -98,11 +96,27 @@ export default function Task({
       {...listeners}
       {...props}
       className={cn(
-        task.completed ? 'opacity-disabled' : 'hover:opacity-hover focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-        'h-auto shrink-0 cursor-pointer items-start justify-start border border-default bg-default-50 p-3 text-start text-sm',
-        'group relative z-0 box-border inline-flex min-w-20 appearance-none gap-2 rounded-lg font-normal whitespace-nowrap text-foreground no-underline subpixel-antialiased select-none tap-highlight-transparent active:opacity-disabled [&>svg]:max-w-8',
-        isDragging && 'before:absolute before:-left-2.5 before:-top-3 before:ml-0.5 before:size-3 before:rounded-full before:border-3 before:border-primary',
-        isDragging && 'after:absolute after:-top-2 after:left-0 after:ml-0.5 after:h-0.5 after:w-full after:bg-primary',
+        `
+          group relative z-0 box-border inline-flex min-w-20 appearance-none gap-2 rounded-lg font-normal
+          whitespace-nowrap text-foreground no-underline subpixel-antialiased select-none tap-highlight-transparent
+          active:opacity-disabled
+          [&>svg]:max-w-8
+        `, // copied HeroUI Button's styles
+        `
+          h-auto shrink-0 cursor-pointer items-start justify-start border border-default bg-default-50 p-3 text-start
+          text-sm
+        `,
+        task.completed
+          ? 'opacity-disabled'
+          : `
+            hover:opacity-hover
+            focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
+          `,
+        isDragging && `
+          before:absolute before:-top-3 before:-left-2.5 before:ml-0.5 before:size-3 before:rounded-full before:border-3
+          before:border-primary
+          after:absolute after:-top-2 after:left-0 after:ml-0.5 after:h-0.5 after:w-full after:bg-primary
+        `,
         isOverlay && 'z-50 cursor-grabbing border border-primary',
       )}
       onBlur={isOverlay ? undefined : () => setIsHover(false)}
@@ -138,8 +152,7 @@ export default function Task({
           <CustomMarkdown isTruncated>{task.name}</CustomMarkdown>
           {task.body && (
             <div className={`
-              task-body-truncated items-center gap-1 text-xs font-normal
-              text-foreground-500
+              task-body-truncated items-center gap-1 text-xs font-normal text-foreground-500
               *:inline-block
             `}
             >
@@ -156,8 +169,10 @@ export default function Task({
         )}
       </div>
       <div className={cn(
-        'absolute top-1/2 right-1.5 ml-auto flex -translate-y-1/2 gap-1.5 pl-3',
-        'bg-gradient-to-l from-default-50 from-80% to-transparent',
+        `
+          absolute top-1/2 right-1.5 ml-auto flex -translate-y-1/2 gap-1.5 bg-gradient-to-l from-default-50 from-80%
+          to-transparent pl-3
+        `,
         isHover ? 'opacity-100' : 'opacity-0',
       )}
       >

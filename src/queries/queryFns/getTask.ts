@@ -1,7 +1,6 @@
 import type { Task } from '../../types/dataSchemas';
 import { resGetTaskZ } from '../../types/resSchemas';
 import { sortByRank } from '../../utils/lexorank';
-
 import { server } from '../../utils/serverUrl';
 
 export default async function getTask(taskId: Task['id'] | undefined): Promise<Task> {

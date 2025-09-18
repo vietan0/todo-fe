@@ -6,7 +6,6 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Helmet } from '@dr.pogodin/react-helmet';
 import { Button, Tooltip, useDisclosure } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router';
@@ -17,7 +16,6 @@ import SortableTask from '../components/SortableTask';
 import useUpdateTaskMutation, { optimisticUpdate } from '../mutations/useUpdateTaskMutation';
 import useProject from '../queries/useProject';
 import useUser from '../queries/useUser';
-
 import { calcNestedRank } from '../utils/calcRank';
 import cn from '../utils/cn';
 import TaskModal from './TaskModal';

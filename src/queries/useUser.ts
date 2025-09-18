@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-
 import getUser from './queryFns/getUser';
 
 export default function useUser() {

@@ -1,6 +1,5 @@
 import type { CreateProject, Project } from '../../types/dataSchemas';
 import { resCreateProjectZ } from '../../types/resSchemas';
-
 import { server } from '../../utils/serverUrl';
 
 export default async function createProject(data: CreateProject): Promise<Project | null> {

@@ -1,6 +1,5 @@
 import type { CreateTask, Project, Task } from '../../types/dataSchemas';
 import { resCreateTaskZ } from '../../types/resSchemas';
-
 import { server } from '../../utils/serverUrl';
 
 export default async function createTask(data: CreateTask, projectId: Project['id']): Promise<Task | null> {

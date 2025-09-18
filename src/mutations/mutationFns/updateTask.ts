@@ -1,6 +1,5 @@
 import type { Task, UpdateTask } from '../../types/dataSchemas';
 import { resUpdateTaskZ } from '../../types/resSchemas';
-
 import { server } from '../../utils/serverUrl';
 
 export default async function updateTask(data: UpdateTask, taskId: Task['id']): Promise<Task | null> {

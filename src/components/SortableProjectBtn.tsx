@@ -1,8 +1,6 @@
 import type { ProjectScalar } from '../types/dataSchemas';
 import { useSortable } from '@dnd-kit/sortable';
-
 import { CSS } from '@dnd-kit/utilities';
-
 import ProjectBtn from './ProjectBtn';
 
 export default function SortableProjectBtn({

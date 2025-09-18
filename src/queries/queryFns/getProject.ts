@@ -1,7 +1,6 @@
 import type { Project } from '../../types/dataSchemas';
 import { resGetProjectZ } from '../../types/resSchemas';
 import { sortTasks } from '../../utils/lexorank';
-
 import { server } from '../../utils/serverUrl';
 
 export default async function getProject(projectId: Project['id'] | undefined): Promise<Project> {

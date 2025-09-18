@@ -1,6 +1,5 @@
 import { Button, Tooltip } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-
 import cn from '../utils/cn';
 
 export default function UpdateTaskButton({
@@ -19,7 +18,10 @@ export default function UpdateTaskButton({
       <Button
         aria-label="Edit Task"
         className={cn(
-          'min-w-0 data-[hover=true]:bg-default/60',
+          `
+            min-w-0
+            data-[hover=true]:bg-default/60
+          `,
           isIconOnly ? 'h-7 w-7' : 'justify-start',
         )}
         disableAnimation

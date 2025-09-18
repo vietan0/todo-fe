@@ -1,7 +1,5 @@
 import type { AuthPayload } from '../types/dataSchemas';
-
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import { signIn, signUp } from './mutationFns/auth';
 
 export default function useAuthMutation() {

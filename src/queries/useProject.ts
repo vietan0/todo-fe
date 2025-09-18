@@ -1,7 +1,5 @@
 import type { Project } from '../types/dataSchemas';
-
 import { useQuery } from '@tanstack/react-query';
-
 import getProject from './queryFns/getProject';
 
 export default function useProject(projectId: Project['id'] | undefined) {

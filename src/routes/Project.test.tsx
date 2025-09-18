@@ -1,14 +1,12 @@
 import type { Project } from '../types/dataSchemas';
 import { cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import createProject from '../mutations/mutationFns/createProject';
 import getProject from '../queries/queryFns/getProject';
 import getProjects from '../queries/queryFns/getProjects';
 import getUser from '../queries/queryFns/getUser';
 import { genProjects, projectFactory, userFactory } from '../test/fakeData';
-
 import { renderWithProviders } from '../test/renderWithProviders';
 
 vi.mock('../queries/queryFns/getUser.ts');

@@ -1,6 +1,5 @@
 import { Helmet } from '@dr.pogodin/react-helmet';
 import { CircularProgress } from '@heroui/react';
-
 import viteLogo from '../assets/vite.svg';
 
 export default function LoadingScreen({ withLogo }: { withLogo?: boolean } = { withLogo: true }) {

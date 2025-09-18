@@ -32,11 +32,6 @@ export default antfu(
         },
         {
           blankLine: 'always',
-          prev: 'import',
-          next: ['const', 'let', 'function', 'block-like', 'interface'],
-        },
-        {
-          blankLine: 'always',
           prev: [
             'multiline-expression',
             'multiline-block-like',
@@ -78,16 +73,15 @@ export default antfu(
     },
     rules: {
       ...eslintPluginBetterTailwindcss.configs['recommended-warn'].rules,
-      'better-tailwindcss/enforce-consistent-class-order': ['warn', {
-        callees: ['cc', 'clb', 'clsx', 'cn', 'cnb', 'ctl', 'cva', 'cx', 'dcnb', 'objstr', 'tv', 'twJoin', 'twMerge'],
-      }],
       'better-tailwindcss/no-unregistered-classes': ['warn', {
         ignore: ['task-body-truncated', 'task-modal-name'],
+      }],
+      'better-tailwindcss/enforce-consistent-line-wrapping': ['warn', {
+        printWidth: 120,
       }],
     },
     settings: {
       'better-tailwindcss': {
-        callees: ['classnames', 'clsx', 'ctl', 'cva', 'tv'],
         entryPoint: 'src/index.css',
       },
     },

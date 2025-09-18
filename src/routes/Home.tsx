@@ -2,7 +2,6 @@ import { Helmet } from '@dr.pogodin/react-helmet';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Navigate, Outlet } from 'react-router';
-
 import LoadingScreen from '../components/LoadingScreen';
 import Sidebar from '../components/Sidebar';
 import useUser from '../queries/useUser';

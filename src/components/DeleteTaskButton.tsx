@@ -1,11 +1,9 @@
 import type { Task, TaskScalar } from '../types/dataSchemas';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip, useDisclosure } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-
 import removeMarkdown from 'markdown-to-text';
 import useDeleteTaskMutation from '../mutations/useDeleteTaskMutation';
 import cn from '../utils/cn';
-
 import MutationError from './MutationError';
 
 export default function DeleteTaskButton({
@@ -33,7 +31,10 @@ export default function DeleteTaskButton({
         <Button
           aria-label="Delete Task"
           className={cn(
-            'min-w-0 data-[hover=true]:bg-default/60',
+            `
+              min-w-0
+              data-[hover=true]:bg-default/60
+            `,
             isIconOnly ? 'h-7 w-7' : 'justify-start',
           )}
           disableAnimation

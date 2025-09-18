@@ -1,8 +1,6 @@
 import type { TaskScalar, Task as TaskT } from '../types/dataSchemas';
 import { useSortable } from '@dnd-kit/sortable';
-
 import { CSS } from '@dnd-kit/utilities';
-
 import Task from './Task';
 
 export default function SortableTask({

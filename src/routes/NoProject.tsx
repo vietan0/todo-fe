@@ -1,7 +1,6 @@
 import { Button } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Navigate } from 'react-router';
-
 import useProjects from '../queries/useProjects';
 import useUser from '../queries/useUser';
 

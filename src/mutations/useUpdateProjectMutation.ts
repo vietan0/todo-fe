@@ -1,8 +1,6 @@
 import type { Project, ProjectScalar, UpdateProject } from '../types/dataSchemas';
-
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { sortByRank } from '../utils/lexorank';
-
 import updateProject from './mutationFns/updateProject';
 
 export default function useUpdateProjectMutation() {

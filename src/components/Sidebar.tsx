@@ -5,7 +5,6 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Tooltip } from '@heroui/react';
 import { Icon } from '@iconify/react';
 import { Resizable } from 're-resizable';
-
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import useSignOutMutation from '../mutations/useSignOutMutation';
@@ -16,7 +15,6 @@ import { calcRank } from '../utils/calcRank';
 import CreateProjectButton from './CreateProjectButton';
 import LoadingScreen from './LoadingScreen';
 import QueryError from './QueryError';
-
 import SortableProjectBtn from './SortableProjectBtn';
 import UserAvatar from './UserAvatar';
 

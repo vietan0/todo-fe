@@ -1,6 +1,5 @@
 import { cleanup, screen, waitFor } from '@testing-library/react';
 import { afterEach, expect, test, vi } from 'vitest';
-
 import getProjects from '../queries/queryFns/getProjects';
 import getUser from '../queries/queryFns/getUser';
 import { genProjects, userFactory } from '../test/fakeData';

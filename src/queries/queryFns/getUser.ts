@@ -1,6 +1,5 @@
 import type { User } from '../../types/dataSchemas';
 import { resGetUserZ } from '../../types/resSchemas';
-
 import { server } from '../../utils/serverUrl';
 
 export default async function getUser(): Promise<User | null> {

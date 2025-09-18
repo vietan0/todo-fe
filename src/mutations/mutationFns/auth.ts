@@ -1,6 +1,5 @@
 import type { AuthPayload } from '../../types/dataSchemas';
 import { resSignInZ } from '../../types/resSchemas';
-
 import { server } from '../../utils/serverUrl';
 
 export async function signIn(data: AuthPayload) {

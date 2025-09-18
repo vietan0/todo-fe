@@ -1,8 +1,6 @@
 import type { Project } from '../types/dataSchemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import { useNavigate } from 'react-router';
-
 import deleteProject from './mutationFns/deleteProject';
 
 export default function useDeleteProjectMutation(projectId: Project['id']) {

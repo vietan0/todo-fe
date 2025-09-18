@@ -1,7 +1,6 @@
 import { cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterAll, afterEach, beforeAll, beforeEach, expect, test, vi } from 'vitest';
-
 import { signIn } from '../mutations/mutationFns/auth';
 import getProjects from '../queries/queryFns/getProjects';
 import getUser from '../queries/queryFns/getUser';

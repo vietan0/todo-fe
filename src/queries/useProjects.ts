@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-
 import getProjects from './queryFns/getProjects';
 
 export default function useProjects(userId: string | undefined) {

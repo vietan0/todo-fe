@@ -4,12 +4,10 @@ import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react/dist/iconify.js';
-
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import useCreateProjectMutation from '../mutations/useCreateProjectMutation';
 import { createProjectZ } from '../types/dataSchemas';
-
 import cn from '../utils/cn';
 import MutationError from './MutationError';
 

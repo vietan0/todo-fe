@@ -3,7 +3,6 @@ import { HeroUIProvider } from '@heroui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router';
-
 import routes from '../routes';
 
 export async function renderWithProviders() {

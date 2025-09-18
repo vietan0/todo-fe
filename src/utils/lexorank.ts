@@ -1,5 +1,4 @@
 import type { ProjectScalar, Task, TaskScalar } from '../types/dataSchemas';
-
 import { LexoRank } from 'lexorank';
 
 /**

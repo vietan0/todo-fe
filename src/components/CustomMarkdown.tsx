@@ -1,10 +1,8 @@
 import type { JSXElementConstructor, ReactElement } from 'react';
 import { Code } from '@heroui/react';
 import Markdown from 'react-markdown';
-
 import remarkGfm from 'remark-gfm';
 import cn from '../utils/cn';
-
 import ShikiHighlighter from './ShikiHighlighter';
 
 export default function CustomMarkdown({ children, isTruncated = false }: { children: string | null | undefined; isTruncated?: boolean }) {
@@ -14,19 +12,31 @@ export default function CustomMarkdown({ children, isTruncated = false }: { chil
         h1: ({ node, ...props }) => (
           <h1
             {...props}
-            className={cn('font-semibold', isTruncated || 'text-base xs:text-lg')}
+            className={cn(
+              'font-semibold',
+              isTruncated || `
+                text-base
+                xs:text-lg
+              `,
+            )}
           />
         ),
         h2: ({ node, ...props }) => (
           <h2
             {...props}
-            className={cn('font-semibold', isTruncated || 'text-sm xs:text-base')}
+            className={cn('font-semibold', isTruncated || `
+              text-sm
+              xs:text-base
+            `)}
           />
         ),
         h3: ({ node, ...props }) => (
           <h3
             {...props}
-            className={cn('font-normal', isTruncated || 'text-base xs:font-medium')}
+            className={cn('font-normal', isTruncated || `
+              text-base
+              xs:font-medium
+            `)}
           />
         ),
         code: ({ children }) => (

@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-
 import createProject from './mutationFns/createProject';
 
 export default function useCreateProjectMutation() {

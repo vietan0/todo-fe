@@ -2,10 +2,8 @@ import type { DraggableAttributes } from '@dnd-kit/core';
 import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import type { HTMLAttributes } from 'react';
 import type { ProjectScalar } from '../types/dataSchemas';
-
 import { Tooltip } from '@heroui/react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import cn from '../utils/cn';
@@ -54,8 +52,18 @@ export default function ProjectBtn({
         {...listeners}
         {...props}
         className={cn(
-          'w-full cursor-pointer justify-start pr-0 pl-2 hover:bg-default-100 focus:bg-default-100 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-          'group relative z-0 box-border inline-flex h-10 min-w-20 appearance-none items-center gap-2 overflow-hidden rounded-lg text-sm font-normal whitespace-nowrap subpixel-antialiased outline-hidden transition-transform-colors-opacity select-none tap-highlight-transparent [&>svg]:max-w-8',
+          `
+            group relative z-0 box-border inline-flex h-10 min-w-20 appearance-none items-center gap-2 overflow-hidden
+            rounded-lg text-sm font-normal whitespace-nowrap subpixel-antialiased outline-hidden
+            transition-transform-colors-opacity select-none tap-highlight-transparent
+            [&>svg]:max-w-8
+          `, // copied HeroUI Button's styles
+          `
+            w-full cursor-pointer justify-start pr-0 pl-2
+            hover:bg-default-100
+            focus:bg-default-100
+            focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
+          `,
           isProjectSelected && 'bg-default/40',
           isOverlay && 'z-50 cursor-grabbing border border-primary',
         )}

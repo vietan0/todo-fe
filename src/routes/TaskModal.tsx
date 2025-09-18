@@ -9,7 +9,6 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import removeMarkdown from 'markdown-to-text';
 import { useEffect, useMemo, useState } from 'react';
-
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate, useParams } from 'react-router';
 import CreateTaskButton from '../components/CreateTaskButton';
@@ -22,7 +21,6 @@ import TaskForm from '../components/TaskForm';
 import UpdateTaskButton from '../components/UpdateTaskButton';
 import useUpdateTaskMutation, { optimisticUpdateSubTask } from '../mutations/useUpdateTaskMutation';
 import useTask from '../queries/useTask';
-
 import { calcRank } from '../utils/calcRank';
 import cn from '../utils/cn';
 
@@ -282,15 +280,10 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
                             )
                           : (
                               <div
-                                className={`
-                                  flex min-w-0 grow flex-col gap-2 text-sm
-                                `}
+                                className="flex min-w-0 grow flex-col gap-2 text-sm"
                                 onClick={() => setIsFormOpen(true)}
                               >
-                                <div className={`
-                                  task-modal-name flex items-center
-                                `}
-                                >
+                                <div className="task-modal-name flex items-center">
                                   <CustomMarkdown>{task.name}</CustomMarkdown>
                                 </div>
                                 {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
@@ -367,10 +360,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
                     </DragOverlay>
                   </DndContext>
                 </div>
-                <div className={`
-                  flex min-w-60 flex-col gap-2 bg-default-100/75 p-4
-                `}
-                >
+                <div className="flex min-w-60 flex-col gap-2 bg-default-100/75 p-4">
                   <div>
                     <p className="text-xs text-default-500">Project</p>
                     <div className="flex items-center gap-1">

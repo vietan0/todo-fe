@@ -1,7 +1,5 @@
 import type { CreateTask, Project } from '../types/dataSchemas';
-
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import createTask from './mutationFns/createTask';
 
 export default function useCreateTaskMutation(projectId: Project['id']) {

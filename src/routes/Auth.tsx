@@ -4,14 +4,12 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Input } from '@heroui/r
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-
 import { Navigate } from 'react-router';
 import LoadingScreen from '../components/LoadingScreen';
 import MutationError from '../components/MutationError';
 import useAuthMutation from '../mutations/useAuthMutation';
 import useUser from '../queries/useUser';
 import { authPayloadZ } from '../types/dataSchemas';
-
 import cn from '../utils/cn';
 
 export default function Auth({ mode }: { mode: 'signup' | 'signin' }) {

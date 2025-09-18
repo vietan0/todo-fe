@@ -1,5 +1,4 @@
 import { Avatar } from '@heroui/react';
-
 import cn from '../utils/cn';
 
 export default function UserAvatar() {
