@@ -42,7 +42,7 @@
 }
 
 .shiki {
-  @apply min-w-0 py-1 px-4 rounded-lg overflow-scroll;
+  @apply min-w-0 py-3 px-4 rounded-lg overflow-scroll;
 }
 
 .shiki > code {
