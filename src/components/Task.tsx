@@ -11,6 +11,7 @@ import cn from '../utils/cn';
 import CustomMarkdown from './CustomMarkdown';
 import DeleteTaskButton from './DeleteTaskButton';
 import MutationError from './MutationError';
+import SubTaskCompletionCount from './SubTaskCompletionCount';
 import TaskForm from './TaskForm';
 import UpdateTaskButton from './UpdateTaskButton';
 
@@ -160,6 +161,7 @@ export default function Task({
               <CustomMarkdown field="body" isTruncated>{task.body}</CustomMarkdown>
             </div>
           )}
+          {'subTasks' in task && <SubTaskCompletionCount task={task} />}
           {isOverlay && childrenCount > 0 && <Code className="text-xs font-bold" color="primary">{childrenCount}</Code>}
         </div>
         {updateTaskMutation.error && (

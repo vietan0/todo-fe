@@ -17,6 +17,7 @@ import DeleteTaskButton from '../components/DeleteTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
 import QueryError from '../components/QueryError';
 import SortableTask from '../components/SortableTask';
+import SubTaskCompletionCount from '../components/SubTaskCompletionCount';
 import TaskForm from '../components/TaskForm';
 import UpdateTaskButton from '../components/UpdateTaskButton';
 import useUpdateTaskMutation, { optimisticUpdateSubTask } from '../mutations/useUpdateTaskMutation';
@@ -43,13 +44,6 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
   const updateTaskMutation = useUpdateTaskMutation();
   const [isFormOpen, setIsFormOpen] = useState<false | 'name' | 'body'>(false);
   const isXs = useMediaQuery({ query: '(min-width: 400px)' });
-
-  const [completedSubCount, subCount] = useMemo(() => {
-    const subCount = taskState?.subTasks.length || 0;
-    const completedSubCount = taskState?.subTasks.filter(t => t.completed).length || 0;
-
-    return [completedSubCount, subCount];
-  }, [taskState]);
 
   useEffect(() => {
     setTaskState(task);
@@ -313,28 +307,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
                     )}
                     {task.parentTaskId === null && <CreateTaskButton parentTaskId={task.id} />}
                   </div>
-                  {task.subTasks.length > 0 && (
-                    <div className="flex items-center gap-2">
-                      <CircularProgress
-                        aria-label="Completion Count"
-                        classNames={{
-                          svg: 'w-6 h-6',
-                          indicator: 'stroke-primary',
-                          track: 'stroke-white/10',
-                        }}
-                        size="sm"
-                        strokeWidth={4}
-                        value={(completedSubCount / subCount) * 100}
-                      />
-                      <span className="text-xs">
-                        {completedSubCount}
-                        {' '}
-                        /
-                        {' '}
-                        {subCount}
-                      </span>
-                    </div>
-                  )}
+                  <SubTaskCompletionCount task={task} />
                   <DndContext
                     collisionDetection={closestCorners}
                     onDragCancel={handleDragCancel}
