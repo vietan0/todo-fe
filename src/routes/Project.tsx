@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router';
 import CreateTaskButton from '../components/CreateTaskButton';
 import LoadingScreen from '../components/LoadingScreen';
+import ProjectName from '../components/ProjectName';
 import QueryError from '../components/QueryError';
 import SortableTask from '../components/SortableTask';
 import useUpdateTaskMutation, { optimisticUpdate } from '../mutations/useUpdateTaskMutation';
@@ -202,7 +203,7 @@ export default function Project() {
           xs:px-8
         `}
         >
-          <h1 className="text-2xl font-bold">{projectState.name}</h1>
+          <ProjectName project={projectState} />
           <CreateTaskButton />
           <div className="flex flex-col gap-2">
             <DndContext
@@ -214,10 +215,10 @@ export default function Project() {
               sensors={sensors}
             >
               <SortableContext
-                items={projectState!.tasks}
+                items={projectState.tasks}
                 strategy={verticalListSortingStrategy}
               >
-                {projectState!.tasks.map(task => (
+                {projectState.tasks.map(task => (
                   <SortableTask
                     deltaX={task.id === activeId ? deltaX : 0} // ghost indentation, only apply to task being dragged
                     isTaskModalOpen={isTaskModalOpen}
