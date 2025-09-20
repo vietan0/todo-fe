@@ -4,11 +4,12 @@ import { useState } from 'react';
 import TaskForm from './TaskForm';
 
 export default function CreateTaskButton({ parentTaskId }: { parentTaskId?: string }) {
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState<false | 'name' | 'body'>(false);
 
   if (isFormOpen) {
     return (
       <TaskForm
+        autoFocusField="name"
         finalIndent={0}
         mode="create"
         parentTaskId={parentTaskId}
@@ -22,7 +23,7 @@ export default function CreateTaskButton({ parentTaskId }: { parentTaskId?: stri
       <Button
         className="shrink-0 self-start"
         color="primary"
-        onPress={() => setIsFormOpen(true)}
+        onPress={() => setIsFormOpen('name')}
         radius="sm"
         size={parentTaskId ? 'sm' : 'md'}
         startContent={<Icon className="shrink-0 text-base" icon="material-symbols:add" />}

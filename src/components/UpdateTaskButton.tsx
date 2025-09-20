@@ -7,7 +7,7 @@ export default function UpdateTaskButton({
   setIsFormOpen,
 }: {
   isIconOnly?: boolean;
-  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsFormOpen: React.Dispatch<React.SetStateAction<false | 'name' | 'body'>>;
 }) {
   return (
     <Tooltip
@@ -26,7 +26,7 @@ export default function UpdateTaskButton({
         )}
         disableAnimation
         isIconOnly={isIconOnly}
-        onPress={() => setIsFormOpen(true)}
+        onPress={() => setIsFormOpen('name')}
         size="sm"
         variant={isIconOnly ? 'light' : 'ghost'}
       >

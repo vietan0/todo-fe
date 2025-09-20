@@ -47,7 +47,7 @@ export default function Task({
   const updateTaskMutation = useUpdateTaskMutation();
   const nav = useNavigate();
   const [isHover, setIsHover] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState<false | 'name' | 'body'>(false);
   const childrenCount = 'subTasks' in task ? task.subTasks.length : 0;
 
   const finalIndent = useMemo(() => {
@@ -81,6 +81,7 @@ export default function Task({
   if (isFormOpen) {
     return (
       <TaskForm
+        autoFocusField="name"
         finalIndent={finalIndent}
         mode="update"
         parentTaskId={undefined}

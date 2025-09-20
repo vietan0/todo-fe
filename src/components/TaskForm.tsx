@@ -13,9 +13,10 @@ import cn from '../utils/cn';
 import MutationError from './MutationError';
 
 interface CommonProps {
+  autoFocusField: 'name' | 'body';
   finalIndent: 0 | 40;
   inModal?: boolean;
-  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsFormOpen: React.Dispatch<React.SetStateAction<false | 'name' | 'body'>>;
 }
 
 type CreateProps = CommonProps & {
@@ -32,7 +33,7 @@ type UpdateProps = CommonProps & {
 
 type Props = CreateProps | UpdateProps;
 
-export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, mode, task, parentTaskId }: Props) {
+export default function TaskForm({ autoFocusField, inModal = false, finalIndent, setIsFormOpen, mode, task, parentTaskId }: Props) {
   const {
     handleSubmit,
     control,
@@ -114,7 +115,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
             render={({ field }) => (
               <Textarea
                 {...field}
-                autoFocus
+                autoFocus={autoFocusField === 'name'}
                 classNames={{
                   input: cn('font-medium', inModal && `
                     text-base
@@ -123,7 +124,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
                 }}
                 errorMessage={formState.errors.name?.message}
                 isInvalid={Boolean(formState.errors.name)}
-                maxRows={3}
+                maxRows={5}
                 minRows={1}
                 onKeyDown={closeFormOnEsc}
                 placeholder="Task name"
@@ -137,6 +138,7 @@ export default function TaskForm({ inModal = false, finalIndent, setIsFormOpen, 
             render={({ field }) => (
               <Textarea
                 {...field}
+                autoFocus={autoFocusField === 'body'}
                 classNames={{
                   input: 'text-[0.8rem]',
                 }}

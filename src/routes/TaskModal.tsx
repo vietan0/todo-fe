@@ -41,7 +41,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
   const [taskState, setTaskState] = useState(task);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 15 } }));
   const updateTaskMutation = useUpdateTaskMutation();
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState<false | 'name' | 'body'>(false);
   const isXs = useMediaQuery({ query: '(min-width: 400px)' });
 
   const [completedSubCount, subCount] = useMemo(() => {
@@ -271,6 +271,7 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
                         {isFormOpen
                           ? (
                               <TaskForm
+                                autoFocusField={isFormOpen}
                                 finalIndent={0}
                                 inModal
                                 mode="update"
@@ -280,14 +281,23 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
                               />
                             )
                           : (
-                              <div
-                                className="flex min-w-0 grow flex-col gap-2 text-sm"
-                                onClick={() => setIsFormOpen(true)}
-                              >
-                                <div className="task-modal-name">
+                              <div className="flex min-w-0 grow flex-col gap-2 text-sm">
+                                <div
+                                  className="task-modal-name"
+                                  onClick={() => setIsFormOpen('name')}
+                                >
                                   <CustomMarkdown field="name">{task.name}</CustomMarkdown>
                                 </div>
-                                {task.body && <CustomMarkdown field="body">{task.body}</CustomMarkdown>}
+                                <div onClick={() => setIsFormOpen('body')}>
+                                  {task.body
+                                    ? <CustomMarkdown field="body">{task.body}</CustomMarkdown>
+                                    : (
+                                        <div className="flex gap-1 text-default-500">
+                                          <Icon className="text-lg" icon="material-symbols:subject" />
+                                          <span>Body</span>
+                                        </div>
+                                      )}
+                                </div>
                               </div>
                             )}
                         {updateTaskMutation.isPending && (
