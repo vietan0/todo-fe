@@ -37,7 +37,6 @@ export default function DeleteTaskButton({
             `,
             isIconOnly ? 'h-7 w-7 rounded-sm' : 'justify-start rounded-md',
           )}
-          disableAnimation
           isIconOnly={isIconOnly}
           onPress={onDeleteTaskOpen}
           size="sm"

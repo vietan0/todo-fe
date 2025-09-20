@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
-        <HeroUIProvider>
+        <HeroUIProvider disableAnimation>
           <RouterProvider router={router} />
         </HeroUIProvider>
         <ReactQueryDevtools initialIsOpen={false} />

@@ -54,8 +54,8 @@ export default function ProjectBtn({
         className={cn(
           `
             group relative z-0 box-border inline-flex h-10 min-w-20 appearance-none items-center gap-2 overflow-hidden
-            rounded-lg text-sm font-normal whitespace-nowrap subpixel-antialiased outline-hidden
-            transition-transform-colors-opacity select-none tap-highlight-transparent
+            rounded-lg text-sm font-normal whitespace-nowrap subpixel-antialiased outline-hidden select-none
+            tap-highlight-transparent
             [&>svg]:max-w-8
           `, // copied HeroUI Button's styles
           `

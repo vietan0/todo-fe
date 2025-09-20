@@ -24,7 +24,6 @@ export default function UpdateTaskButton({
           `,
           isIconOnly ? 'h-7 w-7 rounded-sm' : 'justify-start rounded-md',
         )}
-        disableAnimation
         isIconOnly={isIconOnly}
         onPress={() => setIsFormOpen('name')}
         size="sm"
