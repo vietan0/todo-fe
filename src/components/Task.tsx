@@ -149,14 +149,14 @@ export default function Task({
       />
       <div className="truncate">
         <div>
-          <CustomMarkdown isTruncated>{task.name}</CustomMarkdown>
+          <CustomMarkdown field="name" isTruncated>{task.name}</CustomMarkdown>
           {task.body && (
             <div className={`
               task-body-truncated items-center gap-1 text-xs font-normal text-foreground-500
               *:inline-block
             `}
             >
-              <CustomMarkdown isTruncated>{task.body}</CustomMarkdown>
+              <CustomMarkdown field="body" isTruncated>{task.body}</CustomMarkdown>
             </div>
           )}
           {isOverlay && childrenCount > 0 && <Code className="text-xs font-bold" color="primary">{childrenCount}</Code>}

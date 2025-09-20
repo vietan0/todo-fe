@@ -5,7 +5,11 @@ import remarkGfm from 'remark-gfm';
 import cn from '../utils/cn';
 import ShikiHighlighter from './ShikiHighlighter';
 
-export default function CustomMarkdown({ children, isTruncated = false }: { children: string | null | undefined; isTruncated?: boolean }) {
+export default function CustomMarkdown({ children, field, isTruncated = false }: {
+  children: string | null | undefined;
+  field: 'name' | 'body';
+  isTruncated?: boolean;
+}) {
   return (
     <Markdown
       components={{
@@ -39,11 +43,34 @@ export default function CustomMarkdown({ children, isTruncated = false }: { chil
             `)}
           />
         ),
-        code: ({ children }) => (
-          <Code className={cn('rounded-md text-xs', isTruncated || 'whitespace-pre-wrap')}>
-            {children}
-          </Code>
+        p: ({ node, ...props }) => (
+          <p
+            {...props}
+            className={cn(
+              'inline-block',
+              (field === 'name' || !isTruncated) && 'whitespace-pre-wrap',
+            )}
+          />
         ),
+        code: ({ children }) => {
+          if (children === undefined)
+            return '';
+
+          const noNewLines = field === 'name' && typeof children === 'string'
+            ? children.replaceAll(/\n/g, ' ')
+            : children;
+
+          return (
+            <Code className={cn(
+              'rounded-md text-xs',
+              (!isTruncated || field === 'name') && 'inline',
+              !isTruncated && 'whitespace-pre-wrap',
+            )}
+            >
+              {noNewLines}
+            </Code>
+          );
+        },
         li: ({ node, ...props }) => (
           <li {...props} className={cn(isTruncated && 'inline')} />
         ),
@@ -92,7 +119,9 @@ export default function CustomMarkdown({ children, isTruncated = false }: { chil
             )
           : 'img',
       }}
+      disallowedElements={field === 'name' ? ['pre'] : []}
       remarkPlugins={[remarkGfm]}
+      unwrapDisallowed
     >
       {children}
     </Markdown>

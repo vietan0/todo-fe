@@ -284,10 +284,10 @@ export default function TaskModal({ isOpen, onOpen, onOpenChange, onClose, proje
                                 className="flex min-w-0 grow flex-col gap-2 text-sm"
                                 onClick={() => setIsFormOpen(true)}
                               >
-                                <div className="task-modal-name flex items-center">
-                                  <CustomMarkdown>{task.name}</CustomMarkdown>
+                                <div className="task-modal-name">
+                                  <CustomMarkdown field="name">{task.name}</CustomMarkdown>
                                 </div>
-                                {task.body && <CustomMarkdown>{task.body}</CustomMarkdown>}
+                                {task.body && <CustomMarkdown field="body">{task.body}</CustomMarkdown>}
                               </div>
                             )}
                         {updateTaskMutation.isPending && (
